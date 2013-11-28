@@ -1,6 +1,6 @@
 wysihtml5.commands.italic = {
   exec: function(composer, command) {
-    wysihtml5.commands.formatInline.execWithToggle(composer, command, "i");
+    wysihtml5.commands.formatInline.exec(composer, command, "i");
   },
 
   state: function(composer, command) {

@@ -16,7 +16,7 @@
         if (colorVals[3] !== 1) {
           colString += "background-color: rgba(" + colorVals[0] + ',' + colorVals[1] + ',' + colorVals[2] + ',' + colorVals[3] + ');';
         }
-        wysihtml5.commands.formatInline.execWithToggle(composer, command, "span", false, false, colString, REG_EXP);
+        wysihtml5.commands.formatInline.exec(composer, command, "span", false, false, colString, REG_EXP);
       }
     },
     

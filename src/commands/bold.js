@@ -1,6 +1,6 @@
 wysihtml5.commands.bold = {
   exec: function(composer, command) {
-    wysihtml5.commands.formatInline.execWithToggle(composer, command, "b");
+    wysihtml5.commands.formatInline.exec(composer, command, "b");
   },
 
   state: function(composer, command) {

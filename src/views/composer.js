@@ -220,7 +220,6 @@
       this._initAutoLinking();
       this._initObjectResizing();
       this._initUndoManager();
-      this._initLineBreaking();
       
       // Simulate html5 autofocus on contentEditable element
       // This doesn't work on IOS (5.1.1)
@@ -243,6 +242,8 @@
       
       // Fire global (before-)load event
       this.parent.fire("beforeload").fire("load");
+      this._initLineBreaking();
+
     },
 
     _initAutoLinking: function() {
@@ -439,9 +440,10 @@
         }
         
         if (that.config.useLineBreaks && keyCode === wysihtml5.ENTER_KEY && !wysihtml5.browser.insertsLineBreaksOnReturn()) {
-          event.preventDefault();
-          that.commands.exec("insertLineBreak");
-          
+          if (!event.defaultPrevented) {
+            event.preventDefault();
+            that.commands.exec("insertLineBreak");
+          }
         }
       });
     }
