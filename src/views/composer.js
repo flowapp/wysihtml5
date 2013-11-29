@@ -9,6 +9,8 @@
     // Needed for firefox in order to display a proper caret in an empty contentEditable
     CARET_HACK: "<br>",
 
+    _keyboardHandlers: [],
+
     constructor: function(parent, editableElement, config) {
       this.base(parent, editableElement, config);
       if (!this.config.noTextarea) {
@@ -397,7 +399,9 @@
     
     _initLineBreaking: function() {
       var that                              = this,
-          USE_NATIVE_LINE_BREAK_INSIDE_TAGS = ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6"],
+          _this = this,
+          BLOCK_ELEMENTS                    = ["PRE", "BLOCKQUOTE"],
+          USE_NATIVE_LINE_BREAK_INSIDE_TAGS = ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6", "PRE", "BLOCKQUOTE"],
           LIST_TAGS                         = ["UL", "OL", "MENU"];
       
       function adjust(selectedNode) {
@@ -440,6 +444,9 @@
 
       
       dom.observe(this.element, "keydown", function(event) {
+        _this.test(event)
+        return;
+
         var keyCode = event.keyCode;
         
         if (event.shiftKey) {
@@ -449,39 +456,68 @@
         if (keyCode !== wysihtml5.ENTER_KEY && keyCode !== wysihtml5.BACKSPACE_KEY) {
           return;
         }
-        var blockElement = dom.getParentElement(that.selection.getSelectedNode(), { nodeName: USE_NATIVE_LINE_BREAK_INSIDE_TAGS }, 4);
+        var selectedNode = that.selection.getSelectedNode();
+        var blockElement = dom.getParentElement(selectedNode, { 
+          nodeName: USE_NATIVE_LINE_BREAK_INSIDE_TAGS 
+        }, 4);
+
         if (blockElement) {
-          setTimeout(function() {
-            // Unwrap paragraph after leaving a list or a H1-6
-            var selectedNode = that.selection.getSelectedNode(),
-                list;
-            
-            if (blockElement.nodeName === "LI") {
-              if (!selectedNode) {
-                return;
-              }
+          var list;
+          if (blockElement.nodeName === "LI") {
+            if (!selectedNode) {
+              return;
+            }
 
-              list = dom.getParentElement(selectedNode, { nodeName: LIST_TAGS }, 2);
+            list = dom.getParentElement(selectedNode, {
+              nodeName: LIST_TAGS
+            }, 2);
 
-              if (!list) {
+            if (!list) {
+              setTimeout(function() {
                 adjust(selectedNode);
-              }
+              })
             }
+          } else if (keyCode === wysihtml5.ENTER_KEY) {
+            isBlockElements = BLOCK_ELEMENTS.indexOf(blockElement.nodeName) !== -1
+            isSelectedNodeABlockElements = BLOCK_ELEMENTS.indexOf(selectedNode.nodeName) !== -1
 
-            if (keyCode === wysihtml5.ENTER_KEY && blockElement.nodeName.match(/^H[1-6]$/)) {
-              adjust(selectedNode);
+            if (isBlockElements && isSelectedNodeABlockElements && !blockElement.textContent) {
+              event.preventDefault();
+              _this.selection.executeAndRestore(function() {
+                dom.renameElement(selectedNode, "p");
+              })
+            } else if (blockElement.nodeName.match(/^H[1-6]$/)) {
+              setTimeout(function() {
+                adjust(selectedNode);
+              }, 0)
             }
-          }, 0);
+          }
           return;
         }
         
-        if (that.config.useLineBreaks && keyCode === wysihtml5.ENTER_KEY && !wysihtml5.browser.insertsLineBreaksOnReturn()) {
-          if (!event.defaultPrevented) {
-            event.preventDefault();
-            that.commands.exec("insertLineBreak");
-          }
-        }
+        // if (that.config.useLineBreaks && keyCode === wysihtml5.ENTER_KEY && !wysihtml5.browser.insertsLineBreaksOnReturn()) {
+        //   if (!event.defaultPrevented) {
+        //     event.preventDefault();
+        //     that.commands.exec("insertLineBreak");
+        //   }
+        // }
       });
+    }, 
+
+    test: function(e) {
+      for (var i = 0; i < this._keyboardHandlers.length; i++) {
+        var keyboardHandler = this._keyboardHandlers[i];
+        if (keyboardHandler.matcher(e)) {
+          keyboardHandler.callback(this.editor, this, e);
+        }
+      };
     }
   });
+  wysihtml5.views.Composer.RegisterKeyboardHandler = function(matcher, callback) {
+    wysihtml5.views.Composer.prototype._keyboardHandlers.push({
+      matcher: matcher, 
+      callback: callback
+    });
+  };
+
 })(wysihtml5);

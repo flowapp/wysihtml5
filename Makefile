@@ -88,7 +88,9 @@ JS_FILES = src/wysihtml5.js \
   src/toolbar/toolbar.js \
   src/toolbar/dialog_createTable.js\
   src/toolbar/dialog_foreColorStyle.js\
-  src/editor.js
+  src/editor.js\
+  src/keyboard/break_block_elements.js\
+  src/keyboard/list_element_delete.js
   
 JS_FILES_WOTOOLS = src/wysihtml5.js \
   lib/rangy/rangy-core.js \
@@ -170,7 +172,7 @@ JS_FILES_WOTOOLS = src/wysihtml5.js \
   src/views/textarea.js \
   src/editor.js
 
-all: bundle minify
+all: bundle wotoolbar minify 
 
 bundle:
 	@@echo "Bundling..."
