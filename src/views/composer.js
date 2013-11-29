@@ -131,7 +131,6 @@
             });
             this.editableArea = this.sandbox.getContentEditable();
             dom.insert(this.editableArea).after(this.textarea.element);
-            this._createWysiwygFormField();
         }
     },
 
@@ -147,21 +146,8 @@
       
       var textareaElement = this.textarea.element;
       dom.insert(this.editableArea).after(textareaElement);
-      
-      this._createWysiwygFormField();
     },
     
-    // Creates hidden field which tells the server after submit, that the user used an wysiwyg editor
-    _createWysiwygFormField: function() {
-        if (this.textarea.element.form) {
-          var hiddenField = document.createElement("input");
-          hiddenField.type   = "hidden";
-          hiddenField.name   = "_wysihtml5_mode";
-          hiddenField.value  = 1;
-          dom.insert(hiddenField).after(this.textarea.element);
-        }
-    },
-
     _create: function() {
       var that = this;
       this.doc                = this.sandbox.getDocument();
