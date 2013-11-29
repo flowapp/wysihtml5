@@ -434,10 +434,7 @@ var wysihtml5ParserRules = {
                 "text_formatting_object": 1,
                 "text_color_object": 1
             },
-            "keep_styles": {
-                "color": 1,
-                "backgroundColor": 1
-            },
+            "keep_styles": {},
             "remove_action": "unwrap"
         },
         "rp": {
