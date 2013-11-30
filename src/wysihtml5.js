@@ -1,5 +1,5 @@
 /**
- * @license wysihtml5x v@VERSION
+ * @license wysihtml5x v<%= pkg.version %>
  * https://github.com/Edicy/wysihtml5
  *
  * Author: Christopher Blum (https://github.com/tiff)
@@ -9,28 +9,25 @@
  * Licensed under the MIT license (MIT)
  *
  */
+
+import dom from "wysihtml5/dom";
+import lang from "wysihtml5/lang";
+import { Editor } from "wysihtml5/editor";
+import { Composer } from "wysihtml5/views/composer";
+import "wysihtml5/views/composer_observer";
+
+// Keyboard fixes
+import "wysihtml5/keyboard/break_block_elements";
+import "wysihtml5/keyboard/list_element_delete";
+
+var version = "<%= pkg.version %>";
+
 var wysihtml5 = {
-  version: "@VERSION",
-  
   // namespaces
   commands:   {},
-  dom:        {},
   quirks:     {},
-  toolbar:    {},
-  lang:       {},
   selection:  {},
   views:      {},
-  
-  INVISIBLE_SPACE: "\uFEFF",
-  
-  EMPTY_FUNCTION: function() {},
-  
-  ELEMENT_NODE: 1,
-  TEXT_NODE:    3,
-  
-  BACKSPACE_KEY:  8,
-  ENTER_KEY:      13,
-  ESCAPE_KEY:     27,
-  SPACE_KEY:      32,
-  DELETE_KEY:     46
 };
+
+export { version, Editor, lang, dom};
