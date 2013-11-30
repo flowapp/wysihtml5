@@ -10,6 +10,7 @@
     CARET_HACK: "<br>",
 
     _keyboardHandlers: [],
+    _textSubstitutions: [],
 
     constructor: function(parent, editableElement, config) {
       this.base(parent, editableElement, config);
@@ -444,7 +445,8 @@
 
       
       dom.observe(this.element, "keydown", function(event) {
-        _this.test(event)
+        _this.test(event);
+        _this.lookForTextSubstituion(event);
         return;
 
         var keyCode = event.keyCode;
@@ -504,6 +506,53 @@
       });
     }, 
 
+    _lastInsertedBlock: function(range, e) {
+      var nativeRange = range.nativeRange;
+      var startContainer = nativeRange.startContainer;
+      if (nativeRange.collapsed) {
+        e.preventDefault()
+        var blockElement = dom.getParentElement(selectedNode, { 
+          nodeName: ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6", "PRE", "BLOCKQUOTE"]; 
+        }, 4);
+
+        console.log("LastInsertedBlock: ", nativeRange.cloneRange());
+      }
+    },
+
+    _lastInsertedWordRange: function(range) {
+      var nativeRange = range.nativeRange;
+      var startContainer = nativeRange.startContainer;
+      if (nativeRange.collapsed && startContainer.nodeType == Node.TEXT_NODE) {
+        var wordRange = nativeRange.cloneRange();
+        var textContent = startContainer.textContent.slice(0, nativeRange.startOffset);
+        var lastIndex = textContent.lastIndexOf(" ");
+        if (lastIndex != -1) {
+          wordRange.setStart(nativeRange.startContainer, (lastIndex + 1));
+        } else {
+          wordRange.setStart(startContainer, 0);
+        }
+        return wordRange;
+
+      }
+    },
+
+    lookForTextSubstituion: function(e) {
+      if (e.keyCode == wysihtml5.SPACE_KEY) {
+        var range = this.selection.getRange();
+        var word = this._lastInsertedWordRange(range);
+        console.log("Range: '%o' `%s`", word, word.toString());
+        for (var i = 0; i < this._textSubstitutions.length; i++) {
+          var textSubstitution = this._textSubstitutions[i];
+
+        };
+      } else if (e.keyCode == wysihtml5.ENTER_KEY) {
+        var range = this.selection.getRange();
+        var blockRange = this._lastInsertedBlock(range, e);
+        console.log("blockRange: ", blockRange)
+
+      }
+    },
+
     test: function(e) {
       for (var i = 0; i < this._keyboardHandlers.length; i++) {
         var keyboardHandler = this._keyboardHandlers[i];
@@ -519,5 +568,13 @@
       callback: callback
     });
   };
+
+  wysihtml5.views.Composer.RegisterTextSubstitution = function(word, callback) {
+    wysihtml5.views.Composer.prototype._textSubstitutions.push({
+      word: word,
+      callback: callback
+    });
+  };
+
 
 })(wysihtml5);
