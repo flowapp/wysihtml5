@@ -144,7 +144,6 @@ var Composer = View.extend({
     }
     
     this.enable();
-    
 
     // Simulate html5 placeholder attribute on contentEditable element
     var placeholderText = typeof(this.config.placeholder) === "string"
@@ -302,40 +301,22 @@ var Composer = View.extend({
   },
   
   _initLineBreaking: function() {
-    var that                              = this,
-        _this = this,
-        BLOCK_ELEMENTS                    = ["PRE", "BLOCKQUOTE"],
-        USE_NATIVE_LINE_BREAK_INSIDE_TAGS = ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6", "PRE", "BLOCKQUOTE"],
-        LIST_TAGS                         = ["UL", "OL", "MENU"];
+    var that = this,
+        _this = this;
     
-    function adjust(selectedNode) {
-      var parentElement = dom.getParentElement(selectedNode, { nodeName: ["P", "DIV"] }, 2);
-      if (parentElement) {
-        that.selection.executeAndRestore(function() {
-          if (that.config.useLineBreaks) {
-            dom.replaceWithChildNodes(parentElement);
-          } else if (parentElement.nodeName !== "P") {
-            dom.renameElement(parentElement, "p");
-          }
-        });
-      }
-    }
-    
-    if (!this.config.useLineBreaks) {
-      dom.observe(this.element, ["focus", "keydown"], function() {
-        if (that.isEmpty()) {
-          var paragraph = that.doc.createElement("P");
-          that.element.innerHTML = "";
-          that.element.appendChild(paragraph);
-          if (!browser.displaysCaretInEmptyContentEditableCorrectly()) {
-            paragraph.innerHTML = "<br>";
-            that.selection.setBefore(paragraph.firstChild);
-          } else {
-            that.selection.selectNode(paragraph, true);
-          }
+    dom.observe(this.element, ["focus", "keydown"], function() {
+      if (that.isEmpty()) {
+        var paragraph = that.doc.createElement("P");
+        that.element.innerHTML = "";
+        that.element.appendChild(paragraph);
+        if (!browser.displaysCaretInEmptyContentEditableCorrectly()) {
+          paragraph.innerHTML = "<br>";
+          that.selection.setBefore(paragraph.firstChild);
+        } else {
+          that.selection.selectNode(paragraph, true);
         }
-      });
-    }
+      }
+    });
     
     // Under certain circumstances Chrome + Safari create nested <p>
     // or <h[1-6]> tags after paste Inserting an invisible white space
@@ -347,66 +328,9 @@ var Composer = View.extend({
       });
     }
 
-    
     dom.observe(this.element, "keydown", function(event) {
       _this.test(event);
       //_this.lookForTextSubstituion(event);
-      return;
-
-      var keyCode = event.keyCode;
-      
-      if (event.shiftKey) {
-        return;
-      }
-      
-      if (keyCode !== Constants.ENTER_KEY && keyCode !== Constants.BACKSPACE_KEY) {
-        return;
-      }
-      var selectedNode = that.selection.getSelectedNode();
-      var blockElement = dom.getParentElement(selectedNode, { 
-        nodeName: USE_NATIVE_LINE_BREAK_INSIDE_TAGS 
-      }, 4);
-
-      if (blockElement) {
-        var list;
-        if (blockElement.nodeName === "LI") {
-          if (!selectedNode) {
-            return;
-          }
-
-          list = dom.getParentElement(selectedNode, {
-            nodeName: LIST_TAGS
-          }, 2);
-
-          if (!list) {
-            setTimeout(function() {
-              adjust(selectedNode);
-            })
-          }
-        } else if (keyCode === Constants.ENTER_KEY) {
-          isBlockElements = BLOCK_ELEMENTS.indexOf(blockElement.nodeName) !== -1
-          isSelectedNodeABlockElements = BLOCK_ELEMENTS.indexOf(selectedNode.nodeName) !== -1
-
-          if (isBlockElements && isSelectedNodeABlockElements && !blockElement.textContent) {
-            event.preventDefault();
-            _this.selection.executeAndRestore(function() {
-              dom.renameElement(selectedNode, "p");
-            })
-          } else if (blockElement.nodeName.match(/^H[1-6]$/)) {
-            setTimeout(function() {
-              adjust(selectedNode);
-            }, 0)
-          }
-        }
-        return;
-      }
-      
-      // if (that.config.useLineBreaks && keyCode === wysihtml5.ENTER_KEY && !wysihtml5.browser.insertsLineBreaksOnReturn()) {
-      //   if (!event.defaultPrevented) {
-      //     event.preventDefault();
-      //     that.commands.exec("insertLineBreak");
-      //   }
-      // }
     });
   }, 
 
