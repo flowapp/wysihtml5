@@ -24,6 +24,15 @@ module.exports = function(grunt) {
     'buildTests:dist'
   ]);
 
+  // UAIntegrationTests
+  this.registerTask("integration", "Build integration tests", [
+    "clean", 
+    "transpile:UAIntegrationTests", 
+    "concat:UAIntegrationTests", 
+    "browser:UAIntegrationTests",
+    "mocha_phantomjs:UAIntegrationTests"
+  ]);
+
   // Build a new version of the library
   this.registerTask('build', 'Builds a distributable version of <%= cfg.name %>',
                     ['clean', 'transpile:amd', 'concat:browser', 'browser:distNoVersion', "uglify:browserNoVersion"]);

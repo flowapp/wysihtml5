@@ -49,5 +49,19 @@ module.exports = {
     type: 'cjs',
     src: ['test/test_helpers.js', 'test/tests.js', 'test/tests/**/*_test.js'],
     dest: 'tmp/tests.cjs.js'
+  },
+
+  UAIntegrationTests: {
+    modeleName: nameFor,
+    type: "amd",
+    files: [
+      {
+        expand: true,
+        cwd: "test/ua_integration_tests/",
+        src: ['**/*.js'],
+        dest: 'tmp/ua_integration_tests/',
+        ext: '.amd.js'
+      }
+    ],
   }
 };
