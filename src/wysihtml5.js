@@ -24,6 +24,8 @@ import "wysihtml5/keyboard/break_list";
 
 // Text Substitutions 
 import "wysihtml5/text_substitutions/auto_link";
+import "wysihtml5/text_substitutions/auto_list";
+
 var version = "<%= pkg.version %>";
 
 var wysihtml5 = {
