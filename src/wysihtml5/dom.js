@@ -23,7 +23,6 @@ import { resolveList } from "wysihtml5/dom/resolve_list";
 import { sandbox } from "wysihtml5/dom/sandbox";
 import { setAttributes } from "wysihtml5/dom/set_attributes";
 import { setStyles } from "wysihtml5/dom/set_styles";
-import { simulatePlaceholder } from "wysihtml5/dom/simulate_placeholder";
 //import { table } from "wysihtml5/dom/table";
 import { setTextContent, getTextContent } from "wysihtml5/dom/text_content";
 
@@ -55,7 +54,6 @@ export default = {
   sandbox: sandbox,
   setAttributes: setAttributes,
   setStyles: setStyles,
-  simulatePlaceholder: simulatePlaceholder,
   //table: table,
   setTextContent: setTextContent,
   getTextContent: getTextContent

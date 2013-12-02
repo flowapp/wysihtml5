@@ -59,9 +59,6 @@ Composer.prototype.observe = function() {
   });
 
   // --------- Drag & Drop logic ---------
-  dom.observe(element, "dragenter", function() {
-    that.parent.fire("unset_placeholder");
-  });
 
   dom.observe(element, pasteEvents, function() {
     setTimeout(function() {

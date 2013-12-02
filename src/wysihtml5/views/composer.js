@@ -78,13 +78,6 @@ var Composer = View.extend({
   },
 
   focus: function(setToEnd) {
-    // IE 8 fires the focus event after .focus()
-    // This is needed by our simulate_placeholder.js to work
-    // therefore we clear it ourselves this time
-    if (browser.doesAsyncFocus() && this.hasPlaceholderSet()) {
-      this.clear();
-    }
-    
     this.base();
     
     var lastChild = this.element.lastChild;
@@ -101,17 +94,14 @@ var Composer = View.extend({
     return dom.getTextContent(this.element);
   },
 
-  hasPlaceholderSet: function() {
-    return this.getTextContent() == (this.editableArea.getAttribute("data-placeholder")) && this.placeholderSet;
-  },
-
   isEmpty: function() {
     var innerHTML = this.element.innerHTML.toLowerCase();
-    return innerHTML === ""            ||
-           innerHTML === "<br>"        ||
-           innerHTML === "<p></p>"     ||
-           innerHTML === "<p><br></p>" ||
-           this.hasPlaceholderSet();
+    return (
+      innerHTML === "" ||
+      innerHTML === "<br>" ||
+      innerHTML === "<p></p>" ||
+      innerHTML === "<p><br></p>"
+    );
   },
   
   _initContentEditableArea: function() {
@@ -134,24 +124,18 @@ var Composer = View.extend({
     // Make sure commands dispatcher is ready
     this.commands  = new Commands(this.parent);
 
+    // DEPRECATED
     dom.addClass(this.element, this.config.composerClassName);
 
     this.observe();
     
+    // WTF
     var name = this.config.name;
     if (name) {
       dom.addClass(this.element, name);
     }
     
     this.enable();
-
-    // Simulate html5 placeholder attribute on contentEditable element
-    var placeholderText = typeof(this.config.placeholder) === "string"
-      ? this.config.placeholder
-      : ((this.config.noTextarea) ? this.editableArea.getAttribute("data-placeholder") : this.textarea.element.getAttribute("placeholder"));
-    if (placeholderText) {
-      dom.simulatePlaceholder(this.parent, this, placeholderText);
-    }
 
     // Make sure that the browser avoids using inline styles whenever possible
     this.commands.exec("styleWithCSS", false);
@@ -253,8 +237,12 @@ var Composer = View.extend({
     }
 
     dom.observe(this.element, "keydown", function(event) {
+      _this._handleKeyboardHandlers(event);
+      _this._lookForTextSubstitution(event);
     });
   }, 
+
+  // Text Substitutions
 
   _lastInsertedBlock: function(range, e) {
     var nativeRange = range.nativeRange;
@@ -276,18 +264,30 @@ var Composer = View.extend({
       var wordRange = nativeRange.cloneRange();
       var textContent = startContainer.textContent.slice(0, nativeRange.startOffset);
       var lastIndex = textContent.lastIndexOf(" ");
+
       if (lastIndex != -1) {
         wordRange.setStart(nativeRange.startContainer, (lastIndex + 1));
       } else {
         wordRange.setStart(startContainer, 0);
       }
+      return {
+        range: wordRange,
+        textContent: textContent.slice((lastIndex + 1))
+      };
 
     }
   },
 
+  _lookForTextSubstitution: function(e) {
     if (e.keyCode == Constants.SPACE_KEY) {
       var range = this.selection.getRange();
+      var options = this._lastInsertedWordRange(range);
 
+      for (var index = 0; index < this._textSubstitutions.length; index++) {
+        var textSubstitution = this._textSubstitutions[index];
+        if (textSubstitution.options.word !== false && textSubstitution.matcher(options.textContent, e)) {
+          textSubstitution.callback(this.parent, this, options.range, options.textContent, e);
+        }
       };
     } else if (e.keyCode == Constants.ENTER_KEY) {
       var range = this.selection.getRange();
@@ -295,9 +295,13 @@ var Composer = View.extend({
     }
   },
 
+  // Keyboard Processors 
+
+  _handleKeyboardHandlers: function(e) {
     for (var i = 0; i < this._keyboardHandlers.length; i++) {
       var keyboardHandler = this._keyboardHandlers[i];
       if (keyboardHandler.matcher(e)) {
+        keyboardHandler.callback(this.parent, this, e);
       }
     };
   }
@@ -310,7 +314,11 @@ Composer.RegisterKeyboardHandler = function(matcher, callback) {
   });
 };
 
+Composer.RegisterTextSubstitution = function(matcher, callback, options) {
   Composer.prototype._textSubstitutions.push({
+    matcher: matcher,
+    callback: callback,
+    options: options
   });
 };
 
