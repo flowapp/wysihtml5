@@ -158,7 +158,6 @@ var Composer = View.extend({
     this.commands.exec("enableObjectResizing", false);
     this.commands.exec("insertBrOnReturn", false);
     
-    this._initAutoLinking();
     //this._initUndoManager();
 
     // IE sometimes leaves a single paragraph, which can't be removed by the user
@@ -220,81 +219,6 @@ var Composer = View.extend({
       }
     };
   },
-
-  // TODO convert into a text substitution module
-  _initAutoLinking: function() {
-    var that                           = this,
-        supportsDisablingOfAutoLinking = browser.canDisableAutoLinking(),
-        supportsAutoLinking            = browser.doesAutoLinkingInContentEditable();
-    if (supportsDisablingOfAutoLinking) {
-      this.commands.exec("autoUrlDetect", false);
-    }
-
-    if (!this.config.autoLink) {
-      return;
-    }
-
-    // Only do the auto linking by ourselves when the browser doesn't support auto linking
-    // OR when he supports auto linking but we were able to turn it off (IE9+)
-    if (!supportsAutoLinking || (supportsAutoLinking && supportsDisablingOfAutoLinking)) {
-      this.parent.on("newword:composer", function() {
-        if (dom.getTextContent(that.element).match(dom.autoLink.URL_REG_EXP)) {
-          that.selection.executeAndRestore(function(startContainer, endContainer) {
-            dom.autoLink(endContainer.parentNode);
-          });
-        }
-      });
-      
-      dom.observe(this.element, "blur", function() {
-        dom.autoLink(that.element);
-      });
-    }
-
-    // Assuming we have the following:
-    //  <a href="http://www.google.de">http://www.google.de</a>
-    // If a user now changes the url in the innerHTML we want to make sure that
-    // it's synchronized with the href attribute (as long as the innerHTML is still a url)
-    var // Use a live NodeList to check whether there are any links in the document
-        links           = this.sandbox.getDocument().getElementsByTagName("a"),
-        // The autoLink helper method reveals a reg exp to detect correct urls
-        urlRegExp       = dom.autoLink.URL_REG_EXP,
-        getTextContent  = function(element) {
-          var textContent = lang.string(dom.getTextContent(element)).trim();
-          if (textContent.substr(0, 4) === "www.") {
-            textContent = "http://" + textContent;
-          }
-          return textContent;
-        };
-
-    dom.observe(this.element, "keydown", function(event) {
-      if (!links.length) {
-        return;
-      }
-
-      var selectedNode = that.selection.getSelectedNode(event.target.ownerDocument),
-          link         = dom.getParentElement(selectedNode, { nodeName: "A" }, 4),
-          textContent;
-
-      if (!link) {
-        return;
-      }
-
-      textContent = getTextContent(link);
-      // keydown is fired before the actual content is changed
-      // therefore we set a timeout to change the href
-      setTimeout(function() {
-        var newTextContent = getTextContent(link);
-        if (newTextContent === textContent) {
-          return;
-        }
-
-        // Only set href when new href looks like a valid url
-        if (newTextContent.match(urlRegExp)) {
-          link.setAttribute("href", newTextContent);
-        }
-      }, 0);
-    });
-  },
   
   _initUndoManager: function() {
     this.undoManager = new UndoManager(this.parent);
@@ -329,8 +253,6 @@ var Composer = View.extend({
     }
 
     dom.observe(this.element, "keydown", function(event) {
-      _this.test(event);
-      //_this.lookForTextSubstituion(event);
     });
   }, 
 
@@ -359,18 +281,12 @@ var Composer = View.extend({
       } else {
         wordRange.setStart(startContainer, 0);
       }
-      return wordRange;
 
     }
   },
 
-  lookForTextSubstituion: function(e) {
     if (e.keyCode == Constants.SPACE_KEY) {
       var range = this.selection.getRange();
-      var word = this._lastInsertedWordRange(range);
-
-      for (var i = 0; i < this._textSubstitutions.length; i++) {
-        var textSubstitution = this._textSubstitutions[i];
 
       };
     } else if (e.keyCode == Constants.ENTER_KEY) {
@@ -379,11 +295,9 @@ var Composer = View.extend({
     }
   },
 
-  test: function(e) {
     for (var i = 0; i < this._keyboardHandlers.length; i++) {
       var keyboardHandler = this._keyboardHandlers[i];
       if (keyboardHandler.matcher(e)) {
-        keyboardHandler.callback(this.editor, this, e);
       }
     };
   }
@@ -396,10 +310,7 @@ Composer.RegisterKeyboardHandler = function(matcher, callback) {
   });
 };
 
-Composer.RegisterTextSubstitution = function(word, callback) {
   Composer.prototype._textSubstitutions.push({
-    word: word,
-    callback: callback
   });
 };
 

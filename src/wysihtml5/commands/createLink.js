@@ -4,7 +4,7 @@ import { formatInline } from "./formatInline";
 
 var undef,
     NODE_NAME = "A";
-  
+
 function _removeFormat(composer, anchors) {
   var length  = anchors.length,
       i       = 0,
@@ -18,7 +18,7 @@ function _removeFormat(composer, anchors) {
 
     // if <a> contains url-like text content, rename it to <code> to prevent re-autolinking
     // else replace <a> with its childNodes
-    if (textContent.match(dom.autoLink.URL_REG_EXP) && !codeElement) {
+    if (textContent.match(Constants.URL_REG_EXP) && !codeElement) {
       // <code> element is used to prevent later auto-linking of the content
       codeElement = dom.renameElement(anchor, "code");
     } else {
@@ -75,7 +75,7 @@ var createLink = {
    * Turns selection into a link
    * If selection is already a link, it removes the link and wraps it with a <code> element
    * The <code> element is needed to avoid auto linking
-   * 
+   *
    * @example
    *    // either ...
    *    wysihtml5.commands.createLink.exec(composer, "createLink", "http://www.google.de");

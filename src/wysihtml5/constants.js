@@ -4,7 +4,9 @@ var Constants = {
   ENTER_KEY: 13,
   ESCAPE_KEY: 27,
   SPACE_KEY: 32,
-  DELETE_KEY: 46
+  DELETE_KEY: 46,
+
+  URL_REG_EXP: /^((https?:\/\/|www\.)[^\s<]{3,})/gi
 };
 
 export { Constants };

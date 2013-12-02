@@ -1,4 +1,3 @@
-import { autoLink } from "wysihtml5/dom/auto_link";
 import { addClass, removeClass, hasClass } from "wysihtml5/dom/class";
 import { contains } from "wysihtml5/dom/contains";
 import { ContenteditableArea } from "wysihtml5/dom/contenteditable_area";
@@ -29,7 +28,6 @@ import { simulatePlaceholder } from "wysihtml5/dom/simulate_placeholder";
 import { setTextContent, getTextContent } from "wysihtml5/dom/text_content";
 
 export default = {
-  autoLink: autoLink,
   addClass: addClass,
   removeClass: removeClass,
   hasClass: hasClass,
