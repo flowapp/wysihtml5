@@ -34,13 +34,7 @@ var Toolbar = Base.extend(
 
     this._observe();
     if (showOnInit) { this.show(); }
-    
-    var speechInputLinks  = this.container.querySelectorAll("[data-wysihtml5-command=insertSpeech]"),
-        length            = speechInputLinks.length,
-        i                 = 0;
-    for (; i<length; i++) {
-      new wysihtml5.toolbar.Speech(this, speechInputLinks[i]);
-    }
+
   },
 
   _getLinks: function(type) {

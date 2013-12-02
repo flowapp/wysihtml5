@@ -286,21 +286,6 @@ var browser = (function() {
     },
     
     /**
-     * Whether the browser supports the speech api on the given element
-     * See http://mikepultz.com/2011/03/accessing-google-speech-api-chrome-11/
-     *
-     * @example
-     *    var input = document.createElement("input");
-     *    if (wysihtml5.browser.supportsSpeechApiOn(input)) {
-     *      // ...
-     *    }
-     */
-    supportsSpeechApiOn: function(input) {
-      var chromeVersion = userAgent.match(/Chrome\/(\d+)/) || [undefined, 0];
-      return chromeVersion[1] >= 11 && ("onwebkitspeechchange" in input || "speech" in input);
-    },
-    
-    /**
      * IE9 crashes when setting a getter via Object.defineProperty on XMLHttpRequest or XDomainRequest
      * See https://connect.microsoft.com/ie/feedback/details/650112
      * or try the POC http://tifftiff.de/ie9_crash/
