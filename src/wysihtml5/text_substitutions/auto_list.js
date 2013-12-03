@@ -1,7 +1,8 @@
 import { Composer } from "../views/composer";
+import { getParentElement } from "../dom/get_parent_element";
 
-Composer.RegisterTextSubstitution(function(word) {
-  return (word == "1.");
+Composer.RegisterTextSubstitution(function(textContent) {
+  return (textContent == "1." || textContent == "•" || textContent == "*");
 }, function(editor, composer, range, textContent, e) {
   composer.selection.executeAndRestore(function() {
     range.deleteContents();
@@ -9,7 +10,9 @@ Composer.RegisterTextSubstitution(function(word) {
     var selection = composer.selection.getSelection().nativeSelection;
     selection.removeAllRanges();
     selection.addRange(range);
-    composer.commands.exec("insertOrderedList");
+
+    var command = (textContent == "1.") ? "insertOrderedList" : "insertUnorderedList";
+    composer.commands.exec(command);
   });
 }, {
   word: true,
