@@ -95,13 +95,7 @@ var Composer = View.extend({
   },
 
   isEmpty: function() {
-    var innerHTML = this.element.innerHTML.toLowerCase();
-    return (
-      innerHTML === "" ||
-      innerHTML === "<br>" ||
-      innerHTML === "<p></p>" ||
-      innerHTML === "<p><br></p>"
-    );
+    return !this.element.textContent;
   },
 
   _initContentEditableArea: function() {
