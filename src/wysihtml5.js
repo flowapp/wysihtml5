@@ -21,6 +21,7 @@ import "wysihtml5/keyboard/break_block_elements";
 import "wysihtml5/keyboard/list_element_delete";
 import "wysihtml5/keyboard/break_header";
 import "wysihtml5/keyboard/break_list";
+import "wysihtml5/keyboard/shortcuts";
 
 // Text Substitutions
 import "wysihtml5/text_substitutions/auto_link";

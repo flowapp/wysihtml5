@@ -13,12 +13,6 @@ import { browser } from "../browser";
 import { Constants } from "../constants";
 import lang from "wysihtml5/lang";
 
-var shortcuts = {
-    "66": "bold",     // B
-    "73": "italic",   // I
-    "85": "underline" // U
-  };
-
 Composer.prototype.observe = function() {
   var that                = this,
       state               = this.getValue(),
@@ -123,16 +117,6 @@ Composer.prototype.observe = function() {
       }
     });
   }
-
-  // --------- Shortcut logic ---------
-  dom.observe(element, "keydown", function(event) {
-    var keyCode  = event.keyCode,
-        command  = shortcuts[keyCode];
-    if ((event.ctrlKey || event.metaKey) && !event.altKey && command) {
-      that.commands.exec(command);
-      event.preventDefault();
-    }
-  });
 
   // --------- Make sure that when pressing backspace/delete on selected images deletes the image and it's anchor ---------
   dom.observe(element, "keydown", function(event) {
