@@ -275,13 +275,14 @@ var Composer = View.extend({
     if (e.keyCode == Constants.SPACE_KEY) {
       var range = this.selection.getRange();
       var options = this._lastInsertedWordRange(range);
-
-      for (var index = 0; index < this._textSubstitutions.length; index++) {
-        var textSubstitution = this._textSubstitutions[index];
-        if (textSubstitution.options.word !== false && textSubstitution.matcher(options.textContent, e)) {
-          textSubstitution.callback(this.parent, this, options.range, options.textContent, e);
+      if (options) {
+        for (var index = 0; index < this._textSubstitutions.length; index++) {
+          var textSubstitution = this._textSubstitutions[index];
+          if (textSubstitution.options.word !== false && textSubstitution.matcher(options.textContent, e)) {
+            textSubstitution.callback(this.parent, this, options.range, options.textContent, e);
+          }
         }
-      };
+      }
     } else if (e.keyCode == Constants.ENTER_KEY) {
       var range = this.selection.getRange();
       var blockRange = this._lastInsertedBlock(range, e);
