@@ -20,7 +20,6 @@
  *    paste:composer
  *    paste:textarea
  *    newword:composer
- *    destroy:composer
  *    undo:composer
  *    redo:composer
  *    beforecommand:composer

@@ -28,11 +28,6 @@ Composer.prototype.observe = function() {
       pasteEvents         = ["drop", "paste"],
       interactionEvents   = ["drop", "paste", "mouseup", "focus", "keyup"];
 
-  // --------- destroy:composer event ---------
-  dom.observe(container, "DOMNodeRemoved", function() {
-    that.parent.fire("destroy:composer");
-  });
-
   // --------- User interaction tracking --
 
   dom.observe(focusBlurElement, interactionEvents, function() {
