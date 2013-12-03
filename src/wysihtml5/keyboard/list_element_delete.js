@@ -7,7 +7,7 @@ var LIST_TAGS = ["UL", "OL"];
 
 Composer.RegisterKeyboardHandler(function(e) {
   return (
-    e.type == "keydown" && 
+    e.type == "keydown" &&
     e.keyCode == Constants.BACKSPACE_KEY
   );
 }, function(editor, composer, e) {
@@ -23,7 +23,7 @@ Composer.RegisterKeyboardHandler(function(e) {
       });
 
       var type = list.tagName == "OL" ? "insertOrderedList" : "insertUnorderedList"
-      if (listItem) {
+      if (listItem && list.firstElementChild === listItem) {
         event.preventDefault();
         composer.selection.executeAndRestore(function() {
           document.execCommand(type, true, range.nativeRange)
