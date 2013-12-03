@@ -16,15 +16,14 @@ import lang from "wysihtml5/lang";
 Composer.prototype.observe = function() {
   var that                = this,
       state               = this.getValue(),
-      container           = (this.sandbox.getIframe) ? this.sandbox.getIframe() : this.sandbox.getContentEditable(),
+      container           = this.sandbox.getContentEditable(),
       element             = this.element,
-      focusBlurElement    = (browser.supportsEventsInIframeCorrectly() || this.sandbox.getContentEditable) ? element : this.sandbox.getWindow(),
       pasteEvents         = ["drop", "paste"],
       interactionEvents   = ["drop", "paste", "mouseup", "focus", "keyup"];
 
   // --------- User interaction tracking --
 
-  dom.observe(focusBlurElement, interactionEvents, function() {
+  dom.observe(this.element, interactionEvents, function() {
     setTimeout(function() {
       that.parent.fire("interaction").fire("interaction:composer");
     }, 0);
@@ -32,7 +31,7 @@ Composer.prototype.observe = function() {
 
 
   // --------- Focus & blur logic ---------
-  dom.observe(focusBlurElement, "focus", function() {
+  dom.observe(this.element, "focus", function() {
     that.parent.fire("focus").fire("focus:composer");
 
     // Delay storing of state until all focus handler are fired
@@ -40,7 +39,7 @@ Composer.prototype.observe = function() {
     setTimeout(function() { state = that.getValue(); }, 0);
   });
 
-  dom.observe(focusBlurElement, "blur", function() {
+  dom.observe(this.element, "blur", function() {
     if (state !== that.getValue()) {
       that.parent.fire("change").fire("change:composer");
     }
@@ -48,7 +47,6 @@ Composer.prototype.observe = function() {
   });
 
   // --------- Drag & Drop logic ---------
-
   dom.observe(element, pasteEvents, function() {
     setTimeout(function() {
       that.parent.fire("paste").fire("paste:composer");
@@ -71,23 +69,19 @@ Composer.prototype.observe = function() {
   if (!browser.canSelectImagesInContentEditable()) {
     dom.observe(element, "mousedown", function(event) {
       var target = event.target;
-      var allImages = element.querySelectorAll('img'),
-          notMyImages = element.querySelectorAll('.' + that.config.uneditableContainerClassname + ' img'),
-          myImages = lang.array(allImages).without(notMyImages);
-
-      if (target.nodeName === "IMG" && lang.array(myImages).contains(target)) {
+      if (target.nodeName === "IMG") {
         that.selection.selectNode(target);
       }
     });
   }
 
   if (!browser.canSelectImagesInContentEditable()) {
-      dom.observe(element, "drop", function(event) {
-          // TODO: if I knew how to get dropped elements list from event I could limit it to only IMG element case
-          setTimeout(function() {
-              that.selection.getSelection().removeAllRanges();
-          }, 0);
-      });
+    dom.observe(element, "drop", function(event) {
+      // TODO: if I knew how to get dropped elements list from event I could limit it to only IMG element case
+      setTimeout(function() {
+          that.selection.getSelection().removeAllRanges();
+      }, 0);
+    });
   }
 
   if (browser.hasHistoryIssue() && browser.supportsSelectionModify()) {
