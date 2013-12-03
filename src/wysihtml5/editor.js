@@ -39,13 +39,13 @@ import quirks from "./quirks";
 var undef;
 
 var defaultConfig = {
-  // Give the editor a name, the name will also be set as class name on the iframe and on the iframe's body 
+  // Give the editor a name, the name will also be set as class name on the iframe and on the iframe's body
   name:                 undef,
   // Whether the editor should look like the textarea (by adopting styles)
   style:                true,
   // Whether urls, entered by the user should automatically become clickable-links
   autoLink:             true,
-  // Includes table editing events and cell selection tracking 
+  // Includes table editing events and cell selection tracking
   handleTables:         false,
   // Object which includes parser rules to apply when html gets inserted via copy & paste
   // See parser_rules/*.js for examples
@@ -66,7 +66,7 @@ var defaultConfig = {
   contentEditableMode: true,
   noTextarea: true,
   // Classname of container that editor should not touch and pass through
-  // Pass false to disable 
+  // Pass false to disable
   uneditableContainerClassname: "wysihtml5-uneditable-container"
 };
 
@@ -76,25 +76,25 @@ var Editor = lang.Dispatcher.extend(
     this.editableElement  = editableElement;
     this.config           = lang.object({}).merge(defaultConfig).merge(config).get();
     this._isCompatible    = browser.supported();
-    
+
     // Sort out unsupported/unwanted browsers here
     if (!this._isCompatible || (!this.config.supportTouchDevices && browser.isTouchDevice())) {
       var that = this;
       setTimeout(function() { that.fire("beforeload").fire("load"); }, 0);
       return;
     }
-    
+
     // Add class name to body, to indicate that the editor is supported
     dom.addClass(document.body, this.config.bodyClassName);
-    
+
     this.composer = new Composer(this, this.editableElement, this.config);
     this.currentView = this.composer;
-    
+
     if (typeof(this.config.parser) === "function") {
       this._initParser();
     }
   },
-  
+
   isCompatible: function() {
     return this._isCompatible;
   },
@@ -112,11 +112,11 @@ var Editor = lang.Dispatcher.extend(
     if (!html) {
       return this.clear();
     }
-    
+
     this.currentView.setValue(html, parse);
     return this;
   },
-  
+
   cleanUp: function() {
       this.currentView.cleanUp();
   },
@@ -133,7 +133,7 @@ var Editor = lang.Dispatcher.extend(
     this.currentView.disable();
     return this;
   },
-  
+
   /**
    * Activate editor
    */
@@ -141,11 +141,11 @@ var Editor = lang.Dispatcher.extend(
     this.currentView.enable();
     return this;
   },
-  
+
   isEmpty: function() {
     return this.currentView.isEmpty();
   },
-  
+
   parse: function(htmlOrElement) {
     var returnValue = this.config.parser(htmlOrElement, {
       rules: this.config.parserRules,
@@ -159,7 +159,7 @@ var Editor = lang.Dispatcher.extend(
     }
     return returnValue;
   },
-  
+
   /**
    * Prepare html parser logic
    *  - Observes for paste and drop

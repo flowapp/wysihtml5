@@ -34,13 +34,13 @@ Composer.prototype.observe = function() {
   });
 
   // --------- User interaction tracking --
-  
+
   dom.observe(focusBlurElement, interactionEvents, function() {
     setTimeout(function() {
       that.parent.fire("interaction").fire("interaction:composer");
     }, 0);
   });
-  
+
 
   // --------- Focus & blur logic ---------
   dom.observe(focusBlurElement, "focus", function() {
@@ -85,13 +85,13 @@ Composer.prototype.observe = function() {
       var allImages = element.querySelectorAll('img'),
           notMyImages = element.querySelectorAll('.' + that.config.uneditableContainerClassname + ' img'),
           myImages = lang.array(allImages).without(notMyImages);
-          
+
       if (target.nodeName === "IMG" && lang.array(myImages).contains(target)) {
         that.selection.selectNode(target);
       }
     });
   }
-  
+
   if (!browser.canSelectImagesInContentEditable()) {
       dom.observe(element, "drop", function(event) {
           // TODO: if I knew how to get dropped elements list from event I could limit it to only IMG element case
@@ -100,17 +100,17 @@ Composer.prototype.observe = function() {
           }, 0);
       });
   }
-  
+
   if (browser.hasHistoryIssue() && browser.supportsSelectionModify()) {
     dom.observe(element, "keydown", function(event) {
       if (!event.metaKey && !event.ctrlKey) {
         return;
       }
-      
+
       var keyCode   = event.keyCode,
           win       = element.ownerDocument.defaultView,
           selection = win.getSelection();
-      
+
       if (keyCode === 37 || keyCode === 39) {
         if (keyCode === 37) {
           selection.modify("extend", "left", "lineboundary");
@@ -128,7 +128,7 @@ Composer.prototype.observe = function() {
       }
     });
   }
-  
+
   // --------- Shortcut logic ---------
   dom.observe(element, "keydown", function(event) {
     var keyCode  = event.keyCode,
@@ -138,7 +138,7 @@ Composer.prototype.observe = function() {
       event.preventDefault();
     }
     if (keyCode == 8) {
-      
+
       if (that.selection.isCollapsed()) {
         if (that.selection.caretIsInTheBeginnig()) {
           event.preventDefault();
@@ -146,17 +146,17 @@ Composer.prototype.observe = function() {
           var beforeUneditable = that.selection.caretIsBeforeUneditable();
           if (beforeUneditable) {
             event.preventDefault();
-            
+
             // TODO: take the how to delete around uneditable out of here
             // merge node with previous node from uneditable
             var prevNode = that.selection.getPreviousNode(beforeUneditable, true),
                 curNode = that.selection.getSelectedNode();
-          
-            if (curNode.nodeType !== 1 && curNode.parentNode !== element) { curNode = curNode.parentNode; } 
+
+            if (curNode.nodeType !== 1 && curNode.parentNode !== element) { curNode = curNode.parentNode; }
             if (prevNode) {
               if (curNode.nodeType == 1) {
                 var first = curNode.firstChild;
-              
+
                 if (prevNode.nodeType == 1) {
                   while (curNode.firstChild) {
                     prevNode.appendChild(curNode.firstChild);
@@ -186,7 +186,7 @@ Composer.prototype.observe = function() {
         event.preventDefault();
         that.selection.deleteContents();
       }
-      
+
     }
   });
 

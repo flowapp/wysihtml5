@@ -31,7 +31,7 @@ var Composer = View.extend({
 
   getValue: function(parse) {
     var value = this.isEmpty() ? "" : quirks.getCorrectInnerHTML(this.element);
-    
+
     if (parse) {
       value = this.parent.parse(value);
     }
@@ -43,14 +43,14 @@ var Composer = View.extend({
     if (parse) {
       html = this.parent.parse(html);
     }
-    
+
     try {
       this.element.innerHTML = html;
     } catch (e) {
       this.element.innerText = html;
     }
   },
-  
+
   cleanUp: function() {
       this.parent.parse(this.element);
   },
@@ -79,7 +79,7 @@ var Composer = View.extend({
 
   focus: function(setToEnd) {
     this.base();
-    
+
     var lastChild = this.element.lastChild;
     if (setToEnd && lastChild && this.selection) {
       if (lastChild.nodeName === "BR") {
@@ -103,24 +103,24 @@ var Composer = View.extend({
       innerHTML === "<p><br></p>"
     );
   },
-  
+
   _initContentEditableArea: function() {
     var that = this;
-    
+
     this.sandbox = new dom.ContenteditableArea(function() {
         that._create();
     }, {}, this.editableArea);
   },
-  
+
   _create: function() {
     var that = this;
     this.doc = this.sandbox.getDocument();
     this.element = this.sandbox.getContentEditable()
     this.cleanUp(); // cleans contenteditable on initiation as it may contain html
-    
+
     // Make sure our selection handler is ready
     this.selection = new Selection(this.parent, this.element, this.config.uneditableContainerClassname);
-    
+
     // Make sure commands dispatcher is ready
     this.commands  = new Commands(this.parent);
 
@@ -128,20 +128,20 @@ var Composer = View.extend({
     dom.addClass(this.element, this.config.composerClassName);
 
     this.observe();
-    
+
     // WTF
     var name = this.config.name;
     if (name) {
       dom.addClass(this.element, name);
     }
-    
+
     this.enable();
 
     // Make sure that the browser avoids using inline styles whenever possible
     this.commands.exec("styleWithCSS", false);
     this.commands.exec("enableObjectResizing", false);
     this.commands.exec("insertBrOnReturn", false);
-    
+
     //this._initUndoManager();
 
     // IE sometimes leaves a single paragraph, which can't be removed by the user
@@ -164,7 +164,7 @@ var Composer = View.extend({
           _this._proccesAddedNodes(record.addedNodes)
         });
       });
-      observer.observe(this.element, { 
+      observer.observe(this.element, {
         subtree: true,
         childList: true
       });
@@ -190,8 +190,8 @@ var Composer = View.extend({
     var _this = this;
     for (var index = addedNodes.length - 1; index >= 0; index--) {
       node = addedNodes[index];
-      if (node.nodeType == Node.ELEMENT_NODE && 
-          node.nodeName == "SPAN" && 
+      if (node.nodeType == Node.ELEMENT_NODE &&
+          node.nodeName == "SPAN" &&
           node.className != "_wysihtml5-temp-placeholder"
       ) {
         setTimeout(function() {
@@ -203,15 +203,15 @@ var Composer = View.extend({
       }
     };
   },
-  
+
   _initUndoManager: function() {
     this.undoManager = new UndoManager(this.parent);
   },
-  
+
   _initLineBreaking: function() {
     var that = this,
         _this = this;
-    
+
     dom.observe(this.element, ["focus", "keydown"], function() {
       if (that.isEmpty()) {
         var paragraph = that.doc.createElement("P");
@@ -225,7 +225,7 @@ var Composer = View.extend({
         }
       }
     });
-    
+
     // Under certain circumstances Chrome + Safari create nested <p>
     // or <h[1-6]> tags after paste Inserting an invisible white space
     // in front of it fixes the issue
@@ -240,7 +240,7 @@ var Composer = View.extend({
       _this._handleKeyboardHandlers(event);
       _this._lookForTextSubstitution(event);
     });
-  }, 
+  },
 
   // Text Substitutions
 
@@ -248,7 +248,7 @@ var Composer = View.extend({
     var nativeRange = range.nativeRange;
     var startContainer = nativeRange.startContainer;
     if (nativeRange.collapsed) {
-      var blockElement = dom.getParentElement(startContainer, { 
+      var blockElement = dom.getParentElement(startContainer, {
         nodeName: ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6", "PRE", "BLOCKQUOTE"]
       }, 4);
       if (blockElement) {
@@ -274,7 +274,6 @@ var Composer = View.extend({
         range: wordRange,
         textContent: textContent.slice((lastIndex + 1))
       };
-
     }
   },
 
@@ -295,7 +294,7 @@ var Composer = View.extend({
     }
   },
 
-  // Keyboard Processors 
+  // Keyboard Processors
 
   _handleKeyboardHandlers: function(e) {
     for (var i = 0; i < this._keyboardHandlers.length; i++) {
@@ -309,7 +308,7 @@ var Composer = View.extend({
 
 Composer.RegisterKeyboardHandler = function(matcher, callback) {
   Composer.prototype._keyboardHandlers.push({
-    matcher: matcher, 
+    matcher: matcher,
     callback: callback
   });
 };
