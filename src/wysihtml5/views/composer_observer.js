@@ -117,23 +117,4 @@ Composer.prototype.observe = function() {
       }
     });
   }
-
-  // --------- Make sure that when pressing backspace/delete on selected images deletes the image and it's anchor ---------
-  dom.observe(element, "keydown", function(event) {
-    var target  = that.selection.getSelectedNode(true),
-        keyCode = event.keyCode,
-        parent;
-    if (target && target.nodeName === "IMG" && (keyCode === Constants.BACKSPACE_KEY || keyCode === Constants.DELETE_KEY)) {
-      parent = target.parentNode;
-      // delete the <img>
-      parent.removeChild(target);
-      // and it's parent <a> too if it hasn't got any other child nodes
-      if (parent.nodeName === "A" && !parent.firstChild) {
-        parent.parentNode.removeChild(parent);
-      }
-
-      setTimeout(function() { redraw(element); }, 0);
-      event.preventDefault();
-    }
-  });
 };
