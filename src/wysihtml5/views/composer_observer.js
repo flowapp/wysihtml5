@@ -132,57 +132,6 @@ Composer.prototype.observe = function() {
       that.commands.exec(command);
       event.preventDefault();
     }
-    if (keyCode == 8) {
-
-      if (that.selection.isCollapsed()) {
-        if (that.selection.caretIsInTheBeginnig()) {
-          event.preventDefault();
-        } else {
-          var beforeUneditable = that.selection.caretIsBeforeUneditable();
-          if (beforeUneditable) {
-            event.preventDefault();
-
-            // TODO: take the how to delete around uneditable out of here
-            // merge node with previous node from uneditable
-            var prevNode = that.selection.getPreviousNode(beforeUneditable, true),
-                curNode = that.selection.getSelectedNode();
-
-            if (curNode.nodeType !== 1 && curNode.parentNode !== element) { curNode = curNode.parentNode; }
-            if (prevNode) {
-              if (curNode.nodeType == 1) {
-                var first = curNode.firstChild;
-
-                if (prevNode.nodeType == 1) {
-                  while (curNode.firstChild) {
-                    prevNode.appendChild(curNode.firstChild);
-                  }
-                } else {
-                  while (curNode.firstChild) {
-                    beforeUneditable.parentNode.insertBefore(curNode.firstChild, beforeUneditable);
-                  }
-                }
-                if (curNode.parentNode) {
-                  curNode.parentNode.removeChild(curNode);
-                }
-                that.selection.setBefore(first);
-              } else {
-                if (prevNode.nodeType == 1) {
-                  prevNode.appendChild(curNode);
-                } else {
-                  beforeUneditable.parentNode.insertBefore(curNode, beforeUneditable);
-                }
-                that.selection.setBefore(curNode);
-              }
-            }
-          }
-
-        }
-      } else if (that.selection.containsUneditable()) {
-        event.preventDefault();
-        that.selection.deleteContents();
-      }
-
-    }
   });
 
   // --------- Make sure that when pressing backspace/delete on selected images deletes the image and it's anchor ---------
