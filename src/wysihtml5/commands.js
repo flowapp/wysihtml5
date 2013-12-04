@@ -1,21 +1,21 @@
 /**
  * Rich Text Query/Formatting Commands
- * 
+ *
  * @example
  *    var commands = new wysihtml5.Commands(editor);
  */
 
 import { browser } from "./browser";
-import commands from "./commands/all"; 
+import commands from "./commands/all";
 import lang from "./lang";
 
 var Commands = Base.extend({
-  constructor: function(editor) {
+  constructor: function(editor, composer) {
     this.editor   = editor;
-    this.composer = editor.composer;
-    this.doc      = this.composer.doc;
+    this.composer = composer;
+    this.doc      = document;
   },
-  
+
   /**
    * Check whether the browser supports the given command
    *
@@ -26,7 +26,7 @@ var Commands = Base.extend({
   support: function(command) {
     return browser.supportsCommand(this.doc, command);
   },
-  
+
   /**
    * Check whether the browser supports the given command
    *
@@ -40,9 +40,9 @@ var Commands = Base.extend({
         args    = lang.array(arguments).get(),
         method  = obj && obj.exec,
         result  = null;
-    
+
     this.editor.fire("beforecommand:composer");
-    
+
     if (method) {
       args.unshift(this.composer);
       result = method.apply(obj, args);
@@ -52,11 +52,11 @@ var Commands = Base.extend({
         result = this.doc.execCommand(command, false, value);
       } catch(e) {}
     }
-    
+
     this.editor.fire("aftercommand:composer");
     return result;
   },
-  
+
   /**
    * Check whether the current command is active
    * If the caret is within a bold text, then calling this with command "bold" should return true
@@ -83,7 +83,7 @@ var Commands = Base.extend({
       }
     }
   },
-  
+
   /* Get command state parsed value if command has stateValue parsing function */
   stateValue: function(command) {
     var obj     = commands[command],
@@ -95,7 +95,7 @@ var Commands = Base.extend({
     } else {
       return false;
     }
-  } 
+  }
 });
 
 export { Commands };

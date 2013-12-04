@@ -22,9 +22,9 @@ var Composer = Base.extend({
     this.parent = parent;
     this.element = editableElement;
     this.config = config;
-
+    this.doc = document;
     this.editableArea = editableElement;
-    this._initContentEditableArea();
+    this._create();
   },
 
   clear: function() {
@@ -98,25 +98,17 @@ var Composer = Base.extend({
     return !this.element.textContent;
   },
 
-  _initContentEditableArea: function() {
-    var that = this;
-
-    this.sandbox = new dom.ContenteditableArea(function() {
-        that._create();
-    }, {}, this.editableArea);
-  },
-
   _create: function() {
     var that = this;
-    this.doc = this.sandbox.getDocument();
-    this.element = this.sandbox.getContentEditable()
+    this.doc = document;
+    this.element = this.editableArea;
     this.cleanUp(); // cleans contenteditable on initiation as it may contain html
 
     // Make sure our selection handler is ready
     this.selection = new Selection(this.parent, this.element, this.config.uneditableContainerClassname);
 
     // Make sure commands dispatcher is ready
-    this.commands  = new Commands(this.parent);
+    this.commands  = new Commands(this.parent, this);
 
     // DEPRECATED
     dom.addClass(this.element, this.config.composerClassName);

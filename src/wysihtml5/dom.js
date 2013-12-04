@@ -1,6 +1,5 @@
 import { addClass, removeClass, hasClass } from "wysihtml5/dom/class";
 import { contains } from "wysihtml5/dom/contains";
-import { ContenteditableArea } from "wysihtml5/dom/contenteditable_area";
 import { convertToList } from "wysihtml5/dom/convert_to_list";
 import { copyAttributes } from "wysihtml5/dom/copy_attributes";
 import { copyStyles } from "wysihtml5/dom/copy_styles";
@@ -20,7 +19,6 @@ import { removeEmptyTextNodes } from "wysihtml5/dom/remove_empty_text_nodes";
 import { renameElement } from "wysihtml5/dom/rename_element";
 import { replaceWithChildNodes } from "wysihtml5/dom/replace_with_child_nodes";
 import { resolveList } from "wysihtml5/dom/resolve_list";
-import { sandbox } from "wysihtml5/dom/sandbox";
 import { setAttributes } from "wysihtml5/dom/set_attributes";
 import { setStyles } from "wysihtml5/dom/set_styles";
 //import { table } from "wysihtml5/dom/table";
@@ -31,7 +29,6 @@ export default = {
   removeClass: removeClass,
   hasClass: hasClass,
   contains: contains,
-  ContenteditableArea: ContenteditableArea,
   convertToList: convertToList,
   copyAttributes: copyAttributes,
   copyStyles: copyStyles,
@@ -51,7 +48,6 @@ export default = {
   renameElement: renameElement,
   replaceWithChildNodes: replaceWithChildNodes,
   resolveList: resolveList,
-  sandbox: sandbox,
   setAttributes: setAttributes,
   setStyles: setStyles,
   //table: table,

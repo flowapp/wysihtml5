@@ -16,7 +16,6 @@ import lang from "wysihtml5/lang";
 Composer.prototype.observe = function() {
   var that                = this,
       state               = this.getValue(),
-      container           = this.sandbox.getContentEditable(),
       element             = this.element,
       pasteEvents         = ["drop", "paste"],
       interactionEvents   = ["drop", "paste", "mouseup", "focus", "keyup"];

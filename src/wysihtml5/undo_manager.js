@@ -29,31 +29,31 @@ var UndoManager = lang.Dispatcher.extend({
     this.editor = editor;
     this.composer = editor.composer;
     this.element = this.composer.element;
-    
+
     this.position = 0;
     this.historyStr = [];
     this.historyDom = [];
-    
+
     this.transact();
-    
+
     this._observe();
   },
-  
+
   _observe: function() {
     var that      = this,
-        doc       = this.composer.sandbox.getDocument(),
+        doc       = document,
         lastKey;
-        
+
     // Catch CTRL+Z and CTRL+Y
     dom.observe(this.element, "keydown", function(event) {
       if (event.altKey || (!event.ctrlKey && !event.metaKey)) {
         return;
       }
-      
+
       var keyCode = event.keyCode,
           isUndo = keyCode === Z_KEY && !event.shiftKey,
           isRedo = (keyCode === Z_KEY && event.shiftKey) || (keyCode === Y_KEY);
-      
+
       if (isUndo) {
         that.undo();
         event.preventDefault();
@@ -62,21 +62,21 @@ var UndoManager = lang.Dispatcher.extend({
         event.preventDefault();
       }
     });
-    
+
     // Catch delete and backspace
     dom.observe(this.element, "keydown", function(event) {
       var keyCode = event.keyCode;
       if (keyCode === lastKey) {
         return;
       }
-      
+
       lastKey = keyCode;
-      
+
       if (keyCode === BACKSPACE_KEY || keyCode === DELETE_KEY) {
         that.transact();
       }
     });
-    
+
     // Now this is very hacky:
     // These days browsers don't offer a undo/redo event which we could hook into
     // to be notified when the user hits undo/redo in the contextmenu.
@@ -84,14 +84,14 @@ var UndoManager = lang.Dispatcher.extend({
     // The last element being inserted will be immediately be removed again by a exexCommand("undo")
     //  => When the second element appears in the dom tree then we know the user clicked "redo" in the context menu
     //  => When the first element disappears from the dom tree then we know the user clicked "undo" in the context menu
-    
+
     // TODO: unexpected behaviour. Tends to undo on contextmenu showing in chrome on newly inserted blocks
     /*if (wysihtml5.browser.hasUndoInContextMenu()) {
       var interval, observed, cleanUp = function() {
         cleanTempElements(doc);
         clearInterval(interval);
       };
-      
+
       dom.observe(this.element, "contextmenu", function() {
         cleanUp();
         that.composer.selection.executeAndRestoreSimple(function() {
@@ -123,104 +123,104 @@ var UndoManager = lang.Dispatcher.extend({
         }
       });
     }*/
-    
+
     this.editor
       .on("newword:composer", function() {
         that.transact();
       })
-      
+
       .on("beforecommand:composer", function() {
         that.transact();
       });
   },
-  
+
   transact: function() {
     var previousHtml      = this.historyStr[this.position - 1],
         currentHtml       = this.composer.getValue();
-    
+
     if (currentHtml === previousHtml) {
       return;
     }
-    
+
     var length = this.historyStr.length = this.historyDom.length = this.position;
     if (length > MAX_HISTORY_ENTRIES) {
       this.historyStr.shift();
       this.historyDom.shift();
       this.position--;
     }
-    
+
     this.position++;
-    
+
     var range   = this.composer.selection.getRange(),
         node    = (range && range.startContainer) ? range.startContainer : this.element,
         offset  = (range && range.startOffset) ? range.startOffset : 0,
         element,
         position;
-    
+
     if (node.nodeType === Node.ELEMENT_NODE) {
       element = node;
     } else {
       element  = node.parentNode;
       position = this.getChildNodeIndex(element, node);
     }
-    
+
     element.setAttribute(DATA_ATTR_OFFSET, offset);
     if (typeof(position) !== "undefined") {
       element.setAttribute(DATA_ATTR_NODE, position);
     }
-    
+
     var clone = this.element.cloneNode(!!currentHtml);
     this.historyDom.push(clone);
     this.historyStr.push(currentHtml);
-    
+
     element.removeAttribute(DATA_ATTR_OFFSET);
     element.removeAttribute(DATA_ATTR_NODE);
   },
-  
+
   undo: function() {
     this.transact();
-    
+
     if (!this.undoPossible()) {
       return;
     }
-    
+
     this.set(this.historyDom[--this.position - 1]);
     this.editor.fire("undo:composer");
   },
-  
+
   redo: function() {
     if (!this.redoPossible()) {
       return;
     }
-    
+
     this.set(this.historyDom[++this.position - 1]);
     this.editor.fire("redo:composer");
   },
-  
+
   undoPossible: function() {
     return this.position > 1;
   },
-  
+
   redoPossible: function() {
     return this.position < this.historyStr.length;
   },
-  
+
   set: function(historyEntry) {
     this.element.innerHTML = "";
-    
+
     var i = 0,
         childNodes = historyEntry.childNodes,
         length = historyEntry.childNodes.length;
-    
+
     for (; i<length; i++) {
       this.element.appendChild(childNodes[i].cloneNode(true));
     }
-    
+
     // Restore selection
     var offset,
         node,
         position;
-    
+
     if (historyEntry.hasAttribute(DATA_ATTR_OFFSET)) {
       offset    = historyEntry.getAttribute(DATA_ATTR_OFFSET);
       position  = historyEntry.getAttribute(DATA_ATTR_NODE);
@@ -232,14 +232,14 @@ var UndoManager = lang.Dispatcher.extend({
       node.removeAttribute(DATA_ATTR_OFFSET);
       node.removeAttribute(DATA_ATTR_NODE);
     }
-    
+
     if (position !== null) {
       node = this.getChildNodeByIndex(node, +position);
     }
-    
+
     this.composer.selection.set(node, offset);
   },
-  
+
   getChildNodeIndex: function(parent, child) {
     var i           = 0,
         childNodes  = parent.childNodes,
@@ -250,7 +250,7 @@ var UndoManager = lang.Dispatcher.extend({
       }
     }
   },
-  
+
   getChildNodeByIndex: function(parent, index) {
     return parent.childNodes[index];
   }
