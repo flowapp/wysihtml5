@@ -11,7 +11,7 @@ Composer.RegisterKeyboardHandler(function(e) {
 }, function(editor, composer, e) {
   var selectedNode = composer.selection.getSelectedNode();
   var blockElement = dom.getParentElement(selectedNode, {
-    nodeName: ["PRE", "BLOCKQUOTE"]
+    nodeName: ["BLOCKQUOTE"]
   }, 4);
   if (blockElement && !blockElement.textContent) {
     event.preventDefault();

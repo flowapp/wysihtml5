@@ -18,6 +18,7 @@ import "wysihtml5/views/composer_observer";
 import "wysihtml5/views/composer_selection_event";
 
 // Keyboard fixes
+import "wysihtml5/keyboard/newline_pre";
 import "wysihtml5/keyboard/break_block_elements";
 import "wysihtml5/keyboard/list_element_delete";
 import "wysihtml5/keyboard/break_header";
