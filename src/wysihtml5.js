@@ -29,12 +29,4 @@ import "wysihtml5/text_substitutions/auto_link";
 import "wysihtml5/text_substitutions/auto_list";
 
 var version = "<%= pkg.version %>";
-
-var wysihtml5 = {
-  commands:   {},
-  quirks:     {},
-  selection:  {},
-  views:      {},
-};
-
 export { version, Editor, lang, dom};

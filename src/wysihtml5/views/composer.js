@@ -3,12 +3,11 @@ import lang from "wysihtml5/lang";
 import quirks from "../quirks";
 import { browser } from "../browser";
 import { Constants } from "../constants";
-import { View } from "./view";
 import { Selection } from "../selection/selection";
 import { Commands} from "../commands";
 import { UndoManager } from "../undo_manager";
 
-var Composer = View.extend({
+var Composer = Base.extend({
   name: "composer",
   browser: browser,
   dom: dom,
@@ -20,7 +19,10 @@ var Composer = View.extend({
   _textSubstitutions: [],
 
   constructor: function(parent, editableElement, config) {
-    this.base(parent, editableElement, config);
+    this.parent = parent;
+    this.element = editableElement;
+    this.config = config;
+
     this.editableArea = editableElement;
     this._initContentEditableArea();
   },
@@ -43,16 +45,11 @@ var Composer = View.extend({
     if (parse) {
       html = this.parent.parse(html);
     }
-
-    try {
-      this.element.innerHTML = html;
-    } catch (e) {
-      this.element.innerText = html;
-    }
+    this.element.innerHTML = html;
   },
 
   cleanUp: function() {
-      this.parent.parse(this.element);
+    this.parent.parse(this.element);
   },
 
   show: function() {
@@ -78,7 +75,10 @@ var Composer = View.extend({
   },
 
   focus: function(setToEnd) {
-    this.base();
+    if (document.querySelector(":focus") === this.element) {
+      return;
+    }
+    this.element.focus();
 
     var lastChild = this.element.lastChild;
     if (setToEnd && lastChild && this.selection) {
