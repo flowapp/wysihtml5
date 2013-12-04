@@ -15,6 +15,7 @@ import lang from "wysihtml5/lang";
 import { Editor } from "wysihtml5/editor";
 import { Composer } from "wysihtml5/views/composer";
 import "wysihtml5/views/composer_observer";
+import "wysihtml5/views/composer_selection_event";
 
 // Keyboard fixes
 import "wysihtml5/keyboard/break_block_elements";

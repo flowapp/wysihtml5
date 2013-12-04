@@ -223,160 +223,24 @@
 
       <p>Suspendisse id mauris vel urna venenatis pharetra. Pellentesque luctus et nulla in vulputate. Donec id ligula id enim congue convallis id eu nibh. Phasellus a leo non dui porta sodales ac vel justo. Etiam sed dignissim ligula. Morbi consequat adipiscing risus vitae accumsan. Curabitur dignissim nec quam non blandit. Etiam venenatis, est a facilisis convallis, mauris nibh ultricies sapien, eget egestas neque eros sed libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas et velit sit amet quam pulvinar accumsan. Donec id sollicitudin dolor.</p>
     </div>
-
   </div>
-
-  <!-- oldschool clearfix -->
-  <div style="height: 1px; width: 100%; overflow: hidden; clear: both"></div>
-
-  <br/>
-  <br/>
-
-
-  <div class="ewrapper" contentEditable="false">
-    <div class="toolbar" style="display: none;">
-      <div class="block">
-        <a data-wysihtml5-command="bold" title="CTRL+B">bold</a>
-        <a data-wysihtml5-command="italic" title="CTRL+I">italic</a>
-        <a data-wysihtml5-command="underline" title="CTRL+U">underline</a>
-      </div>
-      <div class="block">
-        <a data-wysihtml5-command="createLink">link</a>
-        <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">h1</a>
-        <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2">h2</a>
-        <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3">h3</a>
-        <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p">p</a>
-        <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="pre">pre</a>
-      </div>
-      <div class="block">
-        <a data-wysihtml5-command="fontSize" data-wysihtml5-command-value="small">small</a>
-        <a data-wysihtml5-command="fontSize" data-wysihtml5-command-value="large">large</a>
-      </div>
-      <div class="block">
-        <a data-wysihtml5-command="insertUnorderedList">&bull; List</a>
-        <a data-wysihtml5-command="insertOrderedList">1. List</a>
-      </div>
-      <div class="block">
-        <a data-wysihtml5-command="justifyLeft">justifyLeft</a>
-        <a data-wysihtml5-command="justifyRight">justifyRight</a>
-        <a data-wysihtml5-command="justifyFull">justifyFull</a>
-      </div>
-
-      <div class="block">
-        <a data-wysihtml5-command="foreColorStyle">Color</a>
-        <div data-wysihtml5-dialog="foreColorStyle" style="display: none;">
-          Color:
-          <input type="text" data-wysihtml5-dialog-field="color" value="rgba(0,0,0,1)" />
-          <a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>
-        </div>
-      </div>
-
-      <div class="block">
-        <a data-wysihtml5-command="bgColorStyle">BG Color</a>
-        <div data-wysihtml5-dialog="bgColorStyle" style="display: none;">
-          Color:
-          <input type="text" data-wysihtml5-dialog-field="color" value="rgba(0,0,0,1)" />
-          <a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>
-        </div>
-      </div>
-
-      <div class="block">
-        <a data-wysihtml5-command="undo">undo</a>
-        <a data-wysihtml5-command="redo">redo</a>
-      </div>
-      <div class="block">
-        <a data-wysihtml5-action="showSource">HTML</a>
-      </div>
-
-      <div class="block">
-        <a data-wysihtml5-command="createTable">Table</a>
-        <div data-wysihtml5-dialog="createTable" style="display: none;">
-          Rows: <input type="text" data-wysihtml5-dialog-field="rows" /><br/>
-          Cols: <input type="text" data-wysihtml5-dialog-field="cols" /><br/>
-          <a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>
-        </div>
-      </div>
-      <div class="block" data-wysihtml5-hiddentools="table" style="display: none;">
-        <a data-wysihtml5-command="mergeTableCells">Merge</a>
-        <a data-wysihtml5-command="addTableCells" data-wysihtml5-command-value="above">row-before</a>
-        <a data-wysihtml5-command="addTableCells" data-wysihtml5-command-value="below">row-after</a>
-        <a data-wysihtml5-command="addTableCells" data-wysihtml5-command-value="before">col-before</a>
-        <a data-wysihtml5-command="addTableCells" data-wysihtml5-command-value="after">col-after</a>
-
-        <a data-wysihtml5-command="deleteTableCells" data-wysihtml5-command-value="row">delete row</a>
-        <a data-wysihtml5-command="deleteTableCells" data-wysihtml5-command-value="column">delete col</a>
-
-      </div>
-
-
-      <div data-wysihtml5-dialog="createLink" style="display: none;">
-        <label>
-          Link:
-          <input data-wysihtml5-dialog-field="href" value="http://">
-        </label>
-        <a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>
-      </div>
-      <div data-wysihtml5-dialog="insertImage" style="display: none;">
-        <label>
-          Image:
-          <input data-wysihtml5-dialog-field="src" value="http://">
-        </label>
-        <label>
-          Align:
-          <select data-wysihtml5-dialog-field="className">
-            <option value="">default</option>
-            <option value="wysiwyg-float-left">left</option>
-            <option value="wysiwyg-float-right">right</option>
-          </select>
-        </label>
-        <a data-wysihtml5-dialog-action="save">OK</a>&nbsp;<a data-wysihtml5-dialog-action="cancel">Cancel</a>
-      </div>
-    </div><!-- toolbar -->
-
-    <div class="editable" data-placeholder="Enter text ...">
-      Pellentesque ullamcorper ultrices nibh mollis mattis. Etiam ac fermentum nisi. Sed sagittis porta augue, vel congue mi. Vivamus egestas vestibulum sem, a suscipit libero faucibus ut. Quisque mauris metus, imperdiet at velit a, suscipit fermentum ante. Nullam pretium mauris at risus eleifend ultrices. Vestibulum ullamcorper mattis est non lobortis. Donec consequat magna quis felis mollis tristique. Fusce sed congue felis.
-      <br/>
-      Nulla facilisi. Ut quis pellentesque nisi, eget convallis nisi. Fusce dapibus tortor sem, et blandit nunc porttitor eget. Etiam eu nulla id nibh aliquet semper ut ut lorem. Nullam dapibus massa interdum interdum vehicula.
-      <br/><br/>
-      <table>
-        <tr>
-          <td>1&nbsp;</td><td>2&nbsp;</td><td>3&nbsp;</td>
-        </tr>
-        <tr>
-          <td>4&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>7&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-</div><!-- //wrap -->
-
-
-
-<h2>Events:</h2>
-<div id="log"></div>
-
-<small>powered by <a href="https://github.com/xing/wysihtml5" target="_blank">wysihtml5</a>.</small>
+</div>
 
 <script src="jquery.1.10.2.js" type="text/javascript" charset="utf-8"></script>
-
-
 <script src="../parser_rules/advanced_unwrap.js"></script>
 <script src="../dist/wysihtml5.js"></script>
 <script src="../vendor/base.js"></script>
 <script src="toolbar.js"></script>
 
 <script>
-var editors = [];
+  var editors = [];
 
-$('.ewrapper').each(function(idx, wrapper) {
-  var editor = new wysihtml5.Editor($(wrapper).find('.editable').get(0), {
-    parserRules:    wysihtml5ParserRules
+  $(".ewrapper").each(function(idx, wrapper) {
+    var element = $(wrapper).find(".editable")[0];
+    var editor = new wysihtml5.Editor(element, {
+      parserRules: wysihtml5ParserRules
+    });
+    new Toolbar(editor, $(wrapper).find(".toolbar")[0], true);
+    editors.push(editor);
   });
-  new Toolbar(editor, $(wrapper).find('.toolbar').get(0), true);
-  editors.push(editor);
-});
 </script>

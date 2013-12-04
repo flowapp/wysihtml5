@@ -25,6 +25,7 @@ var Composer = Base.extend({
     this.doc = document;
     this.editableArea = editableElement;
     this._create();
+    this._setupFakeSelectionEvents();
   },
 
   clear: function() {
