@@ -14,14 +14,14 @@ Composer.RegisterKeyboardHandler(function(e) {
     nodeName: ["LI"]
   }, 4);
 
-  if (listItem) {
+  if (listItem && !listItem.textContent) {
     setTimeout(function() {
       var selectedNode = composer.selection.getSelectedNode();
-      var list = dom.getParentElement(selectedNode, {
-        nodeName: LIST_TAGS
+      var blockElement = dom.getParentElement(selectedNode, {
+        nodeName: ["DIV"]
       });
 
-      if (!list) {
+      if (blockElement) {
         composer.selection.executeAndRestore(function() {
           dom.renameElement(selectedNode, "p");
         });
