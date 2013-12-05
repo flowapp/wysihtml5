@@ -265,7 +265,8 @@ var Composer = Base.extend({
   },
 
   _lookForTextSubstitution: function(e) {
-    if (e.keyCode == Constants.SPACE_KEY) {
+    // Commit words on space and enter
+    if (e.keyCode == Constants.SPACE_KEY || e.keyCode == Constants.ENTER_KEY) {
       var range = this.selection.getRange();
       var options = this._lastInsertedWordRange(range);
       if (options) {
@@ -276,7 +277,10 @@ var Composer = Base.extend({
           }
         }
       }
-    } else if (e.keyCode == Constants.ENTER_KEY) {
+    }
+
+    // Also commit paragraphs on enter
+    if (e.keyCode == Constants.ENTER_KEY) {
       var range = this.selection.getRange();
       var blockRange = this._lastInsertedBlock(range, e);
     }
