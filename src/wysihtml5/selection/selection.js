@@ -241,6 +241,25 @@ var Selection = Base.extend({
       return (offset === 0 && !this.getPreviousNode(node, true));
   },
 
+  caretIsAtStartOfNode: function(parentNode) {
+    var selectedNode = this.getSelectedNode();
+    var selectedRange = this.getRange();
+    var tester = function(range, node, until) {
+      if (range.startOffset == 0) {
+        var parent = node.parentNode;
+        if (parent === until) {
+          return true;
+        }
+        var newRange = document.createRange();
+        newRange.selectNode(parent);
+        return tester(newRange, parent, until);
+      } else {
+        return false;
+      }
+    }
+    return tester(selectedRange, selectedNode, parentNode);
+  },
+
   caretIsBeforeUneditable: function() {
     var selection = this.getSelection(),
         node = selection.anchorNode,

@@ -7,18 +7,20 @@
  *
  * Copyright (C) 2012 XING AG
  * Licensed under the MIT license (MIT)
- *
  */
 
 import dom from "wysihtml5/dom";
 import lang from "wysihtml5/lang";
 import { Editor } from "wysihtml5/editor";
+
+// Composer
 import { Composer } from "wysihtml5/views/composer";
 import "wysihtml5/views/composer_observer";
 import "wysihtml5/views/composer_selection_event";
 
 // Keyboard fixes
 import "wysihtml5/keyboard/prevent_last_paragraph_delete";
+import "wysihtml5/keyboard/prevent_empty_inherence";
 import "wysihtml5/keyboard/newline_pre";
 import "wysihtml5/keyboard/break_block_elements";
 import "wysihtml5/keyboard/list_element_delete";
