@@ -13,14 +13,15 @@ var ensureProperClearing = (function() {
     setTimeout(function() {
       var innerHTML = element.innerHTML.toLowerCase();
       if (innerHTML == "<p>&nbsp;</p>" ||
-          innerHTML == "<p>&nbsp;</p><p>&nbsp;</p>") {
+          innerHTML == "<p>&nbsp;</p><p>&nbsp;</p>" ||
+          innerHTML == "<p><br></p>") {
         element.innerHTML = "";
       }
     }, 0);
   };
 
   return function(composer) {
-    dom.observe(composer.element, ["cut", "keydown"], clearIfNecessary);
+    dom.observe(composer.element, ["cut", "keydown", "blur"], clearIfNecessary);
   };
 })();
 

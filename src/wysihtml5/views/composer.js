@@ -132,9 +132,9 @@ var Composer = Base.extend({
     //this._initUndoManager();
 
     // IE sometimes leaves a single paragraph, which can't be removed by the user
-    if (!browser.clearsContentEditableCorrectly()) {
-      quirks.ensureProperClearing(this);
-    }
+    //if (!browser.clearsContentEditableCorrectly()) {
+    quirks.ensureProperClearing(this);
+    //}
 
     // Fire global (before-)load event
     this.parent.fire("beforeload").fire("load");
