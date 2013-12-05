@@ -12,10 +12,10 @@ Composer.RegisterTextSubstitution(function(word) {
 }, function(editor, composer, range, textContent, e) {
   if (editor.config.autoLink) {
     var blockElement = getParentElement(composer.selection.getSelectedNode(), {
-      nodeName: ["P", "H1", "H2", "H3", "H4", "H5", "H6", "LI", "BLOCKQUOTE"]
+      nodeName: ["P", "H1", "H2", "H3", "H4", "H5", "H6", "LI", "BLOCKQUOTE", "A"]
     }, 4);
 
-    if (blockElement) {
+    if (blockElement && blockElement.nodeName !== "A") {
       composer.selection.executeAndRestore(function() {
         var selection = composer.selection.getSelection().nativeSelection;
         selection.removeAllRanges();
