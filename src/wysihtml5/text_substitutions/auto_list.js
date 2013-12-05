@@ -6,7 +6,7 @@ Composer.RegisterTextSubstitution(function(textContent) {
   return (textContent == "1." || textContent == "•" || textContent == "*" || textContent == "-");
 }, function(editor, composer, range, textContent, e) {
   var selectedNode = range.startContainer;
-  var blockElement = dom.getParentElement(selectedNode, {
+  var blockElement = getParentElement(selectedNode, {
     nodeName: ["P", "DIV", "LI"]
   });
   if (blockElement && blockElement.nodeName != "LI") {
