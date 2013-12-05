@@ -3,16 +3,6 @@ import { Composer } from "../views/composer";
 import { browser } from "../browser";
 import dom from "../dom";
 
-var test = function(node, parentNode) {
-  if (node == parentNode) {
-    return false;
-  } else if (parentNode.lastElementChild == node || parentNode.lastChild == node) {
-    return true;
-  } else {
-    return test(node.parentNode, parentNode);
-  }
-}
-
 Composer.RegisterKeyboardHandler(function(e) {
   return (
     e.type === "keydown" &&
@@ -32,9 +22,7 @@ Composer.RegisterKeyboardHandler(function(e) {
       range.deleteContents();
     }
     var newLines = 1;
-
-    var length = selectedNode.textContent.length;
-    if (length == range.endOffset && test(selectedNode, preElement)) {
+    if (composer.selection.caretIsAtEndOfNode(range, preElement)) {
       newLines++;
     }
     var html = new Array(newLines + 1);

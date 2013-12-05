@@ -279,6 +279,30 @@ var Selection = Base.extend({
     return false;
   },
 
+  caretIsAtEndOfNode: function(range, until) {
+    if (this.caretIsAtEndOfRange(range)) {
+      var parent = range.endContainer.parentNode;
+      if (parent === until) {
+        return true;
+      }
+      var newRange = document.createRange();
+      newRange.selectNode(parent);
+      return this.caretIsAtEndOfNode(newRange, parent, until);
+    } else {
+      return false;
+    }
+  },
+
+  caretIsAtEndOfRange: function(range) {
+    var endContainer = range.endContainer;
+    switch (endContainer.nodeType) {
+      case Node.ELEMENT_NODE:
+        return endContainer.parentNode.childNodes.length > range.endOffset;
+      case Node.TEXT_NODE:
+        return endContainer.textContent.length == range.endOffset;
+    }
+  },
+
   // TODO: has problems in chrome 12. investigate block level and uneditable area inbetween
   executeAndRestore: function(method, restoreScrollPosition) {
     var body                  = this.doc.body,
