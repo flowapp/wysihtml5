@@ -22,6 +22,7 @@ import "wysihtml5/keyboard/prevent_last_paragraph_delete";
 import "wysihtml5/keyboard/newline_pre";
 import "wysihtml5/keyboard/break_block_elements";
 import "wysihtml5/keyboard/list_element_delete";
+import "wysihtml5/keyboard/contenteditable_delete";
 import "wysihtml5/keyboard/break_header";
 import "wysihtml5/keyboard/break_list";
 import "wysihtml5/keyboard/shortcuts";
