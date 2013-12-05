@@ -39,7 +39,15 @@ var Commands = Base.extend({
     var obj     = commands[command],
         args    = lang.array(arguments).get(),
         method  = obj && obj.exec,
-        result  = null;
+        result  = null,
+        blockedCommands = null;
+
+    if(this.state("formatInline", "pre")) {
+      blockedCommands = ["formatInline", "formatBlock", "bold", "italic", "insertUnorderedList", "insertOrderedList"]
+      if(blockedCommands.indexOf(command) != -1 && value != "pre") {
+        return false;
+      }
+    }
 
     this.editor.fire("beforecommand:composer");
 
