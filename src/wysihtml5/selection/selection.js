@@ -241,9 +241,9 @@ var Selection = Base.extend({
       return (offset === 0 && !this.getPreviousNode(node, true));
   },
 
-  caretIsAtStartOfNode: function(parentNode) {
-    var selectedNode = this.getSelectedNode();
-    var selectedRange = this.getRange();
+  caretIsAtStartOfNode: function(parentNode, selectedRange, selectedNode) {
+    selectedNode = selectedNode || this.getSelectedNode();
+    selectedRange = selectedRange || this.getRange();
     var tester = function(range, node, until) {
       if (range.startOffset == 0) {
         var parent = node.parentNode;
