@@ -33,6 +33,9 @@
     "load-grunt-config": "~0.7.0",
     "mocha-phantomjs": "~3.1.6",
     "grunt-mocha-phantomjs": "~0.3.1",
-    "grunt-cli": "~0.1.11"
+    "grunt-cli": "~0.1.11",
+    "wd": "~0.2.5",
+    "mocha-as-promised": "~1.4.1",
+    "chai-as-promised": "~4.1.0"
   }
 }
