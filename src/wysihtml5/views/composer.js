@@ -145,7 +145,7 @@ var Composer = Base.extend({
   _initMutationEvents: function() {
     var _this = this;
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-    if (!MutationObserver) {
+    if (MutationObserver) {
       var observer = new MutationObserver(function(records) {
         records.forEach(function(record) {
           _this._proccesAddedNodes(record.addedNodes)
@@ -176,7 +176,7 @@ var Composer = Base.extend({
   _proccesAddedNodes: function(addedNodes) {
     var _this = this;
     for (var index = addedNodes.length - 1; index >= 0; index--) {
-      node = addedNodes[index];
+      var node = addedNodes[index];
       if (node.nodeType == Node.ELEMENT_NODE &&
           node.nodeName == "SPAN" &&
           node.className != "_wysihtml5-temp-placeholder"
