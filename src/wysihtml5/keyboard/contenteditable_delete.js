@@ -9,13 +9,14 @@ Composer.RegisterKeyboardHandler(function(e) {
 }, function(editor, composer, e) {
   var range = composer.selection.getRange()
   var selectedNode = composer.selection.getSelectedNode();
-  var parentElement = selectedNode.parentElement;
-
-  if(parentElement && parentElement.getAttribute("contenteditable") == "false") {
-    parentElement.parentElement.removeChild(parentElement);
-    if(e.keyCode == Constants.BACKSPACE_KEY) {
-      e.preventDefault();
-      e.stopPropagation();
+  if (selectedNode !== composer.element) {
+    var parentElement = selectedNode.parentElement;
+    if (parentElement && parentElement.getAttribute("contenteditable") == "false") {
+      parentElement.parentElement.removeChild(parentElement);
+      if (e.keyCode == Constants.BACKSPACE_KEY) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     }
   }
 });
