@@ -88,10 +88,6 @@ var Editor = lang.Dispatcher.extend(
 
     this.composer = new Composer(this, this.editableElement, this.config);
     this.currentView = this.composer;
-
-    if (typeof(this.config.parser) === "function") {
-      this._initParser();
-    }
   },
 
   isCompatible: function() {
@@ -157,21 +153,6 @@ var Editor = lang.Dispatcher.extend(
       quirks.redraw(htmlOrElement);
     }
     return returnValue;
-  },
-
-  /**
-   * Prepare html parser logic
-   *  - Observes for paste and drop
-   */
-  _initParser: function() {
-    this.on("paste:composer", function() {
-      var keepScrollPosition  = true,
-          that                = this;
-      that.composer.selection.executeAndRestore(function() {
-        quirks.cleanPastedHTML(that.composer.element);
-        that.parse(that.composer.element);
-      }, keepScrollPosition);
-    });
   }
 });
 

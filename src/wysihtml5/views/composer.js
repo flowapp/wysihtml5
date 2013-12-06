@@ -133,7 +133,7 @@ var Composer = Base.extend({
 
     // IE sometimes leaves a single paragraph, which can't be removed by the user
     //if (!browser.clearsContentEditableCorrectly()) {
-    quirks.ensureProperClearing(this);
+    //quirks.ensureProperClearing(this);
     //}
 
     // Fire global (before-)load event
@@ -162,16 +162,6 @@ var Composer = Base.extend({
         }
       }
     });
-
-    // Under certain circumstances Chrome + Safari create nested <p>
-    // or <h[1-6]> tags after paste Inserting an invisible white space
-    // in front of it fixes the issue
-    if (browser.createsNestedInvalidMarkupAfterPaste()) {
-      dom.observe(this.element, "paste", function(event) {
-        var invisibleSpace = that.doc.createTextNode(Constants.INVISIBLE_SPACE);
-        that.selection.insertNode(invisibleSpace);
-      });
-    }
 
     dom.observe(this.element, "keydown", function(event) {
       _this._handleKeyboardHandlers(event);

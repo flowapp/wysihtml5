@@ -3,7 +3,7 @@
  *
  * Fixing IE's inability to treat unknown elements (HTML5 section, article, ...) correctly
  * when inserted via innerHTML
- * 
+ *
  * @param {String} html The html which should be wrapped in a dom element
  * @param {Obejct} [context] Document object of the context the html belongs to
  *
@@ -23,7 +23,7 @@ var getAsDom = (function() {
     context.body.removeChild(tempElement);
     return tempElement;
   };
-  
+
   /**
    * Make sure IE supports HTML5 tags, which is accomplished by simply creating one instance of each element
    */
@@ -36,8 +36,8 @@ var getAsDom = (function() {
     }
     context._wysihtml5_supportsHTML5Tags = true;
   };
-  
-  
+
+
   /**
    * List of html5 tags
    * taken from http://simon.html5.org/html5-elements
@@ -47,7 +47,7 @@ var getAsDom = (function() {
     "figure", "footer", "header", "hgroup", "keygen", "mark", "meter", "nav", "output", "progress",
     "rp", "rt", "ruby", "svg", "section", "source", "summary", "time", "track", "video", "wbr"
   ];
-  
+
   return function(html, context) {
     context = context || document;
     var tempElement;
@@ -64,5 +64,4 @@ var getAsDom = (function() {
     return tempElement;
   };
 })();
-
 export { getAsDom };

@@ -11,7 +11,10 @@ import dom from "../dom";
 import { redraw } from "../quirks/redraw"
 import { browser } from "../browser";
 import { Constants } from "../constants";
+import quirks from "../quirks";
 import lang from "wysihtml5/lang";
+
+var newLineRegExp = /\n/g;
 
 Composer.prototype.observe = function() {
   var that                = this,
@@ -46,10 +49,50 @@ Composer.prototype.observe = function() {
   });
 
   // --------- Drag & Drop logic ---------
-  dom.observe(element, pasteEvents, function() {
-    setTimeout(function() {
-      that.parent.fire("paste").fire("paste:composer");
-    }, 0);
+  dom.observe(element, ["cut", "copy"], function(e) {
+    var clipboardData = e.clipboardData;
+    if (clipboardData) {
+      var range = that.selection.getRange();
+      var plainText = range.toString();
+      var content = range.cloneContents();
+
+      var node = document.createElement("div");
+      node.appendChild(content);
+
+      clipboardData.setData("text/plain", plainText);
+      clipboardData.setData("text/html", node.innerHTML);
+      if (e.type == "cut") {
+        range.deleteContents();
+      }
+      e.preventDefault();
+    }
+  });
+
+  dom.observe(element, pasteEvents, function(e) {
+    var clipboardData = e.clipboardData;
+    if (clipboardData) {
+      var range = that.selection.getRange();
+      var host = document.createElement("div");
+      var data = clipboardData.getData("text/html");
+      if (data) {
+        host.innerHTML = data;
+      } else {
+        data = clipboardData.getData("Text") || "";
+        data = lang.string(data).escapeHTML();
+        data = data.replace(newLineRegExp, "<br>");
+        host.innerHTML = data;
+      }
+      that.selection.insertNode(host);
+      e.preventDefault();
+    } else {
+      var keepScrollPosition = true;
+      setTimeout(function() {
+        that.selection.executeAndRestore(function() {
+          quirks.cleanPastedHTML(that.element);
+          that.parent.parse(that.element);
+        }, keepScrollPosition);
+      }, 0)
+    }
   });
 
   // --------- neword event ---------
