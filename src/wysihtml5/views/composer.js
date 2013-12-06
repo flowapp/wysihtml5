@@ -146,17 +146,21 @@ var Composer = Base.extend({
     var that = this,
         _this = this;
 
-    dom.observe(this.element, ["focus", "keydown"], function() {
-      if (that.isEmpty()) {
-        var paragraph = that.doc.createElement("P");
-        that.element.innerHTML = "";
-        that.element.appendChild(paragraph);
-        if (!browser.displaysCaretInEmptyContentEditableCorrectly()) {
-          paragraph.innerHTML = "<br>";
-          that.selection.setBefore(paragraph.firstChild);
-        } else {
-          that.selection.selectNode(paragraph, true);
-        }
+    dom.observe(this.element, ["focus", "keydown"], function(e) {
+      if (e.type == "focus" || e.keyCode == Constants.BACKSPACE_KEY) {
+        setTimeout(function() {
+          if (that.isEmpty()) {
+            var paragraph = that.doc.createElement("P");
+            that.element.innerHTML = "";
+            that.element.appendChild(paragraph);
+            if (!browser.displaysCaretInEmptyContentEditableCorrectly()) {
+              paragraph.innerHTML = "<br>";
+              that.selection.setBefore(paragraph.firstChild);
+            } else {
+              that.selection.selectNode(paragraph, true);
+            }
+          }
+        }, 0);
       }
     });
 
