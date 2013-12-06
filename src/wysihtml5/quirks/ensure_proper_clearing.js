@@ -21,7 +21,7 @@ var ensureProperClearing = (function() {
   };
 
   return function(composer) {
-    dom.observe(composer.element, ["cut", "keydown", "blur"], clearIfNecessary);
+    dom.observe(composer.element, ["blur"], clearIfNecessary);
   };
 })();
 
