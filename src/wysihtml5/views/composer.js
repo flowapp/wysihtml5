@@ -139,56 +139,6 @@ var Composer = Base.extend({
     // Fire global (before-)load event
     this.parent.fire("beforeload").fire("load");
     this._initLineBreaking();
-    this._initMutationEvents();
-  },
-
-  _initMutationEvents: function() {
-    var _this = this;
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-    if (!MutationObserver) {
-      var observer = new MutationObserver(function(records) {
-        records.forEach(function(record) {
-          _this._proccesAddedNodes(record.addedNodes)
-        });
-      });
-      observer.observe(this.element, {
-        subtree: true,
-        childList: true
-      });
-    } else {
-      this.element.addEventListener("DOMSubtreeModified", function(e) {
-        _this._proccesMutationEvent(e)
-      }, false);
-    }
-  },
-
-  _proccesMutationEvent: function(e) {
-    var _this = this;
-    var items = this.element.querySelectorAll("span[style]");
-    if (items.length) {
-      for (var i = items.length - 1; i >= 0; i--) {
-        var item = items[i];
-        item.removeAttribute("style");
-      };
-    }
-  },
-
-  _proccesAddedNodes: function(addedNodes) {
-    var _this = this;
-    for (var index = addedNodes.length - 1; index >= 0; index--) {
-      var node = addedNodes[index];
-      if (node.nodeType == Node.ELEMENT_NODE &&
-          node.nodeName == "SPAN" &&
-          node.className != "_wysihtml5-temp-placeholder"
-      ) {
-        setTimeout(function() {
-          _this.selection.executeAndRestore(function() {
-            _this.cleanUp()
-          });
-        }, 0);
-        return;
-      }
-    };
   },
 
   _initUndoManager: function() {
