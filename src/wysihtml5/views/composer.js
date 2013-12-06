@@ -145,7 +145,7 @@ var Composer = Base.extend({
   _initMutationEvents: function() {
     var _this = this;
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-    if (MutationObserver) {
+    if (!MutationObserver) {
       var observer = new MutationObserver(function(records) {
         records.forEach(function(record) {
           _this._proccesAddedNodes(record.addedNodes)
