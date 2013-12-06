@@ -20,7 +20,7 @@ Composer.RegisterTextSubstitution(function(textContent) {
 
       composer.selection.executeAndRestore(function() {
         range.deleteContents();
-        dom.renameElement(blockElement, "blockquote");
+        renameElement(blockElement, "blockquote");
         if (breakElement) {
           composer.selection.setBefore(breakElement);
         }
