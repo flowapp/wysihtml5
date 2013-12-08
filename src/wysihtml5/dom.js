@@ -15,6 +15,7 @@ import { insert } from "wysihtml5/dom/insert";
 import { observe } from "wysihtml5/dom/observe";
 import { Parser } from "wysihtml5/dom/parse";
 import { query } from "wysihtml5/dom/query";
+import { reblock } from "wysihtml5/dom/reblock";
 import { removeEmptyTextNodes } from "wysihtml5/dom/remove_empty_text_nodes";
 import { renameElement } from "wysihtml5/dom/rename_element";
 import { replaceWithChildNodes } from "wysihtml5/dom/replace_with_child_nodes";
@@ -44,6 +45,7 @@ export default = {
   observe: observe,
   Parser: Parser,
   query: query,
+  reblock: reblock,
   removeEmptyTextNodes: removeEmptyTextNodes,
   renameElement: renameElement,
   replaceWithChildNodes: replaceWithChildNodes,

@@ -29,13 +29,5 @@ module.exports = {
       "tmp/<%= pkg.name %>.cjs.js"
     ],
     dest: 'tmp/<%= pkg.name %>.browser1.js'
-  }, 
-
-  UAIntegrationTests: {
-    src: [
-      "vendor/loader.js",
-      "tmp/ua_integration_tests/**/*.amd.js"
-    ], 
-    dest: "tmp/ua_integration_tests.browser1.js"
   }
 };

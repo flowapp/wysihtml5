@@ -1,21 +1,28 @@
 import dom from "../dom";
 import { Constants } from "../constants";
 
+var cleanup = function(composer) {
+  var selectedNode = composer.selection.getSelectedNode();
+  var blockElement = dom.getParentElement(selectedNode, { nodeName: "P" });
+  var listElement = dom.getParentElement(selectedNode, { nodeName: ["OL", "UL", "MENU"] });
+  if (blockElement && listElement) {
+    dom.reblock(blockElement, listElement);
+    composer.selection.setAfter(listElement.querySelector("li"));
+  }
+};
+
 var insertUnorderedList = {
   exec: function(composer, command) {
-    var doc           = composer.doc,
-        selectedNode  = composer.selection.getSelectedNode(),
-        list          = dom.getParentElement(selectedNode, { nodeName: "UL" }),
-        otherList     = dom.getParentElement(selectedNode, { nodeName: "OL" }),
-        tempClassName =  "_wysihtml5-temp-" + new Date().getTime(),
-        isEmpty,
-        tempElement;
-    
-    if (!list && !otherList && composer.commands.support(command)) {
-      doc.execCommand(command, false, null);
+    var selectedNode = composer.selection.getSelectedNode();
+    var list = dom.getParentElement(selectedNode, { nodeName: "UL" });
+    var otherList = dom.getParentElement(selectedNode, { nodeName: "OL" });
+
+    if (!list && !otherList) {
+      document.execCommand(command, false, null);
+      cleanup(composer);
       return;
     }
-    
+
     if (list) {
       // Unwrap list
       // <ul><li>foo</li><li>bar</li></ul>
@@ -32,24 +39,9 @@ var insertUnorderedList = {
       composer.selection.executeAndRestore(function() {
         dom.renameElement(otherList, "ul");
       });
-    } else {
-      // Create list
-      tempElement = composer.selection.deblockAndSurround({
-        "nodeName": "div",
-        "className": tempClassName
-      });
-      if (tempElement) {
-        isEmpty = tempElement.innerHTML === "" || tempElement.innerHTML === Constants.INVISIBLE_SPACE || tempElement.innerHTML === "<br>";
-        composer.selection.executeAndRestore(function() {
-          list = dom.convertToList(tempElement, "ul", composer.parent.config.uneditableContainerClassname);
-        });
-        if (isEmpty) {
-          composer.selection.selectNode(list.querySelector("li"), true);
-        }
-      }
     }
   },
-  
+
   state: function(composer) {
     var selectedNode = composer.selection.getSelectedNode();
     return dom.getParentElement(selectedNode, { nodeName: "UL" });
