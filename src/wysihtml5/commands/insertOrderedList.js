@@ -1,6 +1,16 @@
 import dom from "../dom";
 import { Constants } from "../constants";
 
+var cleanup = function(composer) {
+  var selectedNode = composer.selection.getSelectedNode();
+  var blockElement = dom.getParentElement(selectedNode, { nodeName: "P" });
+  var listElement = dom.getParentElement(selectedNode, { nodeName: ["OL", "UL", "MENU"] });
+  if (blockElement && listElement) {
+    dom.reblock(blockElement, listElement);
+    composer.selection.setAfter(listElement.querySelector("li"));
+  }
+};
+
 var insertOrderedList = {
   exec: function(composer, command) {
     var doc           = composer.doc,
@@ -10,12 +20,13 @@ var insertOrderedList = {
         tempClassName =  "_wysihtml5-temp-" + new Date().getTime(),
         isEmpty,
         tempElement;
-    
-    if (!list && !otherList && true) { //composer.commands.support(command)) {
+
+    if (!list && !otherList) {
       doc.execCommand(command, false, null);
+      cleanup(composer);
       return;
     }
-    
+
     if (list) {
       // Unwrap list
       // <ol><li>foo</li><li>bar</li></ol>
@@ -32,24 +43,9 @@ var insertOrderedList = {
       composer.selection.executeAndRestore(function() {
         dom.renameElement(otherList, "ol");
       });
-    } else {
-      // Create list
-      tempElement = composer.selection.deblockAndSurround({
-        "nodeName": "div",
-        "className": tempClassName
-      });
-      if (tempElement) {
-        isEmpty = tempElement.innerHTML === "" || tempElement.innerHTML === Constants.INVISIBLE_SPACE || tempElement.innerHTML === "<br>";
-        composer.selection.executeAndRestore(function() {
-          list = dom.convertToList(tempElement, "ol", composer.parent.config.uneditableContainerClassname);
-        });
-        if (isEmpty) {
-          composer.selection.selectNode(list.querySelector("li"), true);
-        }
-      }
     }
   },
-  
+
   state: function(composer) {
     var selectedNode = composer.selection.getSelectedNode();
     return dom.getParentElement(selectedNode, { nodeName: "OL" });
