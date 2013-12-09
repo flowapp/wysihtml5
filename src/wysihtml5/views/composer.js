@@ -168,6 +168,10 @@ var Composer = Base.extend({
       _this._handleKeyboardHandlers(event);
       _this._lookForTextSubstitution(event);
     });
+
+    dom.observe(this.element, "blur", function(event) {
+      _this._lookForTextSubstitution(event);
+    })
   },
 
   // Text Substitutions
@@ -207,7 +211,7 @@ var Composer = Base.extend({
 
   _lookForTextSubstitution: function(e) {
     // Commit words on space and enter
-    if (e.keyCode == Constants.SPACE_KEY || e.keyCode == Constants.ENTER_KEY) {
+    if (e.keyCode == Constants.SPACE_KEY || e.keyCode == Constants.ENTER_KEY || e.type === "blur") {
       var range = this.selection.getRange();
       var options = this._lastInsertedWordRange(range);
       if (options) {
