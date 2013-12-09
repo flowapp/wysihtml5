@@ -129,7 +129,7 @@ var Composer = Base.extend({
     this.commands.exec("enableObjectResizing", false);
     this.commands.exec("insertBrOnReturn", false);
 
-    //this._initUndoManager();
+    this._initUndoManager();
 
     quirks.ensureProperClearing(this);
 
@@ -139,7 +139,7 @@ var Composer = Base.extend({
   },
 
   _initUndoManager: function() {
-    this.undoManager = new UndoManager(this.parent);
+    this.undoManager = new UndoManager(this);
   },
 
   _initLineBreaking: function() {

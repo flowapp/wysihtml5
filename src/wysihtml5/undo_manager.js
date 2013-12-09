@@ -25,9 +25,9 @@ function cleanTempElements(doc) {
 }
 
 var UndoManager = lang.Dispatcher.extend({
-  constructor: function(editor) {
-    this.editor = editor;
-    this.composer = editor.composer;
+  constructor: function(composer) {
+    this.composer = composer;
+    this.editor = this.composer.parent;
     this.element = this.composer.element;
 
     this.position = 0;
