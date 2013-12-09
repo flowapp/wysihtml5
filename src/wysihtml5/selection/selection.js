@@ -632,13 +632,13 @@ var Selection = Base.extend({
     if (this.contain && range) {
       var containment = range.compareNode(this.contain);
       if (containment !== 2) {
-        if (containment === 1) {
+        if (containment === 1 && this.contain.firstChild) {
           range.setStartBefore(this.contain.firstChild);
         }
-        if (containment === 0) {
+        if (containment === 0 && this.contain.lastChild) {
           range.setEndAfter(this.contain.lastChild);
         }
-        if (containment === 3) {
+        if (containment === 3 && this.contain.firstChild && this.contain.lastChild) {
           range.setStartBefore(this.contain.firstChild);
           range.setEndAfter(this.contain.lastChild);
         }
