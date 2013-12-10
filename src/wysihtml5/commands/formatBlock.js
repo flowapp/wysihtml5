@@ -219,6 +219,7 @@ var formatBlock = {
               if (nodeName && nodeName != "PRE") {
                 blockElement = dom.renameElement(blockElement, nodeName);
               } else if (nodeName == "PRE") {
+                blockElement.innerHTML += "\n\n"
                 dom.replaceWithChildNodes(blockElement);
               }
               if (className) {
