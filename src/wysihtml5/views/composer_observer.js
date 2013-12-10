@@ -76,6 +76,7 @@ Composer.prototype.observe = function() {
       var data = clipboardData.getData("text/html");
       if (data) {
         host.innerHTML = data;
+        that.parent.parse(host);
       } else {
         data = clipboardData.getData("Text") || "";
         data = lang.string(data).escapeHTML();
