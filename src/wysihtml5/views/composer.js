@@ -30,6 +30,7 @@ var Composer = Base.extend({
 
   clear: function() {
     this.element.innerHTML = browser.displaysCaretInEmptyContentEditableCorrectly() ? "" : this.CARET_HACK;
+    this._updateHasValueClass();
   },
 
   getValue: function(parse) {
@@ -47,6 +48,7 @@ var Composer = Base.extend({
       html = this.parent.parse(html);
     }
     this.element.innerHTML = html;
+    this._updateHasValueClass();
   },
 
   cleanUp: function() {
@@ -236,6 +238,30 @@ var Composer = Base.extend({
         keyboardHandler.callback(this.parent, this, e);
       }
     };
+  },
+
+  _updateHasValueClass: function() {
+    var VISUAL_BLOCKS, emptyText, containsVisualBlocks, innerHTML;
+    VISUAL_BLOCKS = ["ul", "ol", "blockquote"]
+    innerHTML = this.element.innerHTML;
+    if(innerHTML) {
+      innerHTML = innerHTML.trim();
+    }
+
+    for(var i = 0; i < VISUAL_BLOCKS.length; i++) {
+      if(innerHTML.indexOf(VISUAL_BLOCKS[i]) != -1) {
+        containsVisualBlocks = true;
+        break;
+      }
+    }
+
+    emptyText = !containsVisualBlocks && this.isEmpty() && innerHTML.indexOf("<p>", 2) == -1;
+
+    if(emptyText) {
+      dom.removeClass(this.element, "has-value");
+    } else {
+      dom.addClass(this.element, "has-value");
+    }
   }
 });
 
