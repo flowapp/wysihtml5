@@ -22,12 +22,12 @@ function _getCumulativeOffsetTop(element) {
 }
 
 var Selection = Base.extend({
-  constructor: function(editor, contain, unselectableClass) {
+  constructor: function(editor, composer, contain, unselectableClass) {
     // Make sure that our external range library is initialized
     window.rangy.init();
 
     this.editor = editor;
-    this.composer = editor.composer;
+    this.composer = composer;
     this.doc = document;
     this.contain = contain;
     this.unselectableClass = unselectableClass || false;
@@ -300,6 +300,67 @@ var Selection = Base.extend({
         return endContainer.parentNode.childNodes.length > range.endOffset;
       case Node.TEXT_NODE:
         return endContainer.textContent.length == range.endOffset;
+    }
+  },
+
+  insertElements: function(elements) {
+    var range = this.getRange();
+    if (!range.collapsed) {
+      range.deleteContents();
+      range = this.getRange();
+    }
+
+    var items = elements.map(function(node) {
+      if (node.nodeType == Node.TEXT_NODE) {
+        var fragment = document.createDocumentFragment();
+        fragment.appendChild(node);
+        return fragment;
+      }
+      return node;
+    });
+
+    var selectedNode = this.getSelectedNode();
+    var oldLastChild;
+    var blockElement = dom.getParentElement(selectedNode, {
+      nodeName: ["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "BLOCKQUOTE"]
+    });
+
+    if (!blockElement) {
+      this.composer.ensureParagraph();
+      blockElement = this.contain.querySelector("P") || this.contain.firstElementChild;
+    }
+
+    // Extract the tail of the current block
+    var endRange = range.cloneRange();
+    endRange.setEndAfter(blockElement.lastChild);
+
+    if (endRange.toString()) {
+      var documentFragment = endRange.extractContents();
+      var lastChild = items[items.length - 1];
+      oldLastChild = lastChild.lastChild;
+      dom.appendChildNodes(documentFragment, lastChild);
+    } else if (elements.length > 1) {
+      oldLastChild = elements[elements.length - 1];
+    }
+
+    // Integrate the first block of content with the current block element
+    var firstChild = items[0];
+    if (firstChild.nodeType == Node.TEXT_NODE || firstChild.nodeName == blockElement.nodeName) {
+      items.shift();
+      dom.appendChildNodes(firstChild, blockElement, (!!blockElement.textContent));
+    }
+
+    // Insert it
+    var fragment = document.createDocumentFragment();
+    items.forEach(function(element) {
+      fragment.appendChild(element);
+    });
+    dom.insert(fragment).after(blockElement);
+
+    // Restore the selection
+    var item = oldLastChild || blockElement;
+    if (item) {
+      this.setAfter(item);
     }
   },
 

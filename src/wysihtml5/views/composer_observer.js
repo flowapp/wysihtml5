@@ -59,7 +59,7 @@ Composer.prototype.observe = function() {
       var node = document.createElement("div");
       node.appendChild(content);
 
-      clipboardData.setData("text/plain", plainText);
+      clipboardData.setData("text/plain", node.innerText);
       clipboardData.setData("text/html", node.innerHTML);
       if (e.type == "cut") {
         range.deleteContents();
@@ -68,6 +68,7 @@ Composer.prototype.observe = function() {
     }
   });
 
+  var NEWLINE_SPLITTER = /\n\n+/;
   dom.observe(element, pasteEvents, function(e) {
     var clipboardData = e.clipboardData;
     if (clipboardData) {
@@ -77,13 +78,21 @@ Composer.prototype.observe = function() {
       if (data) {
         host.innerHTML = data;
         that.parent.parse(host);
-      } else {
-        data = clipboardData.getData("Text") || "";
-        data = lang.string(data).escapeHTML();
-        data = data.replace(newLineRegExp, "<br>");
-        host.innerHTML = data;
+        var fragment = dom.nodeList.toArray(host.childNodes);
+        that.selection.insertElements(fragment);
+      } else if (data = clipboardData.getData("Text")) {
+        var paragraphs = data.split(NEWLINE_SPLITTER);
+        var incluedsTrailingNewLines = !paragraphs[paragraphs.length - 1];
+        if (incluedsTrailingNewLines) {
+          paragraphs.pop();
+        }
+        var fragment = paragraphs.map(function(chunk, index) {
+          var paragraph = document.createElement("P");
+          paragraph.textContent = chunk;
+          return paragraph;
+        });
+        that.selection.insertElements(fragment);
       }
-      that.selection.insertNode(host);
       e.preventDefault();
     } else {
       var keepScrollPosition = true;
