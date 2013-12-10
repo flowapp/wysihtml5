@@ -39,13 +39,13 @@ describe("Auto linking", function() {
 
   it("should auto link URLs starting with `www`", function() {
     return editor.type("www.getflow.com ").then(function() {
-      return expect(hrefForItem()).to.eventually.equal("http://www.getflow.com")
+      return expect(hrefForItem()).to.eventually.equal("http://www.getflow.com/")
     });
   });
 
   it("should auto link URLs starting with a protocol", function() {
-    return editor.type("mailto:michael@bluth.com").then(function() {
-      return expect(hrefForItem()).to.eventually.equal("http://www.getflow.com")
+    return editor.type("mailto:michael@bluth.com ").then(function() {
+      return expect(hrefForItem()).to.eventually.equal("mailto:michael@bluth.com")
     });
   });
 });

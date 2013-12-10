@@ -6,6 +6,7 @@ import { getParentElement } from "../dom/get_parent_element";
 
 var supportsDisablingOfAutoLinking = browser.canDisableAutoLinking();
 var supportsAutoLinking = browser.doesAutoLinkingInContentEditable();
+var INCLUDES_PROTOCOL = /^(https?:\/\/|mailto:)/;
 
 Composer.RegisterTextSubstitution(function(word) {
   return word.match(Constants.URL_REG_EXP);
@@ -16,6 +17,10 @@ Composer.RegisterTextSubstitution(function(word) {
     }, 4);
 
     if (blockElement && blockElement.nodeName !== "A") {
+      if (!INCLUDES_PROTOCOL.test(textContent)) {
+        textContent = "http://"+ textContent;
+      }
+
       composer.selection.executeAndRestore(function() {
         var selection = composer.selection.getSelection().nativeSelection;
         selection.removeAllRanges();
