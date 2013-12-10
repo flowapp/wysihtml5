@@ -37,4 +37,4 @@ import "wysihtml5/text_substitutions/auto_list";
 import "wysihtml5/text_substitutions/blockquote";
 
 var version = "<%= pkg.version %>";
-export { version, Editor, lang, dom};
+export { version, Editor, Composer, lang, dom};
