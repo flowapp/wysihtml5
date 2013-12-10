@@ -18,7 +18,7 @@ function hasClass(el, cssClass, regExp) {
   if (!el.className) {
     return false;
   }
-  
+
   var matchingClassNames = el.className.match(regExp) || [];
   return matchingClassNames[matchingClassNames.length - 1] === cssClass;
 }
@@ -37,13 +37,13 @@ function addStyle(el, cssStyle, regExp) {
     if (el.getAttribute('style') && !(/\s+/).test(el.getAttribute('style'))) {
       el.setAttribute('style', cssStyle + ";" + el.getAttribute('style'));
     } else {
-      
+
       el.setAttribute('style', cssStyle);
     }
   } else {
     el.setAttribute('style', cssStyle);
   }
-} 
+}
 
 function addClass(el, cssClass, regExp) {
   if (el.className) {
@@ -82,11 +82,11 @@ function getMatchingStyleRegexp(el, style) {
   var regexes = [],
       sSplit = style.split(';'),
       elStyle = el.getAttribute('style');
-  
+
   if (elStyle) {
-    elStyle = elStyle.replace(/\s/gi, '').toLowerCase();    
+    elStyle = elStyle.replace(/\s/gi, '').toLowerCase();
     regexes.push(new RegExp("(^|\\s|;)" + style.replace(/\s/gi, '').replace(/([\(\)])/gi, "\\$1").toLowerCase().replace(";", ";?"), "gi"));
-  
+
     for (var i = sSplit.length; i-- > 0;) {
       if (!(/^\s*$/).test(sSplit[i])) {
         regexes.push(new RegExp("(^|\\s|;)" + sSplit[i].replace(/\s/gi, '').replace(/([\(\)])/gi, "\\$1").toLowerCase().replace(";", ";?"), "gi"));
@@ -98,17 +98,17 @@ function getMatchingStyleRegexp(el, style) {
       }
     }
   }
-  
+
   return false;
 };
 
 function removeOrChangeStyle(el, style, regExp) {
-  
+
   var exactRegex = getMatchingStyleRegexp(el, style);
-  
+
   /*new RegExp("(^|\\s|;)" + style.replace(/\s/gi, '').replace(/([\(\)])/gi, "\\$1").toLowerCase().replace(";", ";?"), "gi"),
       elStyle = el.getAttribute('style');*/
-      
+
   if (exactRegex) {
     // adding same style value on property again removes style
     removeStyle(el, exactRegex);
@@ -249,20 +249,20 @@ HTMLApplier.prototype = {
     var cssClassMatch;
     while (node) {
       cssClassMatch = this.cssClass ? hasClass(node, this.cssClass, this.similarClassRegExp) : (this.cssStyle !== "") ? false : true;
-      if (node.nodeType == Node.ELEMENT_NODE && rangy.dom.arrayContains(this.tagNames, node.tagName.toLowerCase()) && cssClassMatch) {
+      if (node.nodeType == Node.ELEMENT_NODE && node.getAttribute("contenteditable") != "false" && rangy.dom.arrayContains(this.tagNames, node.tagName.toLowerCase()) && cssClassMatch) {
         return node;
       }
       node = node.parentNode;
     }
     return false;
   },
-  
+
   // returns parents of node with given style attribute
   getAncestorWithStyle: function(node) {
     var cssStyleMatch;
     while (node) {
       cssStyleMatch = this.cssStyle ? hasStyleAttr(node, this.similarStyleRegExp) : false;
-      if (node.nodeType == Node.ELEMENT_NODE && rangy.dom.arrayContains(this.tagNames, node.tagName.toLowerCase()) && cssStyleMatch) {
+      if (node.nodeType == Node.ELEMENT_NODE && node.getAttribute("contenteditable") != "false" && rangy.dom.arrayContains(this.tagNames, node.tagName.toLowerCase()) && cssStyleMatch) {
         return node;
       }
       node = node.parentNode;
@@ -323,7 +323,7 @@ HTMLApplier.prototype = {
       range.setEnd(rangeEndNode, rangeEndOffset);
     }
   },
-  
+
   getAdjacentMergeableTextNode: function(node, forward) {
       var isTextNode = (node.nodeType == Node.TEXT_NODE);
       var el = isTextNode ? node.parentNode : node;
@@ -344,7 +344,7 @@ HTMLApplier.prototype = {
       }
       return null;
   },
-  
+
   areElementsMergeable: function(el1, el2) {
     return rangy.dom.arrayContains(this.tagNames, (el1.tagName || "").toLowerCase())
       && rangy.dom.arrayContains(this.tagNames, (el2.tagName || "").toLowerCase())
@@ -366,7 +366,7 @@ HTMLApplier.prototype = {
   applyToTextNode: function(textNode) {
     var parent = textNode.parentNode;
     if (parent.childNodes.length == 1 && rangy.dom.arrayContains(this.tagNames, parent.tagName.toLowerCase())) {
-      
+
       if (this.cssClass) {
         addClass(parent, this.cssClass, this.similarClassRegExp);
       }
@@ -385,7 +385,7 @@ HTMLApplier.prototype = {
     var styleMode = (ancestorWithClass) ? false : true,
         ancestor = ancestorWithClass || ancestorWithStyle,
         styleChanged = false;
-    
+
     if (!range.containsNode(ancestor)) {
       // Split out the portion of the ancestor from which we can remove the CSS class
       var ancestorRange = range.cloneRange();
@@ -399,15 +399,15 @@ HTMLApplier.prototype = {
           ancestor = splitNodeAt(ancestor, range.startContainer, range.startOffset);
       }
     }
-    
+
     if (!styleMode && this.similarClassRegExp) {
       removeClass(ancestor, this.similarClassRegExp);
     }
-    
+
     if (styleMode && this.similarStyleRegExp) {
       styleChanged = (removeOrChangeStyle(ancestor, this.cssStyle, this.similarStyleRegExp) === "change");
     }
-    
+
     if (this.isRemovable(ancestor) && !styleChanged) {
       replaceWithOwnChildren(ancestor);
     }
@@ -415,9 +415,9 @@ HTMLApplier.prototype = {
 
   applyToRange: function(range) {
       var textNodes;
-      for (var ri = range.length; ri--;) {    
+      for (var ri = range.length; ri--;) {
           textNodes = range[ri].getNodes([Node.TEXT_NODE]);
-          
+
           if (!textNodes.length) {
             try {
               var node = this.createContainer(range[ri].endContainer.ownerDocument);
@@ -426,7 +426,7 @@ HTMLApplier.prototype = {
               return;
             } catch(e) {}
           }
-      
+
           range[ri].splitBoundaries();
           textNodes = range[ri].getNodes([Node.TEXT_NODE]);
           if (textNodes.length) {
@@ -438,24 +438,24 @@ HTMLApplier.prototype = {
                 this.applyToTextNode(textNode);
               }
             }
-        
+
             range[ri].setStart(textNodes[0], 0);
             textNode = textNodes[textNodes.length - 1];
             range[ri].setEnd(textNode, textNode.length);
-        
+
             if (this.normalize) {
               this.postApply(textNodes, range[ri]);
             }
           }
-          
+
       }
   },
 
   undoToRange: function(range) {
     var textNodes, textNode, ancestorWithClass, ancestorWithStyle;
-    
+
     for (var ri = range.length; ri--;) {
-      
+
       textNodes = range[ri].getNodes([Node.TEXT_NODE]);
       if (textNodes.length) {
         range[ri].splitBoundaries();
@@ -467,7 +467,7 @@ HTMLApplier.prototype = {
         range[ri].selectNode(node);
         textNodes = [node];
       }
-  
+
       for (var i = 0, len = textNodes.length; i < len; ++i) {
         textNode = textNodes[i];
         ancestorWithClass = this.getAncestorWithClass(textNode);
@@ -479,7 +479,7 @@ HTMLApplier.prototype = {
           this.undoToTextNode(textNode, range[ri], false, ancestorWithStyle);
         }
       }
-  
+
       if (len == 1) {
         this.selectNode(range[ri], textNodes[0]);
       } else {
@@ -491,10 +491,10 @@ HTMLApplier.prototype = {
           this.postApply(textNodes, range[ri]);
         }
       }
-        
+
     }
   },
-  
+
   selectNode: function(range, node) {
     var isElement       = node.nodeType === Node.ELEMENT_NODE,
         canHaveHTML     = "canHaveHTML" in node ? node.canHaveHTML : true,
@@ -513,7 +513,7 @@ HTMLApplier.prototype = {
       range.setEndAfter(node);
     }
   },
-  
+
   getTextSelectedByRange: function(textNode, range) {
     var textRange = range.cloneRange();
     textRange.selectNodeContents(textNode);
@@ -528,7 +528,7 @@ HTMLApplier.prototype = {
   isAppliedToRange: function(range) {
     var ancestors = [],
         ancestor, styleAncestor, textNodes;
-    
+
     for (var ri = range.length; ri--;) {
       textNodes = range[ri].getNodes([Node.TEXT_NODE]);
       if (!textNodes.length) {
@@ -538,7 +538,7 @@ HTMLApplier.prototype = {
         }
         return ancestor ? [ancestor] : false;
       }
-  
+
       for (var i = 0, len = textNodes.length, selectedText; i < len; ++i) {
         selectedText = this.getTextSelectedByRange(textNodes[i], range[ri]);
         ancestor = this.getAncestorWithClass(textNodes[i]);
@@ -550,7 +550,7 @@ HTMLApplier.prototype = {
         }
       }
     }
-    
+
     return (ancestors.length) ? ancestors : false;
   },
 
