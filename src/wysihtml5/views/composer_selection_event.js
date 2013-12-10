@@ -47,10 +47,11 @@ Composer.prototype._fireSelectionChange = function() {
       returnValue = nativeRange;
     }
   }
-  var event = new CustomEvent("wysihtml5:selectionchange", {
-    "detail": returnValue
-  });
+
+  var event = document.createEvent("CustomEvent");
+  event.initCustomEvent("wysihtml5:selectionchange", false, false, returnValue);
   this.element.dispatchEvent(event);
+
 };
 
 
