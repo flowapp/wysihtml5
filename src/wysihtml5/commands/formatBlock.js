@@ -138,7 +138,7 @@ function _execCommand(doc, composer, command, nodeName, className) {
       });
     }
     doc.execCommand(command, false, nodeName);
-  
+
     if (eventListener) {
       eventListener.stop();
     }
@@ -149,13 +149,13 @@ function _selectionWrap(composer, options) {
   if (composer.selection.isCollapsed()) {
       composer.selection.selectLine();
   }
-  
+
   var surroundedNodes = composer.selection.surround(options);
   for (var i = 0, imax = surroundedNodes.length; i < imax; i++) {
     _removeLineBreakBeforeAndAfter(surroundedNodes[i]);
     _removeLastChildIfLineBreak(surroundedNodes[i]);
   }
-  
+
   // rethink restoring selection
   //composer.selection.selectNode(element, wysihtml5.browser.displaysCaretInEmptyContentEditableCorrectly());
 }
@@ -173,21 +173,21 @@ var formatBlock = {
         selectedNodes, classRemoveAction, blockRenameFound;
 
     nodeName = typeof(nodeName) === "string" ? nodeName.toUpperCase() : nodeName;
-    
+
     if (blockElements.length) {
       composer.selection.executeAndRestoreSimple(function() {
         for (var b = blockElements.length; b--;) {
           if (classRegExp) {
             classRemoveAction = _removeClass(blockElements[b], classRegExp);
           }
-      
+
           if (classRemoveAction && nodeName === null && blockElements[b].nodeName != defaultNodeName) {
             // dont rename or remove element when just setting block formating class
             return;
           }
-          
+
           var hasClasses = _hasClasses(blockElements[b]);
-          
+
           if (!hasClasses && (useLineBreaks || nodeName === "P")) {
             // Insert a line break afterwards and beforewards when there are siblings
             // that are not of type line break or block element
@@ -199,10 +199,10 @@ var formatBlock = {
           }
         }
       });
-      
+
       return;
     }
-    
+
     // Find similiar block element and rename it (<h2 class="foo"></h2>  =>  <h1 class="foo"></h1>)
     if (nodeName === null || lang.array(BLOCK_ELEMENTS_GROUP).contains(nodeName)) {
       selectedNodes = composer.selection.findNodesInSelection(BLOCK_ELEMENTS_GROUP).concat(composer.selection.getSelectedOwnNodes());
@@ -216,19 +216,22 @@ var formatBlock = {
           }
           if (blockElement) {
               // Rename current block element to new block element and add class
-              if (nodeName) {
+              if (nodeName && nodeName != "PRE") {
                 blockElement = dom.renameElement(blockElement, nodeName);
+              } else if (nodeName == "PRE") {
+                blockElement.innerHTML += "\n\n"
+                dom.replaceWithChildNodes(blockElement);
               }
               if (className) {
                 _addClass(blockElement, className, classRegExp);
               }
-          
-            blockRenameFound = true;
+
+            blockRenameFound = nodeName != "PRE";
           }
         }
-        
+
       });
-      
+
       if (blockRenameFound) {
         return;
       }
@@ -246,19 +249,19 @@ var formatBlock = {
         if (composer.commands.support(command)) {
           _execCommand(doc, composer, command, nodeName || defaultNodeName, className);
           return;
-        } 
+        }
     }
 
-    
+
   },
 
   state: function(composer, command, nodeName, className, classRegExp) {
     var nodes = composer.selection.getSelectedOwnNodes(),
         parents = [],
         parent;
-        
+
     nodeName = typeof(nodeName) === "string" ? nodeName.toUpperCase() : nodeName;
-    
+
     //var selectedNode = composer.selection.getSelectedNode();
     for (var i = 0, maxi = nodes.length; i < maxi; i++) {
       parent = dom.getParentElement(nodes[i], {
@@ -277,4 +280,4 @@ var formatBlock = {
   }
 };
 
-export { formatBlock }; 
+export { formatBlock };
