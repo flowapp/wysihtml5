@@ -241,21 +241,17 @@ var Composer = Base.extend({
   },
 
   _updateHasValueClass: function() {
-    var VISUAL_BLOCKS, emptyText, containsVisualBlocks, innerHTML;
+    var VISUAL_BLOCKS, emptyText, containsVisualBlocks;
     VISUAL_BLOCKS = ["ul", "ol", "blockquote"]
-    innerHTML = this.element.innerHTML;
-    if(innerHTML) {
-      innerHTML = innerHTML.trim();
-    }
 
     for(var i = 0; i < VISUAL_BLOCKS.length; i++) {
-      if(innerHTML.indexOf(VISUAL_BLOCKS[i]) != -1) {
+      if(this.element.querySelectorAll(VISUAL_BLOCKS[i]).length > 0) {
         containsVisualBlocks = true;
         break;
       }
     }
 
-    emptyText = !containsVisualBlocks && this.isEmpty() && innerHTML.indexOf("<p>", 2) == -1;
+    emptyText = !containsVisualBlocks && this.isEmpty() && this.element.querySelectorAll("p").length <= 1;
 
     if(emptyText) {
       dom.removeClass(this.element, "has-value");
