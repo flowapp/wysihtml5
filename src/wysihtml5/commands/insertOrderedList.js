@@ -15,11 +15,19 @@ var insertOrderedList = {
   exec: function(composer, command) {
     var doc           = composer.doc,
         selectedNode  = composer.selection.getSelectedNode(),
-        list          = dom.getParentElement(selectedNode, { nodeName: "OL" }),
-        otherList     = dom.getParentElement(selectedNode, { nodeName: "UL" }),
         tempClassName =  "_wysihtml5-temp-" + new Date().getTime(),
         isEmpty,
-        tempElement;
+        tempElement,
+        list,
+        otherList;
+
+    if(composer.element.querySelector("OL")) {
+      list = dom.getParentElement(selectedNode, { nodeName: "OL" });
+    }
+
+    if(composer.element.querySelector("UL")) {
+     otherList = dom.getParentElement(selectedNode, { nodeName: "UL" });
+    }
 
     if (!list && !otherList) {
       doc.execCommand(command, false, null);
@@ -48,7 +56,11 @@ var insertOrderedList = {
 
   state: function(composer) {
     var selectedNode = composer.selection.getSelectedNode();
-    return dom.getParentElement(selectedNode, { nodeName: "OL" });
+    if(composer.element.querySelector("OL")) {
+      return dom.getParentElement(selectedNode, { nodeName: "OL" });
+    } else {
+      return false;
+    }
   }
 };
 
