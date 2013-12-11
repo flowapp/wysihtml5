@@ -46,6 +46,7 @@ Composer.prototype.observe = function() {
       that.parent.fire("change").fire("change:composer");
     }
     that.parent.fire("blur").fire("blur:composer");
+    that._updateHasValueClass();
   });
 
   // --------- Drag & Drop logic ---------
@@ -65,6 +66,7 @@ Composer.prototype.observe = function() {
         range.deleteContents();
       }
       e.preventDefault();
+      that._updateHasValueClass();
     }
   });
 
@@ -99,13 +101,18 @@ Composer.prototype.observe = function() {
   // --------- neword event ---------
   dom.observe(element, "keyup", function(event) {
     var keyCode = event.keyCode;
+    that._updateHasValueClass();
     if (keyCode === Constants.SPACE_KEY || keyCode === Constants.ENTER_KEY) {
       that.parent.fire("newword:composer");
     }
   });
 
   this.parent.on("paste:composer", function() {
-    setTimeout(function() { that.parent.fire("newword:composer"); }, 0);
+    setTimeout(function() {
+      that.parent.fire("newword:composer");
+      that._updateHasValueClass();
+    }, 0);
+
   });
 
   // --------- Make sure that images are selected when clicking on them ---------
