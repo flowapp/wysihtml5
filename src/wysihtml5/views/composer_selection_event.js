@@ -43,7 +43,8 @@ Composer.prototype._fireSelectionChange = function() {
   var returnValue = null;
   if (range) {
     var nativeRange = range.nativeRange;
-    if (this.element.contains(nativeRange.commonAncestorContainer)) {
+    var position = this.element.compareDocumentPosition(nativeRange.commonAncestorContainer);
+    if (position & Node.DOCUMENT_POSITION_CONTAINED_BY) {
       returnValue = nativeRange;
     }
   }
