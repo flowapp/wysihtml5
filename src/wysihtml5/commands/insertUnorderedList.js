@@ -14,14 +14,15 @@ var cleanup = function(composer) {
 var insertUnorderedList = {
   exec: function(composer, command) {
     var selectedNode = composer.selection.getSelectedNode();
-    var list, otherList;
+    var list = dom.getParentElement(selectedNode, { nodeName: "UL" });
+    var otherList = dom.getParentElement(selectedNode, { nodeName: "OL" });
 
-    if(composer.element.querySelector("UL")) {
-      list = dom.getParentElement(selectedNode, { nodeName: "UL" });
+    if(list && !composer.element.contains(list)) {
+      list = null
     }
 
-    if(composer.element.querySelector("OL")) {
-      otherList = dom.getParentElement(selectedNode, { nodeName: "UL" });
+    if(otherList && !composer.element.contains(otherList)) {
+      otherList = null
     }
 
     if (!list && !otherList) {
@@ -51,11 +52,8 @@ var insertUnorderedList = {
 
   state: function(composer) {
     var selectedNode = composer.selection.getSelectedNode();
-    if(composer.element.querySelector("UL")) {
-      return dom.getParentElement(selectedNode, { nodeName: "UL" });
-    } else {
-      return false;
-    }
+    var node = dom.getParentElement(selectedNode, { nodeName: "UL" });
+    return (composer.element.contains(node) ? node : false);
   }
 };
 
