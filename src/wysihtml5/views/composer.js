@@ -37,11 +37,11 @@ var Composer = Base.extend({
     var value;
     var element = this.element;
 
-    if(!options) {
+    if (!options) {
       options = {}
     }
 
-    if(options.trim) {
+    if (options.trim) {
       element = this.trimEmptyNodes(element);
     }
 
@@ -68,32 +68,29 @@ var Composer = Base.extend({
 
   trimEmptyNodes: function(element) {
     var lastNodeWithValueIndex = null;
-    var wrapper = document.createElement("div");
-    var node, text, childNodes = [];
+    var firstNode, lastNode, firstNodeText, lastNodeText;
+    element = element.cloneNode(true);
 
-    for(var i = 0; i < element.childNodes.length; i++) {
-      node = element.childNodes[i].cloneNode();
-      text = node.innerText ? node.innerText.trim() : node.textContent.trim()
-      if(text != "" || lastNodeWithValueIndex != null) {
-        childNodes.push(node);
-        wrapper.appendChild(node);
+    while (element.childNodes.length) {
+      firstNode = element.childNodes[0]
+      lastNode = element.childNodes[element.childNodes.length - 1]
+      firstNodeText = (firstNode.textContent || "").trim()
+      lastNodeText = (lastNode.textContent || "").trim()
+
+      if (!firstNodeText) {
+        element.removeChild(firstNode);
       }
 
-      if(text != "") {
-        lastNodeWithValueIndex = i;
+      if (!lastNodeText && lastNode != firstNode) {
+        element.removeChild(lastNode);
+      }
+
+      if (firstNodeText && lastNodeText) {
+        break;
       }
     }
 
-    if(lastNodeWithValueIndex != null) {
-        childNodes.splice(0, lastNodeWithValueIndex + 1);
-        if(childNodes.length) {
-            for(var i = 0; i < childNodes.length; i++) {
-              wrapper.removeChild(childNodes[i]);
-            }
-        }
-    }
-
-    return wrapper;
+    return element;
   },
 
   show: function() {
