@@ -95,6 +95,8 @@ Composer.prototype.observe = function() {
         });
         that.selection.insertElements(fragment);
       }
+      var textNodes = that._textNodes(that.element);
+      that._processNodesForBlockTextSubstitution(textNodes);
       e.preventDefault();
     } else {
       var keepScrollPosition = true;
