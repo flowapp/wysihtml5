@@ -17,6 +17,7 @@ import { Parser } from "wysihtml5/dom/parse";
 import { query } from "wysihtml5/dom/query";
 import { reblock } from "wysihtml5/dom/reblock";
 import { removeEmptyTextNodes } from "wysihtml5/dom/remove_empty_text_nodes";
+import { removeEmptyNodes } from "wysihtml5/dom/remove_empty_nodes";
 import { renameElement } from "wysihtml5/dom/rename_element";
 import { replaceWithChildNodes } from "wysihtml5/dom/replace_with_child_nodes";
 import { resolveList } from "wysihtml5/dom/resolve_list";
@@ -47,6 +48,7 @@ export default = {
   query: query,
   reblock: reblock,
   removeEmptyTextNodes: removeEmptyTextNodes,
+  removeEmptyNodes: removeEmptyNodes,
   renameElement: renameElement,
   replaceWithChildNodes: replaceWithChildNodes,
   resolveList: resolveList,

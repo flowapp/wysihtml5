@@ -33,10 +33,21 @@ var Composer = Base.extend({
     this._updateHasValueClass();
   },
 
-  getValue: function(parse) {
-    var value = this.isEmpty() ? "" : quirks.getCorrectInnerHTML(this.element);
+  getValue: function(options) {
+    var value;
+    var element = this.element;
 
-    if (parse) {
+    if (!options) {
+      options = {}
+    }
+
+    if (options.trim) {
+      element = wysihtml5.dom.removeEmptyNodes(element);
+    }
+
+    value = this.isEmpty() ? "" : quirks.getCorrectInnerHTML(element);
+
+    if (options.parse) {
       value = this.parent.parse(value);
     }
 
