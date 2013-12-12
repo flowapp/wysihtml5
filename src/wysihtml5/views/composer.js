@@ -42,7 +42,7 @@ var Composer = Base.extend({
     }
 
     if (options.trim) {
-      element = this.trimEmptyNodes(element);
+      element = wysihtml5.dom.removeEmptyNodes(element);
     }
 
     value = this.isEmpty() ? "" : quirks.getCorrectInnerHTML(element);
@@ -64,32 +64,6 @@ var Composer = Base.extend({
 
   cleanUp: function() {
     this.parent.parse(this.element);
-  },
-
-  trimEmptyNodes: function(element) {
-    var firstNode, lastNode, firstNodeText, lastNodeText;
-    element = element.cloneNode(true);
-
-    while (element.childNodes.length) {
-      firstNode = element.childNodes[0]
-      lastNode = element.childNodes[element.childNodes.length - 1]
-      firstNodeText = (firstNode.textContent || "").trim()
-      lastNodeText = (lastNode.textContent || "").trim()
-
-      if (!firstNodeText) {
-        element.removeChild(firstNode);
-      }
-
-      if (!lastNodeText && lastNode != firstNode) {
-        element.removeChild(lastNode);
-      }
-
-      if (firstNodeText && lastNodeText) {
-        break;
-      }
-    }
-
-    return element;
   },
 
   show: function() {
