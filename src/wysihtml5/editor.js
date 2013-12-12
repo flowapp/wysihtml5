@@ -99,8 +99,8 @@ var Editor = lang.Dispatcher.extend(
     return this;
   },
 
-  getValue: function(parse) {
-    return this.currentView.getValue(parse);
+  getValue: function(options) {
+    return this.currentView.getValue(options);
   },
 
   setValue: function(html, parse) {
