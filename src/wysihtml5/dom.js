@@ -1,4 +1,5 @@
 import { addClass, removeClass, hasClass } from "wysihtml5/dom/class";
+import { appendChildNodes } from "wysihtml5/dom/append_child_nodes";
 import { contains } from "wysihtml5/dom/contains";
 import { convertToList } from "wysihtml5/dom/convert_to_list";
 import { copyAttributes } from "wysihtml5/dom/copy_attributes";
@@ -22,11 +23,12 @@ import { replaceWithChildNodes } from "wysihtml5/dom/replace_with_child_nodes";
 import { resolveList } from "wysihtml5/dom/resolve_list";
 import { setAttributes } from "wysihtml5/dom/set_attributes";
 import { setStyles } from "wysihtml5/dom/set_styles";
-//import { table } from "wysihtml5/dom/table";
+import { nodeList } from "wysihtml5/dom/node_list";
 import { setTextContent, getTextContent } from "wysihtml5/dom/text_content";
 
 export default = {
   addClass: addClass,
+  appendChildNodes: appendChildNodes,
   removeClass: removeClass,
   hasClass: hasClass,
   contains: contains,
@@ -52,7 +54,7 @@ export default = {
   resolveList: resolveList,
   setAttributes: setAttributes,
   setStyles: setStyles,
-  //table: table,
+  nodeList: nodeList,
   setTextContent: setTextContent,
   getTextContent: getTextContent
 };

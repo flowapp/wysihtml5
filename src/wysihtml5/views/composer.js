@@ -108,7 +108,7 @@ var Composer = Base.extend({
     this.cleanUp(); // cleans contenteditable on initiation as it may contain html
 
     // Make sure our selection handler is ready
-    this.selection = new Selection(this.parent, this.element, this.config.uneditableContainerClassname);
+    this.selection = new Selection(this.parent, this, this.element, this.config.uneditableContainerClassname);
 
     // Make sure commands dispatcher is ready
     this.commands  = new Commands(this.parent, this);
@@ -151,17 +151,7 @@ var Composer = Base.extend({
     dom.observe(this.element, ["focus", "keydown"], function(e) {
       if (e.type == "focus" || e.keyCode == Constants.BACKSPACE_KEY) {
         setTimeout(function() {
-          if (that.isEmpty()) {
-            var paragraph = that.doc.createElement("P");
-            that.element.innerHTML = "";
-            that.element.appendChild(paragraph);
-            if (!browser.displaysCaretInEmptyContentEditableCorrectly()) {
-              paragraph.innerHTML = "<br>";
-              that.selection.setBefore(paragraph.firstChild);
-            } else {
-              that.selection.selectNode(paragraph, true);
-            }
-          }
+          that.ensureParagraph();
         }, 0);
       }
     });
@@ -170,6 +160,21 @@ var Composer = Base.extend({
       _this._handleKeyboardHandlers(event);
       _this._lookForTextSubstitution(event);
     });
+  },
+
+  ensureParagraph: function() {
+    if (this.isEmpty()) {
+      var paragraph = this.doc.createElement("P");
+      this.element.innerHTML = "";
+      this.element.appendChild(paragraph);
+      if (!browser.displaysCaretInEmptyContentEditableCorrectly()) {
+        paragraph.innerHTML = "<br>";
+        this.selection.setBefore(paragraph.firstChild);
+      } else {
+        this.selection.selectNode(paragraph, true);
+      }
+      return paragraph;
+    }
   },
 
   // Text Substitutions
