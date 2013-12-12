@@ -67,7 +67,6 @@ var Composer = Base.extend({
   },
 
   trimEmptyNodes: function(element) {
-    var lastNodeWithValueIndex = null;
     var firstNode, lastNode, firstNodeText, lastNodeText;
     element = element.cloneNode(true);
 
