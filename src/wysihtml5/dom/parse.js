@@ -585,7 +585,11 @@ var Parser = (function() {
         attributeValue = (attributeValue || "").replace(REG_EXP, "");
         return attributeValue || null;
       };
-    })()
+    })(),
+
+    any: function(attributeValue) {
+      return attributeValue;
+    }
   };
 
   // ------------ class converter (converts an html attribute to a class name) ------------ \\
