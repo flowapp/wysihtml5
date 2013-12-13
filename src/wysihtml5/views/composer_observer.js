@@ -60,7 +60,7 @@ Composer.prototype.observe = function() {
       var node = document.createElement("div");
       node.appendChild(content);
 
-      clipboardData.setData("text/plain", node.innerText);
+      clipboardData.setData("text/plain", node.innerText || node.textContent);
       clipboardData.setData("text/html", node.innerHTML);
       if (e.type == "cut") {
         range.deleteContents();
