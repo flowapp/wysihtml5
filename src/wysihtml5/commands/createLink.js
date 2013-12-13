@@ -41,6 +41,7 @@ function _format(composer, attributes) {
       textContent,
       whiteSpace,
       j;
+
   formatInline.exec(composer, undef, NODE_NAME, tempClass, tempClassRegExp);
   anchors = doc.querySelectorAll(NODE_NAME + "." + tempClass);
   length  = anchors.length;
@@ -66,6 +67,7 @@ function _format(composer, attributes) {
     }
   }
   composer.selection.setAfter(elementToSetCaretAfter);
+  return anchors;
 }
 
 var createLink = {
@@ -92,7 +94,7 @@ var createLink = {
     } else {
       // Create links
       value = typeof(value) === "object" ? value : { href: value };
-      _format(composer, value);
+      return _format(composer, value);
     }
   },
 
