@@ -48,6 +48,8 @@ var Composer = Base.extend({
     value = this.isEmpty() ? "" : quirks.getCorrectInnerHTML(element);
 
     if (options.parse) {
+      var textNodes = this._textNodes(element);
+      this._processNodesForBlockTextSubstitution(textNodes);
       value = this.parent.parse(value);
     }
 
@@ -191,16 +193,51 @@ var Composer = Base.extend({
   // Text Substitutions
 
   _lastInsertedBlock: function(range, e) {
-    var nativeRange = range.nativeRange;
+    var nativeRange = range.nativeRange || range;
     var startContainer = nativeRange.startContainer;
     if (nativeRange.collapsed) {
       var blockElement = dom.getParentElement(startContainer, {
         nodeName: ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6", "PRE", "BLOCKQUOTE"]
       }, 4);
       if (blockElement) {
-
+        var nodes = this._textNodes(blockElement);
+        return nodes;
       }
     }
+  },
+
+  _processNodesForBlockTextSubstitution: function(nodes) {
+    var _this = this;
+    nodes.forEach(function(node) {
+      _this._textSubstitutions.forEach(function(textSubstitution) {
+        var textContent = node.textContent;
+        if (textSubstitution.options.sentence !== false && textSubstitution.matcher(node.textContent, null, _this.parent, _this)) {
+          var range = document.createRange();
+          range.selectNodeContents(node);
+          textSubstitution.callback(_this.parent, _this, range, textContent);
+        }
+      });
+    });
+  },
+
+  _textNodes: function(node) {
+    node.normalize()
+    var treeWalker = document.createTreeWalker(
+      node,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function(node) {
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      },
+      false
+    );
+
+    var nodeList = [];
+    while (treeWalker.nextNode()) {
+      nodeList.push(treeWalker.currentNode);
+    }
+    return nodeList;
   },
 
   _lastInsertedWordRange: function(range) {
@@ -231,7 +268,7 @@ var Composer = Base.extend({
       if (options) {
         for (var index = 0; index < this._textSubstitutions.length; index++) {
           var textSubstitution = this._textSubstitutions[index];
-          if (textSubstitution.options.word !== false && textSubstitution.matcher(options.textContent, e)) {
+          if (textSubstitution.options.word !== false && textSubstitution.matcher(options.textContent, e, this.parent, this)) {
             textSubstitution.callback(this.parent, this, options.range, options.textContent, e);
           }
         }
@@ -241,9 +278,13 @@ var Composer = Base.extend({
     // Also commit paragraphs on enter
     if (e.keyCode == Constants.ENTER_KEY) {
       var range = this.selection.getRange();
-      var blockRange = this._lastInsertedBlock(range, e);
+      var nodes = this._lastInsertedBlock(range, e);
+      if (nodes && nodes.length) {
+        this._processNodesForBlockTextSubstitution(nodes);
+      }
     }
   },
+
 
   // Keyboard Processors
 
