@@ -30,6 +30,7 @@ var Composer = Base.extend({
 
   clear: function() {
     this.element.innerHTML = browser.displaysCaretInEmptyContentEditableCorrectly() ? "" : this.CARET_HACK;
+    this.undoManager.reset();
     this._updateHasValueClass();
   },
 
@@ -61,6 +62,7 @@ var Composer = Base.extend({
       html = this.parent.parse(html);
     }
     this.element.innerHTML = html;
+    this.undoManager.reset();
     this._updateHasValueClass();
   },
 
