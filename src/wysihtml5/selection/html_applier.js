@@ -545,7 +545,8 @@ HTMLApplier.prototype = {
         if (!ancestor) {
           ancestor = this.getAncestorWithStyle(textNodes[i]);
         }
-        if (!(selectedText != "" && !ancestor)) {
+
+        if (ancestor && selectedText.length) {
           ancestors.push(ancestor);
         }
       }
