@@ -24,8 +24,10 @@ var autoList = function(editor, composer, range, textContent, e) {
         var command = orderedList ? "insertOrderedList" : "insertUnorderedList";
         composer.commands.exec(command);
       });
+      return true;
     }
   }
+  return false;
 };
 
 var hasPrefix = function(string, prefix) {
@@ -48,9 +50,10 @@ var isListPrefix = function(textContent, exact) {
 Composer.RegisterTextSubstitution(function(textContent) {
   return isListPrefix(textContent, true);
 }, function(editor, composer, range, textContent, e) {
-  autoList(editor, composer, range, textContent, e);
-  if (e.type === "keydown" && e.keyCode == Constants.SPACE_KEY) {
-    e.preventDefault();
+  if (autoList(editor, composer, range, textContent, e)) {
+    if (e.type === "keydown" && e.keyCode == Constants.SPACE_KEY) {
+      e.preventDefault();
+    }
   }
 }, {
   word: true,
