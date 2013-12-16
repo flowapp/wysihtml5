@@ -1,4 +1,5 @@
 import { addClass, removeClass, hasClass } from "wysihtml5/dom/class";
+import { all } from "wysihtml5/dom/all";
 import { appendChildNodes } from "wysihtml5/dom/append_child_nodes";
 import { contains } from "wysihtml5/dom/contains";
 import { convertToList } from "wysihtml5/dom/convert_to_list";
@@ -28,6 +29,7 @@ import { nodeList } from "wysihtml5/dom/node_list";
 import { setTextContent, getTextContent } from "wysihtml5/dom/text_content";
 
 export default = {
+  all: all,
   addClass: addClass,
   appendChildNodes: appendChildNodes,
   removeClass: removeClass,

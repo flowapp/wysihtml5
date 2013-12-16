@@ -516,29 +516,25 @@ var Selection = Base.extend({
    * @param {Object} node The node to surround the selected elements with
    */
   surround: function(nodeOptions) {
-    var ranges = this.getOwnRanges(),
-        node, nodes = [];
-    if (ranges.length == 0) {
-      return nodes;
+    var range = this.getRange();
+    if (!range) {
+      return null;
     }
 
-    for (var i = ranges.length; i--;) {
-      node = this.doc.createElement(nodeOptions.nodeName);
-      nodes.push(node);
-      if (nodeOptions.className) {
-        node.className = nodeOptions.className;
-      }
-      try {
-        // This only works when the range boundaries are not overlapping other elements
-        ranges[i].surroundContents(node);
-        this.selectNode(node);
-      } catch(e) {
-        // fallback
-        node.appendChild(ranges[i].extractContents());
-        ranges[i].insertNode(node);
-      }
+    var node = document.createElement(nodeOptions.nodeName);
+    if (nodeOptions.className) {
+      node.className = nodeOptions.className;
     }
-    return nodes;
+    try {
+      // This only works when the range boundaries are not overlapping other elements
+      range.surroundContents(node);
+      this.selectNode(node);
+    } catch(e) {
+      // fallback
+      node.appendChild(range.extractContents());
+      range.insertNode(node);
+    }
+    return node;
   },
 
   deblockAndSurround: function(nodeOptions) {

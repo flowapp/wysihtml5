@@ -47,8 +47,6 @@ var Commands = Base.extend({
       if(blockedCommands.indexOf(command) != -1 && value != "pre") {
         return false;
       }
-    } else if(value == "pre") {
-      this.doc.execCommand("removeFormat")
     }
 
     this.editor.fire("beforecommand:composer");
