@@ -29,14 +29,15 @@ var UndoManager = lang.Dispatcher.extend({
     this.composer = composer;
     this.editor = this.composer.parent;
     this.element = this.composer.element;
+    this.reset();
+    this._observe();
+  },
 
+  reset: function() {
     this.position = 0;
     this.historyStr = [];
     this.historyDom = [];
-
     this.transact();
-
-    this._observe();
   },
 
   _observe: function() {
