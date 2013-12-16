@@ -703,12 +703,43 @@ var Selection = Base.extend({
           range.setStartBefore(this.contain.firstChild);
           range.setEndAfter(this.contain.lastChild);
         }
-      } else if (this._detectInlineRangeProblems(range)) {
+      }
+      if (this._detectInlineRangeProblems(range)) {
         var previousElementSibling = range.endContainer.previousElementSibling;
         if (previousElementSibling) {
           range.setEnd(previousElementSibling, this._endOffsetForNode(previousElementSibling));
         }
       }
+
+      this._normalizeEndContainer(range)
+    }
+  },
+
+  _normalizeEndContainer: function(range) {
+    var endContainer = range.endContainer;
+    if (endContainer.nodeType == Node.ELEMENT_NODE && !range.collapsed) {
+      endContainer = endContainer.childNodes[range.endOffset - 1];
+      if (endContainer) {
+        endContainer = this._lastChild(endContainer);
+        switch (endContainer.nodeType) {
+          case Node.TEXT_NODE:
+            range.setEnd(endContainer, endContainer.length);
+            break;
+          case Node.ELEMENT_NODE:
+            var parent = endContainer.parentNode;
+            range.setEnd(parent, parent.childNodes.length);
+            break;
+        }
+      }
+    }
+  },
+
+  _lastChild: function(endContainer) {
+    var container = endContainer.lastChild;
+    if (container) {
+      return this._lastChild(container);
+    } else {
+      return endContainer;
     }
   },
 
