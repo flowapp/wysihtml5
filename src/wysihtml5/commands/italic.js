@@ -1,8 +1,9 @@
 import { formatInline } from "./formatInline";
+import { nativeCommand } from "./native_command";
 
 var italic = {
   exec: function(composer, command) {
-    formatInline.exec(composer, command, "i");
+    nativeCommand.exec(composer, "italic");
   },
 
   state: function(composer, command) {
