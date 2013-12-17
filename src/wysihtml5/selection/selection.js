@@ -322,7 +322,7 @@ var Selection = Base.extend({
     var selectedNode = this.getSelectedNode();
     var oldLastChild;
     var blockElement = dom.getParentElement(selectedNode, {
-      nodeName: ["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "BLOCKQUOTE"]
+      nodeName: ["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "UL", "OL", "BLOCKQUOTE"]
     });
 
     if (!blockElement) {
