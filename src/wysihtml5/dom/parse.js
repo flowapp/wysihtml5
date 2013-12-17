@@ -90,10 +90,6 @@ var Parser = (function() {
         newNode,
         firstChild;
 
-    if (config.uneditableClass) {
-      uneditableClass = config.uneditableClass;
-    }
-
     if (isString) {
       element = getAsDom(elementOrHtml, context);
     } else {
