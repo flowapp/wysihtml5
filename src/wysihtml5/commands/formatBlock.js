@@ -178,6 +178,12 @@ var formatBlock = {
             // that are not of type line break or block element
             _addLineBreakBeforeAndAfter(blockElements[b]);
             dom.replaceWithChildNodes(blockElements[b]);
+          } else if (nodeName === "PRE") {
+            var element = blockElements[b];
+            var content = element.innerHTML;
+            var paragraphs = dom.fromPlainText(content, true);
+            var fragment = dom.nodeList.toFragment(paragraphs);
+            element.parentNode.replaceChild(fragment, element);
           } else {
             // Make sure that styling is kept by renaming the element to a <div> or <p> and copying over the class name
             dom.renameElement(blockElements[b], nodeName === "P" ? "DIV" : defaultNodeName);

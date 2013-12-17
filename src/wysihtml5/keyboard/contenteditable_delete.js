@@ -9,8 +9,8 @@ Composer.RegisterKeyboardHandler(function(e) {
 }, function(editor, composer, e) {
   var range = composer.selection.getRange()
   var selectedNode = composer.selection.getSelectedNode();
-  if (selectedNode !== composer.element) {
-    var parentElement = selectedNode.parentElement;
+  if (selectedNode && selectedNode !== composer.element) {
+    var parentElement = selectedNode.parentNode;
     if (parentElement && parentElement.getAttribute("contenteditable") == "false") {
       parentElement.parentElement.removeChild(parentElement);
       if (e.keyCode == Constants.BACKSPACE_KEY) {

@@ -70,7 +70,6 @@ Composer.prototype.observe = function() {
     }
   });
 
-  var NEWLINE_SPLITTER = /\n\n+/;
   dom.observe(element, pasteEvents, function(e) {
     var clipboardData = e.clipboardData;
     if (clipboardData) {
@@ -83,16 +82,7 @@ Composer.prototype.observe = function() {
         var fragment = dom.nodeList.toArray(host.childNodes);
         that.selection.insertElements(fragment);
       } else if (data = clipboardData.getData("Text")) {
-        var paragraphs = data.split(NEWLINE_SPLITTER);
-        var incluedsTrailingNewLines = !paragraphs[paragraphs.length - 1];
-        if (incluedsTrailingNewLines) {
-          paragraphs.pop();
-        }
-        var fragment = paragraphs.map(function(chunk, index) {
-          var paragraph = document.createElement("P");
-          paragraph.textContent = chunk;
-          return paragraph;
-        });
+        var fragment = dom.fromPlainText(data);
         that.selection.insertElements(fragment);
       }
       var textNodes = that._textNodes(that.element);
