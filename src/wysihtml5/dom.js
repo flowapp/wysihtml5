@@ -1,10 +1,12 @@
 import { addClass, removeClass, hasClass } from "wysihtml5/dom/class";
+import { all } from "wysihtml5/dom/all";
 import { appendChildNodes } from "wysihtml5/dom/append_child_nodes";
 import { contains } from "wysihtml5/dom/contains";
 import { convertToList } from "wysihtml5/dom/convert_to_list";
 import { copyAttributes } from "wysihtml5/dom/copy_attributes";
 import { copyStyles } from "wysihtml5/dom/copy_styles";
 import { delegate } from "wysihtml5/dom/delegate";
+import { fromPlainText } from "./dom/from_plain_text";
 import { getAsDom } from "wysihtml5/dom/get_as_dom";
 import { getAttribute } from "wysihtml5/dom/get_attribute";
 import { getParentElement } from "wysihtml5/dom/get_parent_element";
@@ -28,6 +30,7 @@ import { nodeList } from "wysihtml5/dom/node_list";
 import { setTextContent, getTextContent } from "wysihtml5/dom/text_content";
 
 export default = {
+  all: all,
   addClass: addClass,
   appendChildNodes: appendChildNodes,
   removeClass: removeClass,
@@ -37,6 +40,7 @@ export default = {
   copyAttributes: copyAttributes,
   copyStyles: copyStyles,
   delegate: delegate,
+  fromPlainText: fromPlainText,
   getAsDom: getAsDom,
   getAttribute: getAttribute,
   getParentElement: getParentElement,

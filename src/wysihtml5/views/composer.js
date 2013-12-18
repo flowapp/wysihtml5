@@ -224,22 +224,7 @@ var Composer = Base.extend({
 
   _textNodes: function(node) {
     node.normalize()
-    var treeWalker = document.createTreeWalker(
-      node,
-      NodeFilter.SHOW_TEXT,
-      {
-        acceptNode: function(node) {
-          return NodeFilter.FILTER_ACCEPT;
-        }
-      },
-      false
-    );
-
-    var nodeList = [];
-    while (treeWalker.nextNode()) {
-      nodeList.push(treeWalker.currentNode);
-    }
-    return nodeList;
+    return dom.all.textNodes(node);
   },
 
   _lastInsertedWordRange: function(range) {

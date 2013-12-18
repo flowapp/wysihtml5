@@ -1,6 +1,7 @@
 import dom from "../dom";
 import lang from "wysihtml5/lang";
 import { browser } from "../browser";
+import { Constants } from "../constants";
 
 var BLOCK_ELEMENTS_GROUP = ["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "BLOCKQUOTE", "DIV"];
 
@@ -145,21 +146,6 @@ function _execCommand(doc, composer, command, nodeName, className) {
   }
 }
 
-function _selectionWrap(composer, options) {
-  if (composer.selection.isCollapsed()) {
-      composer.selection.selectLine();
-  }
-
-  var surroundedNodes = composer.selection.surround(options);
-  for (var i = 0, imax = surroundedNodes.length; i < imax; i++) {
-    _removeLineBreakBeforeAndAfter(surroundedNodes[i]);
-    _removeLastChildIfLineBreak(surroundedNodes[i]);
-  }
-
-  // rethink restoring selection
-  //composer.selection.selectNode(element, wysihtml5.browser.displaysCaretInEmptyContentEditableCorrectly());
-}
-
 function _hasClasses(element) {
   return !!lang.string(element.className).trim();
 }
@@ -173,7 +159,6 @@ var formatBlock = {
         selectedNodes, classRemoveAction, blockRenameFound;
 
     nodeName = typeof(nodeName) === "string" ? nodeName.toUpperCase() : nodeName;
-
     if (blockElements.length) {
       composer.selection.executeAndRestoreSimple(function() {
         for (var b = blockElements.length; b--;) {
@@ -193,6 +178,12 @@ var formatBlock = {
             // that are not of type line break or block element
             _addLineBreakBeforeAndAfter(blockElements[b]);
             dom.replaceWithChildNodes(blockElements[b]);
+          } else if (nodeName === "PRE") {
+            var element = blockElements[b];
+            var content = element.innerHTML;
+            var paragraphs = dom.fromPlainText(content, true);
+            var fragment = dom.nodeList.toFragment(paragraphs);
+            element.parentNode.replaceChild(fragment, element);
           } else {
             // Make sure that styling is kept by renaming the element to a <div> or <p> and copying over the class name
             dom.renameElement(blockElements[b], nodeName === "P" ? "DIV" : defaultNodeName);
@@ -203,56 +194,48 @@ var formatBlock = {
       return;
     }
 
-    // Find similiar block element and rename it (<h2 class="foo"></h2>  =>  <h1 class="foo"></h1>)
     if (nodeName === null || lang.array(BLOCK_ELEMENTS_GROUP).contains(nodeName)) {
+      if (nodeName == "PRE") {
+        var node = composer.selection.surround({nodeName: "PRE"});
+        if (node) {
+          var children = dom.all.elements(node);
+          children.reverse().forEach(function(child) {
+            if (child.nodeName == "BR") {
+              child.parentNode.replaceChild(document.createTextNode("\n"), child);
+            } else {
+              if (Constants.BLOCK_ELEMENTS.indexOf(child.nodeName) != -1 && node.lastChild != child) {
+                child.innerHTML += "\n\n";
+              }
+              dom.replaceWithChildNodes(child);
+            }
+          });
+        }
+        return;
+      }
+
+      // Find similiar block element and rename it (<h2 class="foo"></h2>  =>  <h1 class="foo"></h1>)
       selectedNodes = composer.selection.findNodesInSelection(BLOCK_ELEMENTS_GROUP).concat(composer.selection.getSelectedOwnNodes());
+
       composer.selection.executeAndRestoreSimple(function() {
         for (var n = selectedNodes.length; n--;) {
           var blockElement = dom.getParentElement(selectedNodes[n], {
             nodeName: BLOCK_ELEMENTS_GROUP
           });
           if (blockElement == composer.element) {
-              blockElement = null;
+            continue;
           }
           if (blockElement) {
-              // Rename current block element to new block element and add class
-              if (nodeName && nodeName != "PRE") {
-                blockElement = dom.renameElement(blockElement, nodeName);
-              } else if (nodeName == "PRE") {
-                blockElement.innerHTML += "\n\n"
-                dom.replaceWithChildNodes(blockElement);
-              }
-              if (className) {
-                _addClass(blockElement, className, classRegExp);
-              }
-
-            blockRenameFound = nodeName != "PRE";
+            // Rename current block element to new block element and add class
+            if (nodeName) {
+              blockElement = dom.renameElement(blockElement, nodeName);
+            }
+            if (className) {
+              _addClass(blockElement, className, classRegExp);
+            }
           }
         }
-
       });
-
-      if (blockRenameFound) {
-        return;
-      }
     }
-
-    if (browser.supportsSelectLine()) {
-        _selectionWrap(composer, {
-          "nodeName": (nodeName || defaultNodeName),
-          "className": className || null
-        });
-    } else {
-        // Falling back to native command for Opera up to 12 mostly
-        // Native command does not create elements from selecton boundaries.
-        // Not quite user expected behaviour
-        if (composer.commands.support(command)) {
-          _execCommand(doc, composer, command, nodeName || defaultNodeName, className);
-          return;
-        }
-    }
-
-
   },
 
   state: function(composer, command, nodeName, className, classRegExp) {
