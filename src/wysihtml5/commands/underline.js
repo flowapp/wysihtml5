@@ -1,8 +1,9 @@
 import { formatInline } from "./formatInline";
+import { nativeCommand } from "./native_command";
 
 var underline = {
   exec: function(composer, command) {
-    formatInline.exec(composer, command, "u");
+    nativeCommand.exec(composer, "underline");
   },
 
   state: function(composer, command) {

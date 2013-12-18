@@ -1,8 +1,9 @@
 import { formatInline } from "./formatInline";
+import { nativeCommand } from "./native_command";
 
 var bold = {
   exec: function(composer, command) {
-    formatInline.exec(composer, command, "b");
+    nativeCommand.exec(composer, "bold");
   },
 
   state: function(composer, command) {
