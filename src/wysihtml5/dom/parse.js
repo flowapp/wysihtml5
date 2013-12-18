@@ -102,6 +102,17 @@ var Parser = (function() {
       element.removeChild(firstChild);
       if (newNode) {
         fragment.appendChild(newNode);
+        if (lang.array([
+                "div", "pre", "p",
+                "blockquote",
+                "table", "td", "th",
+                "ul", "ol", "li",
+                "dd", "dl",
+                "footer", "header", "section",
+                "h1", "h2", "h3", "h4", "h5", "h6"
+            ]).contains(newNode.nodeName.toLowerCase())) {
+              fragment.appendChild(document.createTextNode("\n\n"));
+        }
       }
     }
 
