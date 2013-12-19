@@ -19,17 +19,18 @@ import "wysihtml5/views/composer_observer";
 import "wysihtml5/views/composer_selection_event";
 
 // Keyboard fixes
+import "wysihtml5/keyboard/list_merger";
 import "wysihtml5/keyboard/prevent_last_paragraph_delete";
 import "wysihtml5/keyboard/prevent_empty_inherence";
 import "wysihtml5/keyboard/clear_inline_block_style";
 import "wysihtml5/keyboard/newline_pre";
 import "wysihtml5/keyboard/break_block_elements";
-import "wysihtml5/keyboard/list_element_delete";
 import "wysihtml5/keyboard/contenteditable_delete";
 import "wysihtml5/keyboard/break_header";
 import "wysihtml5/keyboard/break_list";
 import "wysihtml5/keyboard/shortcuts";
 import "wysihtml5/keyboard/delete_images";
+import "wysihtml5/keyboard/delete_block_elements";
 
 // Text Substitutions
 import "wysihtml5/text_substitutions/auto_link";

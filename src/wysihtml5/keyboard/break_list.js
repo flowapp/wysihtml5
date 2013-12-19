@@ -1,5 +1,6 @@
 import { Constants } from "../constants";
 import { Composer } from "../views/composer";
+import { ensureParagraph } from "../helpers/ensure_paragraph";
 import dom from "../dom";
 
 var LIST_TAGS = ["UL", "OL", "MENU"];
@@ -16,16 +17,10 @@ Composer.RegisterKeyboardHandler(function(e) {
 
   if (listItem && !listItem.textContent) {
     setTimeout(function() {
-      var selectedNode = composer.selection.getSelectedNode();
-      var blockElement = dom.getParentElement(selectedNode, {
-        nodeName: ["DIV"]
+      composer.selection.executeAndRestore(function() {
+        var selectedNode = composer.selection.getSelectedNode();
+        ensureParagraph(selectedNode, composer);
       });
-
-      if (blockElement) {
-        composer.selection.executeAndRestore(function() {
-          dom.renameElement(selectedNode, "p");
-        });
-      }
     }, 0);
   }
 });
