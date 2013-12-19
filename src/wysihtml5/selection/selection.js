@@ -245,9 +245,11 @@ var Selection = Base.extend({
     selectedNode = selectedNode || this.getSelectedNode();
     selectedRange = selectedRange || this.getRange();
     var tester = function(range, node, until) {
-      if (range.startOffset == 0) {
+      var textContent = range.startContainer.textContent;
+      var isEmpty = (!textContent || textContent === Constants.INVISIBLE_SPACE)
+      if (range.startOffset == 0 || (range.startOffset == 1 && isEmpty)) {
         var parent = node.parentNode;
-        if (parent === until) {
+        if (node === until || parent === until) {
           return true;
         }
         var newRange = document.createRange();
