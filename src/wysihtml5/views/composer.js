@@ -6,6 +6,7 @@ import { Constants } from "../constants";
 import { Selection } from "../selection/selection";
 import { Commands} from "../commands";
 import { UndoManager } from "../undo_manager";
+import { isPrintableKey } from "../helpers/is_printable_key";
 
 var Composer = Base.extend({
   name: "composer",
@@ -31,7 +32,7 @@ var Composer = Base.extend({
   clear: function() {
     this.element.innerHTML = browser.displaysCaretInEmptyContentEditableCorrectly() ? "" : this.CARET_HACK;
     this.undoManager.reset();
-    this._updateHasValueClass();
+    this._checkForValueAndUpdateClass();
   },
 
   getValue: function(options) {
@@ -63,7 +64,7 @@ var Composer = Base.extend({
     }
     this.element.innerHTML = html;
     this.undoManager.reset();
-    this._updateHasValueClass();
+    this._checkForValueAndUpdateClass();
   },
 
   cleanUp: function() {
@@ -284,7 +285,13 @@ var Composer = Base.extend({
     };
   },
 
-  _updateHasValueClass: function() {
+  _checkForPendingValueChangeAndUpdateClass: function(keyCode) {
+    if (isPrintableKey(keyCode)) {
+      dom.addClass(this.element, "has-value");
+    }
+  },
+
+  _checkForValueAndUpdateClass: function() {
     var VISUAL_BLOCKS, emptyText, containsVisualBlocks;
     VISUAL_BLOCKS = ["ul", "ol", "blockquote"]
 
