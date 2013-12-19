@@ -35,6 +35,7 @@ import "wysihtml5/keyboard/delete_images";
 import "wysihtml5/text_substitutions/auto_link";
 import "wysihtml5/text_substitutions/auto_list";
 import "wysihtml5/text_substitutions/blockquote";
+import "wysihtml5/text_substitutions/ticks";
 
 var version = "<%= pkg.version %>";
 export { version, Editor, Composer, lang, dom};
