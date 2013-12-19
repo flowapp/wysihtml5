@@ -6,7 +6,7 @@ import { Constants } from "../constants";
 import { Selection } from "../selection/selection";
 import { Commands} from "../commands";
 import { UndoManager } from "../undo_manager";
-import { isPrintableKey } from "../helpers/is_printable_key";
+import { isNonPrintableKey } from "../helpers/is_non_printable_key";
 
 var Composer = Base.extend({
   name: "composer",
@@ -286,7 +286,7 @@ var Composer = Base.extend({
   },
 
   _checkForPendingValueChangeAndUpdateClass: function(keyCode) {
-    if (isPrintableKey(keyCode)) {
+    if (!isNonPrintableKey(keyCode)) {
       dom.addClass(this.element, "has-value");
     }
   },
