@@ -80,6 +80,13 @@ Composer.prototype.observe = function() {
         host.innerHTML = data;
         that.parent.parse(host);
         var fragment = dom.nodeList.toArray(host.childNodes);
+
+        for (var i = 0; i < fragment.length; i++) {
+          if (fragment[i].nodeType == Node.TEXT_NODE) {
+            fragment[i] = dom.fromPlainText(fragment[i].textContent)[0];
+          }
+        }
+
         that.selection.insertElements(fragment);
       } else if (data = clipboardData.getData("Text")) {
         var fragment = dom.fromPlainText(data);
