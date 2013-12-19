@@ -115,37 +115,6 @@ function _isLineBreakOrBlockElement(element) {
   return false;
 }
 
-/**
- * Execute native query command
- * and if necessary modify the inserted node's className
- */
-function _execCommand(doc, composer, command, nodeName, className) {
-  var ranges = composer.selection.getOwnRanges();
-  for (var i = ranges.length; i--;){
-    composer.selection.getSelection().removeAllRanges();
-    composer.selection.setSelection(ranges[i]);
-    if (className) {
-      var eventListener = dom.observe(doc, "DOMNodeInserted", function(event) {
-        var target = event.target,
-            displayStyle;
-        if (target.nodeType !== Node.ELEMENT_NODE) {
-          return;
-        }
-        displayStyle = dom.getStyle("display").from(target);
-        if (displayStyle.substr(0, 6) !== "inline") {
-          // Make sure that only block elements receive the given class
-          target.className += " " + className;
-        }
-      });
-    }
-    doc.execCommand(command, false, nodeName);
-
-    if (eventListener) {
-      eventListener.stop();
-    }
-  }
-}
-
 function _hasClasses(element) {
   return !!lang.string(element.className).trim();
 }
