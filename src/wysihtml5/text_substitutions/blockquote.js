@@ -14,8 +14,10 @@ Composer.RegisterTextSubstitution(function(textContent) {
     if (composer.selection.caretIsAtStartOfNode(blockElement, range, selectedNode)) {
       var breakElement;
       if (blockElement.textContent.trim() == ">") {
-        breakElement = document.createElement("br");
-        blockElement.appendChild(breakElement);
+        var paragraph = document.createElement("p");
+        breakElement = document.createElement("br")
+        paragraph.appendChild(breakElement);
+        blockElement.appendChild(paragraph);
       }
 
       composer.selection.executeAndRestore(function() {
