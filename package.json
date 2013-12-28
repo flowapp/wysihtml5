@@ -36,6 +36,8 @@
     "wd": "~0.2.5",
     "mocha-as-promised": "~1.4.1",
     "chai-as-promised": "~4.1.0",
-    "grunt-mocha-selenium": "git://github.com/mogstad/grunt-mocha-selenium"
+    "grunt-mocha-selenium": "git://github.com/mogstad/grunt-mocha-selenium",
+    "jsdom": "~0.8.10",
+    "rsvp": "~2.0.4"
   }
 }
