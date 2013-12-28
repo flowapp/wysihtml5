@@ -167,9 +167,10 @@
       }
 
       // Needed for opera and chrome
-      dom.delegate(container, "[data-wysihtml5-command], [data-wysihtml5-action]", "mousedown", function(event) { event.preventDefault(); });
-
-      dom.delegate(container, "[data-wysihtml5-command]", "click", function(event) {
+      $(container).on("mousedown", "[data-wysihtml5-command], [data-wysihtml5-action]", function(event) {
+        event.preventDefault();
+      });
+      $(container).on("click", "[data-wysihtml5-command]", function(event) {
         var link          = this,
             command       = link.getAttribute("data-wysihtml5-command"),
             commandValue  = link.getAttribute("data-wysihtml5-command-value");
@@ -177,7 +178,7 @@
         event.preventDefault();
       });
 
-      dom.delegate(container, "[data-wysihtml5-action]", "click", function(event) {
+      $(container).on("click", "[data-wysihtml5-action]", function(event) {
         var action = this.getAttribute("data-wysihtml5-action");
         that.execAction(action);
         event.preventDefault();

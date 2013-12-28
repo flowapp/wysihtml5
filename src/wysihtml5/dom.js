@@ -5,7 +5,6 @@ import { contains } from "wysihtml5/dom/contains";
 import { convertToList } from "wysihtml5/dom/convert_to_list";
 import { copyAttributes } from "wysihtml5/dom/copy_attributes";
 import { copyStyles } from "wysihtml5/dom/copy_styles";
-import { delegate } from "wysihtml5/dom/delegate";
 import { fromPlainText } from "./dom/from_plain_text";
 import { getAsDom } from "wysihtml5/dom/get_as_dom";
 import { getAttribute } from "wysihtml5/dom/get_attribute";
@@ -39,7 +38,6 @@ export default = {
   convertToList: convertToList,
   copyAttributes: copyAttributes,
   copyStyles: copyStyles,
-  delegate: delegate,
   fromPlainText: fromPlainText,
   getAsDom: getAsDom,
   getAttribute: getAttribute,
