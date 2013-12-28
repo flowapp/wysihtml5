@@ -11,10 +11,38 @@ function SetupContentEditable(content, url) {
   }).then(function() {
     return browser.execute("arguments[0].innerHTML = arguments[1];", [item, content]);
   }).then(function() {
-    return item.type("a"+ wd.SPECIAL_KEYS["Back space"]);
+    if (content.indexOf("[") === -1) {
+      return item.type("a"+ wd.SPECIAL_KEYS["Back space"]);
+    } else {
+      return browser.execute(SetSelection.toString() +"; SetSelection(arguments[0]);", [item]);
+    }
   }).then(function() {
     return item;
   });
 }
+
+function SetSelection(parent) {
+  var range = document.createRange();
+  var nodes = wysihtml5.dom.all.textNodes(parent);
+  nodes.forEach(function(node) {
+    var text = node.nodeValue;
+    var index;
+    index = text.indexOf("[");
+    if (index !== -1) {
+      node.nodeValue = text.replace("[", "");
+      range.setStart(node, index);
+    }
+    index = text.indexOf("]");
+    if (index !== -1) {
+      node.nodeValue = text.replace("]", "");
+      range.setEnd(node, index);
+    }
+  });
+  if (range.startContainer && range.endContainer) {
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+};
 
 module.exports = SetupContentEditable;
