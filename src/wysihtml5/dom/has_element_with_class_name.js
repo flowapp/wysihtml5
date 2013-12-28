@@ -8,24 +8,17 @@
  * @example
  *    wysihtml5.dom.hasElementWithClassName(document, "foobar");
  */
-import { browser } from "../browser";
 
-var LIVE_CACHE          = {},
-    DOCUMENT_IDENTIFIER = 1;
+var LIVE_CACHE = {};
+var DOCUMENT_IDENTIFIER = 1;
 
 function _getDocumentIdentifier(doc) {
   return doc._wysihtml5_identifier || (doc._wysihtml5_identifier = DOCUMENT_IDENTIFIER++);
 }
 
 var hasElementWithClassName = function(doc, className) {
-  // getElementsByClassName is not supported by IE<9
-  // but is sometimes mocked via library code (which then doesn't return live node lists)
-  if (!browser.supportsNativeGetElementsByClassName()) {
-    return !!doc.querySelector("." + className);
-  }
-
-  var key         = _getDocumentIdentifier(doc) + ":" + className,
-      cacheEntry  = LIVE_CACHE[key];
+  var key = _getDocumentIdentifier(doc) + ":" + className;
+  var cacheEntry = LIVE_CACHE[key];
   if (!cacheEntry) {
     cacheEntry = LIVE_CACHE[key] = doc.getElementsByClassName(className);
   }

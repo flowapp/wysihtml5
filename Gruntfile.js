@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
-  require('load-grunt-tasks')(grunt);
+  require("load-grunt-tasks")(grunt);
 
-  var config = require('load-grunt-config')(grunt, {
+  var config = require("load-grunt-config")(grunt, {
     configPath: process.cwd() +"/tasks/options",
     init: false
   });
@@ -10,10 +10,10 @@ module.exports = function(grunt) {
 
   grunt.loadTasks("tasks");
 
-  this.registerTask("default", ['build']);
+  this.registerTask("default", ["build"]);
 
   // Build a new version of the library
-  this.registerTask('build', "Builds a distributable version of “"+ config.pkg.name +"”", [
+  this.registerTask("build", "Builds a distributable version of “"+ config.pkg.name +"”", [
     "clean",
     "transpile:amd",
     "concat:browser",

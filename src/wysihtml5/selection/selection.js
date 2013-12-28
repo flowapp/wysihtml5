@@ -10,17 +10,6 @@ import { Constants } from "../constants";
 import lang from "wysihtml5/lang";
 import { browser } from "../browser";
 
-function _getCumulativeOffsetTop(element) {
-  var top = 0;
-  if (element.parentNode) {
-    do {
-      top += element.offsetTop || 0;
-      element = element.offsetParent;
-    } while (element);
-  }
-  return top;
-}
-
 var Selection = Base.extend({
   constructor: function(editor, composer, contain, unselectableClass) {
     // Make sure that our external range library is initialized
@@ -231,14 +220,12 @@ var Selection = Base.extend({
     return (ret !== this.contain) ? ret : false;
   },
 
-
-
   caretIsInTheBeginnig: function() {
-      var selection = this.getSelection(),
-          node = selection.anchorNode,
-          offset = selection.anchorOffset;
+    var selection = this.getSelection();
+    var node = selection.anchorNode;
+    var offset = selection.anchorOffset;
 
-      return (offset === 0 && !this.getPreviousNode(node, true));
+    return (offset === 0 && !this.getPreviousNode(node, true));
   },
 
   caretIsAtStartOfNode: function(parentNode, selectedRange, selectedNode) {
@@ -577,100 +564,12 @@ var Selection = Base.extend({
   },
 
   /**
-   * Scroll the current caret position into the view
-   * FIXME: This is a bit hacky, there might be a smarter way of doing this
-   *
-   * @example
-   *    selection.scrollIntoView();
-   */
-  scrollIntoView: function() {
-    var doc           = this.doc,
-        tolerance     = 5, // px
-        hasScrollBars = doc.documentElement.scrollHeight > doc.documentElement.offsetHeight,
-        tempElement   = doc._wysihtml5ScrollIntoViewElement = doc._wysihtml5ScrollIntoViewElement || (function() {
-          var element = doc.createElement("span");
-          // The element needs content in order to be able to calculate it's position properly
-          element.innerHTML = Constatns.INVISIBLE_SPACE;
-          return element;
-        })(),
-        offsetTop;
-
-    if (hasScrollBars) {
-      this.insertNode(tempElement);
-      offsetTop = _getCumulativeOffsetTop(tempElement);
-      tempElement.parentNode.removeChild(tempElement);
-      if (offsetTop >= (doc.body.scrollTop + doc.documentElement.offsetHeight - tolerance)) {
-        doc.body.scrollTop = offsetTop;
-      }
-    }
-  },
-
-  /**
-   * Select line where the caret is in
+   * https://developer.mozilla.org/en/DOM/Selection/modify
    */
   selectLine: function() {
-    if (browser.supportsSelectionModify()) {
-      this._selectLine_W3C();
-    } else if (this.doc.selection) {
-      this._selectLine_MSIE();
-    }
-  },
-
-  /**
-   * See https://developer.mozilla.org/en/DOM/Selection/modify
-   */
-  _selectLine_W3C: function() {
-    var win       = this.doc.defaultView,
-        selection = win.getSelection();
+    var selection = window.getSelection();
     selection.modify("move", "left", "lineboundary");
     selection.modify("extend", "right", "lineboundary");
-  },
-
-  _selectLine_MSIE: function() {
-    var range       = this.doc.selection.createRange(),
-        rangeTop    = range.boundingTop,
-        scrollWidth = this.doc.body.scrollWidth,
-        rangeBottom,
-        rangeEnd,
-        measureNode,
-        i,
-        j;
-
-    if (!range.moveToPoint) {
-      return;
-    }
-
-    if (rangeTop === 0) {
-      // Don't know why, but when the selection ends at the end of a line
-      // range.boundingTop is 0
-      measureNode = this.doc.createElement("span");
-      this.insertNode(measureNode);
-      rangeTop = measureNode.offsetTop;
-      measureNode.parentNode.removeChild(measureNode);
-    }
-
-    rangeTop += 1;
-
-    for (i=-10; i<scrollWidth; i+=2) {
-      try {
-        range.moveToPoint(i, rangeTop);
-        break;
-      } catch(e1) {}
-    }
-
-    // Investigate the following in order to handle multi line selections
-    // rangeBottom = rangeTop + (rangeHeight ? (rangeHeight - 1) : 0);
-    rangeBottom = rangeTop;
-    rangeEnd = this.doc.selection.createRange();
-    for (j=scrollWidth; j>=0; j--) {
-      try {
-        rangeEnd.moveToPoint(j, rangeBottom);
-        break;
-      } catch(e2) {}
-    }
-
-    range.setEndPoint("EndToEnd", rangeEnd);
-    range.select();
   },
 
   getText: function() {
@@ -784,38 +683,56 @@ var Selection = Base.extend({
     if (r) { ranges.push(r); }
 
     if (this.unselectableClass && this.contain && r) {
-        var uneditables = this.getOwnUneditables(),
-            tmpRange;
-        if (uneditables.length > 0) {
-          for (var i = 0, imax = uneditables.length; i < imax; i++) {
-            tmpRanges = [];
-            for (var j = 0, jmax = ranges.length; j < jmax; j++) {
-              if (ranges[j]) {
-                switch (ranges[j].compareNode(uneditables[i])) {
-                  case 2:
-                    // all selection inside uneditable. remove
-                  break;
-                  case 3:
-                    //section begins before and ends after uneditable. spilt
-                    tmpRange = ranges[j].cloneRange();
-                    tmpRange.setEndBefore(uneditables[i]);
-                    tmpRanges.push(tmpRange);
+      var uneditables = this.getOwnUneditables();
+      if (uneditables.length > 0) {
+        for (var i = 0, imax = uneditables.length; i < imax; i++) {
+          var tmpRanges = [];
+          for (var j = 0, jmax = ranges.length; j < jmax; j++) {
+            if (ranges[j]) {
+              switch (this._compareNode(ranges[j], uneditables[i])) {
+                case 3:
+                  //section begins before and ends after uneditable. spilt
+                  tmpRange = ranges[j].cloneRange();
+                  tmpRange.setEndBefore(uneditables[i]);
+                  tmpRanges.push(tmpRange);
 
-                    tmpRange = ranges[j].cloneRange();
-                    tmpRange.setStartAfter(uneditables[i]);
-                    tmpRanges.push(tmpRange);
+                  tmpRange = ranges[j].cloneRange();
+                  tmpRange.setStartAfter(uneditables[i]);
+                  tmpRanges.push(tmpRange);
                   break;
-                  default:
-                    // in all other cases uneditable does not touch selection. dont modify
-                    tmpRanges.push(ranges[j]);
-                }
+                case 0:
+                case 1:
+                  // in all other cases uneditable does not touch selection. don’t modify
+                  tmpRanges.push(ranges[j]);
               }
-              ranges = tmpRanges;
             }
+            ranges = tmpRanges;
           }
         }
+      }
     }
     return ranges;
+  },
+
+  _compareNode: function(range, node) {
+    var nodeRange = node.ownerDocument.createRange();
+    try {
+      nodeRange.selectNode(node);
+    }
+    catch (e) {
+      nodeRange.selectNodeContents(node);
+    }
+    var nodeIsBefore = range.compareBoundaryPoints(Range.START_TO_START, nodeRange) == 1;
+    var nodeIsAfter = range.compareBoundaryPoints(Range.END_TO_END, nodeRange) == -1;
+
+    if (nodeIsBefore && !nodeIsAfter)
+      return 0;
+    if (!nodeIsBefore && nodeIsAfter)
+      return 1;
+    if (nodeIsBefore && nodeIsAfter)
+      return 2;
+
+    return 3;
   },
 
   getSelection: function() {
@@ -823,8 +740,7 @@ var Selection = Base.extend({
   },
 
   setSelection: function(range) {
-    var win       = this.doc.defaultView || this.doc.parentWindow,
-        selection = rangy.getSelection(win);
+    var selection = rangy.getSelection(window);
     return selection.setSingleRange(range);
   },
 
@@ -833,7 +749,7 @@ var Selection = Base.extend({
   },
 
   isCollapsed: function() {
-      return this.getSelection().isCollapsed;
+    return this.getSelection().isCollapsed;
   }
 
 });
