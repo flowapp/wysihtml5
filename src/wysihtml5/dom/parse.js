@@ -52,6 +52,7 @@
 
 import lang from "wysihtml5/lang";
 import { getAsDom } from "./get_as_dom";
+import { getAttribute } from "./get_attribute";
 import { getCorrectInnerHTML } from "../quirks/get_correct_inner_html";
 import { hasClass } from "./class";
 import { browser } from "../browser";
@@ -488,7 +489,7 @@ var Parser = (function() {
    *
    * Therefore we have to check the element's outerHTML for the attribute
    */
-  var HAS_GET_ATTRIBUTE_BUG = !browser.supportsGetAttributeCorrectly();
+  // TODO: remove and use DOM helper instead.
   function _getAttribute(node, attributeName) {
     attributeName = attributeName.toLowerCase();
     var nodeName = node.nodeName;
@@ -498,14 +499,7 @@ var Parser = (function() {
       // this fixes a very annoying bug in firefox (ver 3.6 & 4) and IE 8 where images copied from the same host
       // will have relative paths, which the sanitizer strips out (see attributeCheckMethods.url)
       return node.src;
-    } else if (HAS_GET_ATTRIBUTE_BUG && "outerHTML" in node) {
-      // Don't trust getAttribute/hasAttribute in IE 6-8, instead check the element's outerHTML
-      var outerHTML      = node.outerHTML.toLowerCase(),
-          // TODO: This might not work for attributes without value: <input disabled>
-          hasAttribute   = outerHTML.indexOf(" " + attributeName +  "=") != -1;
-
-      return hasAttribute ? node.getAttribute(attributeName) : null;
-    } else{
+    } else {
       return node.getAttribute(attributeName);
     }
   }

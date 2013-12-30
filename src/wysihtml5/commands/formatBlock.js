@@ -217,9 +217,9 @@ var formatBlock = {
     //var selectedNode = composer.selection.getSelectedNode();
     for (var i = 0, maxi = nodes.length; i < maxi; i++) {
       parent = dom.getParentElement(nodes[i], {
-        nodeName:     nodeName,
-        className:    className,
-        classRegExp:  classRegExp
+        nodeName: nodeName,
+        className: className,
+        classRegExp: classRegExp
       });
       if (parent && lang.array(parents).indexOf(parent) == -1) {
         parents.push(parent);

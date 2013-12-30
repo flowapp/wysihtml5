@@ -7,15 +7,11 @@ import { Constants } from "./constants";
 import lang from "wysihtml5/lang";
 import dom from "./dom";
 
-var Z_KEY               = 90,
-    Y_KEY               = 89,
-    BACKSPACE_KEY       = 8,
-    DELETE_KEY          = 46,
-    MAX_HISTORY_ENTRIES = 25,
-    DATA_ATTR_NODE      = "data-wysihtml5-selection-node",
-    DATA_ATTR_OFFSET    = "data-wysihtml5-selection-offset",
-    UNDO_HTML           = '<span id="_wysihtml5-undo" class="_wysihtml5-temp">' + Constants.INVISIBLE_SPACE + '</span>',
-    REDO_HTML           = '<span id="_wysihtml5-redo" class="_wysihtml5-temp">' + Constants.INVISIBLE_SPACE + '</span>';
+var Z_KEY = 90;
+var Y_KEY = 89;
+var MAX_HISTORY_ENTRIES = 25;
+var DATA_ATTR_NODE = "data-wysihtml5-selection-node";
+var DATA_ATTR_OFFSET = "data-wysihtml5-selection-offset";
 
 function cleanTempElements(doc) {
   var tempElement;
@@ -74,7 +70,7 @@ var UndoManager = lang.Dispatcher.extend({
 
       lastKey = keyCode;
 
-      if (keyCode === BACKSPACE_KEY || keyCode === DELETE_KEY) {
+      if (keyCode === Constants.BACKSPACE_KEY || keyCode === Constants.DELETE_KEY) {
         that.transact();
       }
     });
@@ -195,9 +191,10 @@ var UndoManager = lang.Dispatcher.extend({
   },
 
   getChildNodeIndex: function(parent, child) {
-    var i           = 0,
-        childNodes  = parent.childNodes,
-        length      = childNodes.length;
+    var i = 0;
+    var childNodes = parent.childNodes;
+    var length = childNodes.length;
+
     for (; i<length; i++) {
       if (childNodes[i] === child) {
         return i;

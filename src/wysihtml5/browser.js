@@ -10,19 +10,19 @@ var browser = (function() {
       isWebKit    = userAgent.indexOf("AppleWebKit/") !== -1,
       isChrome    = userAgent.indexOf("Chrome/")      !== -1,
       isOpera     = userAgent.indexOf("Opera/")       !== -1;
-  
+
   function iosVersion(userAgent) {
     return +((/ipad|iphone|ipod/.test(userAgent) && userAgent.match(/ os (\d+).+? like mac os x/)) || [undefined, 0])[1];
   }
-  
+
   function androidVersion(userAgent) {
     return +(userAgent.match(/android (\d+)/) || [undefined, 0])[1];
   }
-  
+
   return {
     // Static variable needed, publicly accessible, to be able override it in unit tests
     USER_AGENT: userAgent,
-    
+
     /**
      * Exclude browsers that are not capable of displaying and handling
      * contentEditable as desired:
@@ -46,39 +46,17 @@ var browser = (function() {
         && hasQuerySelectorSupport
         && !isIncompatibleMobileBrowser;
     },
-    
+
     isTouchDevice: function() {
       return this.supportsEvent("touchmove");
     },
-    
+
     isIos: function() {
       return (/ipad|iphone|ipod/i).test(this.USER_AGENT);
     },
-    
+
     isAndroid: function() {
       return this.USER_AGENT.indexOf("Android") !== -1;
-    },
-    
-    /**
-     * Whether the browser supports sandboxed iframes
-     * Currently only IE 6+ offers such feature <iframe security="restricted">
-     *
-     * http://msdn.microsoft.com/en-us/library/ms534622(v=vs.85).aspx
-     * http://blogs.msdn.com/b/ie/archive/2008/01/18/using-frames-more-securely.aspx
-     *
-     * HTML5 sandboxed iframes are still buggy and their DOM is not reachable from the outside (except when using postMessage)
-     */
-    supportsSandboxedIframes: function() {
-      return isIE;
-    },
-
-    /**
-     * IE6+7 throw a mixed content warning when the src of an iframe
-     * is empty/unset or about:blank
-     * window.querySelector is implemented as of IE8
-     */
-    throwsMixedContentWarningWhenIframeSrcIsEmpty: function() {
-      return !("querySelector" in document);
     },
 
     /**
@@ -90,30 +68,10 @@ var browser = (function() {
     },
 
     /**
-     * Opera and IE are the only browsers who offer the css value
-     * in the original unit, thx to the currentStyle object
-     * All other browsers provide the computed style in px via window.getComputedStyle
-     */
-    hasCurrentStyleProperty: function() {
-      return "currentStyle" in testElement;
-    },
-    
-    /**
      * Firefox on OSX navigates through history when hitting CMD + Arrow right/left
      */
     hasHistoryIssue: function() {
       return isGecko && navigator.platform.substr(0, 3) === "Mac";
-    },
-
-    /**
-     * Whether the browser inserts a <br> when pressing enter in a contentEditable element
-     */
-    insertsLineBreaksOnReturn: function() {
-      return isGecko;
-    },
-
-    supportsPlaceholderAttributeOn: function(element) {
-      return "placeholder" in element;
     },
 
     supportsEvent: function(eventName) {
@@ -121,28 +79,6 @@ var browser = (function() {
         testElement.setAttribute("on" + eventName, "return;");
         return typeof(testElement["on" + eventName]) === "function";
       })();
-    },
-
-    /**
-     * Opera doesn't correctly fire focus/blur events when clicking in- and outside of iframe
-     */
-    supportsEventsInIframeCorrectly: function() {
-      return !isOpera;
-    },
-    
-    /**
-     * Everything below IE9 doesn't know how to treat HTML5 tags
-     *
-     * @param {Object} context The document object on which to check HTML5 support
-     *
-     * @example
-     *    wysihtml5.browser.supportsHTML5Tags(document);
-     */
-    supportsHTML5Tags: function(context) {
-      var element = context.createElement("div"),
-          html5   = "<article>foo</article>";
-      element.innerHTML = html5;
-      return element.innerHTML.toLowerCase() === html5;
     },
 
     /**
@@ -163,7 +99,7 @@ var browser = (function() {
         // formatBlock fails with some tags (eg. <blockquote>)
         "formatBlock":          isIE,
       };
-      
+
       // Firefox throws errors for queryCommandSupported, so we have to build up our own object of supported commands
       var supported = {
         "insertHTML": isGecko
@@ -218,26 +154,11 @@ var browser = (function() {
     },
 
     /**
-     * IE gives wrong results for getAttribute
-     */
-    supportsGetAttributeCorrectly: function() {
-      var td = document.createElement("td");
-      return td.getAttribute("rowspan") != "1";
-    },
-
-    /**
      * When clicking on images in IE, Opera and Firefox, they are selected, which makes it easy to interact with them.
      * Chrome and Safari both don't support this
      */
     canSelectImagesInContentEditable: function() {
       return isGecko || isIE || isOpera;
-    },
-
-    /**
-     * All browsers except Safari and Chrome automatically scroll the range/caret position into view
-     */
-    autoScrollsToCaret: function() {
-      return !isWebKit;
     },
 
     /**
@@ -259,59 +180,32 @@ var browser = (function() {
     },
 
     /**
-     * Whether the browser supports the native document.getElementsByClassName which returns live NodeLists
-     */
-    supportsNativeGetElementsByClassName: function() {
-      return String(document.getElementsByClassName).indexOf("[native code]") !== -1;
-    },
-
-    /**
      * As of now (19.04.2011) only supported by Firefox 4 and Chrome
      * See https://developer.mozilla.org/en/DOM/Selection/modify
      */
     supportsSelectionModify: function() {
       return "getSelection" in window && "modify" in window.getSelection();
     },
-    
+
     // Returns if there is a way for setting selection to expand a line
     supportsSelectLine: function () {
         return (this.supportsSelectionModify() || document.selection) ? true : false;
     },
-    
+
     /**
      * Opera needs a white space after a <br> in order to position the caret correctly
      */
     needsSpaceAfterLineBreak: function() {
       return isOpera;
     },
-    
-    /**
-     * IE9 crashes when setting a getter via Object.defineProperty on XMLHttpRequest or XDomainRequest
-     * See https://connect.microsoft.com/ie/feedback/details/650112
-     * or try the POC http://tifftiff.de/ie9_crash/
-     */
-    crashesWhenDefineProperty: function(property) {
-      return isIE && (property === "XMLHttpRequest" || property === "XDomainRequest");
-    },
-    
-    /**
-     * IE is the only browser who fires the "focus" event not immediately when .focus() is called on an element
-     */
-    doesAsyncFocus: function() {
-      return isIE;
-    },
-    
+
     /**
      * In IE it's impssible for the user and for the selection library to set the caret after an <img> when it's the lastChild in the document
      */
     hasProblemsSettingCaretAfterImg: function() {
       return isIE;
     },
-    
-    hasUndoInContextMenu: function() {
-      return isGecko || isChrome || isOpera;
-    },
-    
+
     /**
      * Opera sometimes doesn't insert the node at the right position when range.insertNode(someNode)
      * is used (regardless if rangy or native)
@@ -320,29 +214,6 @@ var browser = (function() {
      */
     hasInsertNodeIssue: function() {
       return isOpera;
-    },
-    
-    /**
-     * IE 8+9 don't fire the focus event of the <body> when the iframe gets focused (even though the caret gets set into the <body>)
-     */
-    hasIframeFocusIssue: function() {
-      return isIE;
-    },
-    
-    /**
-     * Chrome + Safari create invalid nested markup after paste
-     * 
-     *  <p>
-     *    foo
-     *    <p>bar</p> <!-- BOO! -->
-     *  </p>
-     */
-    createsNestedInvalidMarkupAfterPaste: function() {
-      return isWebKit;
-    },
-    
-    supportsMutationEvents: function() {
-        return ("MutationEvent" in window);
     }
   };
 })();
