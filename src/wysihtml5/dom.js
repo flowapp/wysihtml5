@@ -12,7 +12,6 @@ import { getParentElement } from "wysihtml5/dom/get_parent_element";
 import { getStyle } from "wysihtml5/dom/get_style";
 import { hasElementWithClassName } from "wysihtml5/dom/has_element_with_class_name";
 import { hasElementWithTagName } from "wysihtml5/dom/has_element_with_tag_name";
-import { insertCSS } from "wysihtml5/dom/insert_css";
 import { insert } from "wysihtml5/dom/insert";
 import { observe } from "wysihtml5/dom/observe";
 import { Parser } from "wysihtml5/dom/parse";
@@ -45,7 +44,6 @@ export default = {
   getStyle: getStyle,
   hasElementWithClassName: hasElementWithClassName,
   hasElementWithTagName: hasElementWithTagName,
-  insertCSS: insertCSS,
   insert: insert,
   observe: observe,
   Parser: Parser,
