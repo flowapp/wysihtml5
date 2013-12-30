@@ -4,7 +4,7 @@ var DOM = require("../lib/dom_helper");
 var SetupContentEditable = require("../lib/setup_content_editable");
 var ContentShouldEqual = require("../lib/content");
 var RSVP = require("rsvp");
-var wait = require("./lib/wait");
+var wait = require("../lib/wait");
 
 describe("List Merger", function() {
   context("collapsed range", function() {

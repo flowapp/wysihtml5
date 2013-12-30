@@ -29,12 +29,12 @@ function SetSelection(parent) {
     var index;
     index = text.indexOf("[");
     if (index !== -1) {
-      node.nodeValue = text.replace("[", "");
+      node.nodeValue = text = text.replace("[", "");
       range.setStart(node, index);
     }
     index = text.indexOf("]");
     if (index !== -1) {
-      node.nodeValue = text.replace("]", "");
+      node.nodeValue = text = text.replace("]", "");
       range.setEnd(node, index);
     }
   });
