@@ -15,17 +15,21 @@ var convertListItemIntoParagraph = function(listItem, composer) {
     }
     composer.selection.setBefore(paragraph);
   } else {
-    var newList = document.createElement(list.nodeName);
     var children = nodeList.toArray(list.childNodes);
     var index = children.indexOf(listItem);
     if (index !== -1) {
+      var newList = document.createElement(list.nodeName);
       children = children.slice(index + 1);
       children.forEach(function(node) {
         newList.appendChild(node);
       });
       list.removeChild(listItem);
-      list.parentNode.insertBefore(newList, list.nextSibling);
-      list.parentNode.insertBefore(paragraph, newList);
+      var parent = list.parentNode;
+      parent.insertBefore(newList, list.nextSibling);
+      parent.insertBefore(paragraph, newList);
+      if (!newList.childNodes.length) {
+        parent.removeChild(newList);
+      }
       composer.selection.setBefore(paragraph);
     }
   }
