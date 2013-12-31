@@ -692,7 +692,7 @@ var Selection = Base.extend({
               switch (this._compareNode(ranges[j], uneditables[i])) {
                 case 3:
                   //section begins before and ends after uneditable. spilt
-                  tmpRange = ranges[j].cloneRange();
+                  var tmpRange = ranges[j].cloneRange();
                   tmpRange.setEndBefore(uneditables[i]);
                   tmpRanges.push(tmpRange);
 
