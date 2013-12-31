@@ -1,3 +1,4 @@
+import { blockquote } from "./blockquote";
 import { bold } from "./bold";
 import { createLink } from "./createLink";
 import { formatBlock } from "./formatBlock";
@@ -13,6 +14,7 @@ import { underline } from "./underline";
 import { undo } from "./undo";
 
 export default = {
+  blockquote: blockquote,
   bold: bold,
   createLink: createLink,
   formatBlock: formatBlock,

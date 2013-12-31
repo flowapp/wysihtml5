@@ -20,7 +20,7 @@ describe("Blackquote", function() {
 
   it("creating blackquote by committing `>`", function() {
     return editor.type("> test").then(function() {
-      return ContentShouldEqual(editor, "<blockquote>test<br></blockquote>");
+      return ContentShouldEqual(editor, "<blockquote><p>test</p></blockquote>");
     });
   });
 

@@ -73,28 +73,6 @@ function _addLineBreakBeforeAndAfter(node) {
   }
 }
 
-/**
- * Removes line breaks before and after the given node
- */
-function _removeLineBreakBeforeAndAfter(node) {
-  var nextSibling     = _getNextSiblingThatIsNotBlank(node),
-      previousSibling = _getPreviousSiblingThatIsNotBlank(node);
-
-  if (nextSibling && _isLineBreak(nextSibling)) {
-    nextSibling.parentNode.removeChild(nextSibling);
-  }
-  if (previousSibling && _isLineBreak(previousSibling)) {
-    previousSibling.parentNode.removeChild(previousSibling);
-  }
-}
-
-function _removeLastChildIfLineBreak(node) {
-  var lastChild = node.lastChild;
-  if (lastChild && _isLineBreak(lastChild)) {
-    lastChild.parentNode.removeChild(lastChild);
-  }
-}
-
 function _isLineBreak(node) {
   return node.nodeName === "BR";
 }
