@@ -13,6 +13,7 @@ import { getStyle } from "wysihtml5/dom/get_style";
 import { hasElementWithClassName } from "wysihtml5/dom/has_element_with_class_name";
 import { hasElementWithTagName } from "wysihtml5/dom/has_element_with_tag_name";
 import { insert } from "wysihtml5/dom/insert";
+import { normalize } from "./dom/normalize";
 import { observe } from "wysihtml5/dom/observe";
 import { Parser } from "wysihtml5/dom/parse";
 import { query } from "wysihtml5/dom/query";
@@ -45,6 +46,7 @@ export default = {
   hasElementWithClassName: hasElementWithClassName,
   hasElementWithTagName: hasElementWithTagName,
   insert: insert,
+  normalize: normalize,
   observe: observe,
   Parser: Parser,
   query: query,
