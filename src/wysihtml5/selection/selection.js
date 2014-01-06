@@ -614,17 +614,25 @@ var Selection = Base.extend({
 
   _normalizeEndContainer: function(range) {
     var endContainer = range.endContainer;
-    if (endContainer.nodeType == Node.ELEMENT_NODE && !range.collapsed) {
+    if (endContainer.nodeType == Node.ELEMENT_NODE) {
       endContainer = endContainer.childNodes[range.endOffset - 1];
       if (endContainer) {
         endContainer = this._lastChild(endContainer);
         switch (endContainer.nodeType) {
           case Node.TEXT_NODE:
-            range.setEnd(endContainer, endContainer.length);
+            var startOffset = endContainer.length;
+            range.setEnd(endContainer, startOffset);
+            if (range.collapsed) {
+              range.setStart(endContainer, startOffset);
+            }
             break;
           case Node.ELEMENT_NODE:
             var parent = endContainer.parentNode;
-            range.setEnd(parent, parent.childNodes.length);
+            var endOffset = parent.childNodes.length
+            range.setEnd(parent, endOffset);
+            if (range.collapsed) {
+              range.setStart(parent, endOffset);
+            }
             break;
         }
       }
