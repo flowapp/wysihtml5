@@ -224,7 +224,7 @@ var Composer = Base.extend({
   },
 
   _textNodes: function(node) {
-    node.normalize()
+    dom.normalize(node);
     return dom.all.textNodes(node);
   },
 
