@@ -1,16 +1,10 @@
-import { query } from "./query";
 var normalize = function(node) {
-  var childNode, unEditableNodes;
   node.normalize();
-  unEditableNodes = query(node, "[contenteditable='false']");
+  var uneditableNodes = node.querySelectorAll("[contenteditable='false']");
 
-  for(var i = 0; i < unEditableNodes.length; i++) {
-    childNode = unEditableNodes[i];
-    if(childNode.nextSibling) {
-      childNode.parentNode.insertBefore(document.createTextNode(""), childNode.nextSibling);
-    } else {
-      childNode.parentNode.appendChild(document.createTextNode(""));
-    }
+  for(var i = 0; i < uneditableNodes.length; i++) {
+    var childNode = uneditableNodes[i];
+    childNode.parentNode.insertBefore(document.createTextNode(""), childNode.nextSibling);
   }
 }
 
