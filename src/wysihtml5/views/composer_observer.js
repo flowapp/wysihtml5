@@ -13,6 +13,7 @@ import { browser } from "../browser";
 import { Constants } from "../constants";
 import quirks from "../quirks";
 import lang from "wysihtml5/lang";
+import { fromPlainText } from "../helpers/from_plain_text";
 
 var newLineRegExp = /\n/g;
 
@@ -83,13 +84,13 @@ Composer.prototype.observe = function() {
 
         for (var i = 0; i < fragment.length; i++) {
           if (fragment[i].nodeType == Node.TEXT_NODE) {
-            fragment[i] = dom.fromPlainText(fragment[i].textContent)[0];
+            fragment[i] = fromPlainText(fragment[i].textContent)[0];
           }
         }
 
         that.selection.insertElements(fragment);
       } else if (data = clipboardData.getData("Text")) {
-        var fragment = dom.fromPlainText(data);
+        var fragment = fromPlainText(data);
         that.selection.insertElements(fragment);
       }
       var textNodes = that._textNodes(that.element);

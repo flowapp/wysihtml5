@@ -12,6 +12,7 @@ import { italic } from "./italic";
 import { redo } from "./redo";
 import { underline } from "./underline";
 import { undo } from "./undo";
+import { pre } from "./pre";
 
 export default = {
   blockquote: blockquote,
@@ -27,5 +28,6 @@ export default = {
   italic: italic,
   redo: redo,
   underline: underline,
-  undo: undo
+  undo: undo,
+  pre: pre
 };

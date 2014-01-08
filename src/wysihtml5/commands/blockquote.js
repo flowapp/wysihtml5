@@ -5,36 +5,13 @@ import { nodeList } from "../dom/node_list";
 import { replaceWithChildNodes } from "../dom/replace_with_child_nodes";
 import { getParentElement } from "../dom/get_parent_element";
 import { convertNestedBlockquoteIntoParagraph } from "../helpers/convert_nested_blockquote_into_paragraph";
+import { selectedNodesClosestTo } from "../helpers/selected_nodes_closest_to";
 
-var parentNodeClosestToNode = function(node, parentNode) {
-  var parent = node.parentNode;
-  if (parent === parentNode) {
-    return node;
-  }
-  if (!parent) {
-    return null;
-  }
-  return parentNodeClosestToNode(parent, parentNode);
-};
 
-var nodesBetweenSiblings = function(first, second) {
-  var parent = first.parentNode;
-  var children = nodeList.toArray(parent.childNodes);
-  return children.slice(children.indexOf(first), children.indexOf(second) + 1);
-}
-
-var closest = function(startContainer, endContainer, parent) {
-  if (startContainer === endContainer) {
-    return [parentNodeClosestToNode(startContainer, parent) || parent.firstElementChild];
-  } else {
-    var start = parentNodeClosestToNode(startContainer, parent) || parent.firstElementChild;
-    var end = parentNodeClosestToNode(endContainer, parent) || parent.lastElementChild;
-    return nodesBetweenSiblings(start, end);
-  }
-}
-
-var unwrap = function(startContainer, endContainer, composer) {
-  var childNodes = closest(startContainer, endContainer, composer.element);
+var unwrap = function(range, composer) {
+  var childNodes = selectedNodesClosestTo(range, composer.element);
+  var startContainer = range.startContainer;
+  var endContainer = range.endContainer;
   childNodes.forEach(function(node) {
     if (node.nodeName === "BLOCKQUOTE") {
       var start = node.contains(startContainer);
@@ -78,12 +55,12 @@ var blockquote = {
     if (blockquotes = composer.commands.state("blockquote")) {
       var range = composer.selection.getRange();
       composer.selection.executeAndRestoreSimple(function() {
-        unwrap(range.startContainer, range.endContainer, composer);
+        unwrap(range, composer);
       });
     } else {
       var range = composer.selection.getRange();
       var commonAncestorContainer = range.commonAncestorContainer;
-      var childNodes = closest(range.startContainer, range.endContainer, composer.element);
+      var childNodes = selectedNodesClosestTo(range, composer.element);
       var insertBefore = childNodes[childNodes.length - 1].nextElementSibling;
       var blockquote = document.createElement("blockquote");
 
