@@ -334,7 +334,7 @@ var Selection = Base.extend({
 
     // Integrate the first block of content with the current block element
     var firstChild = items[0];
-    if (firstChild.nodeType == Node.TEXT_NODE || firstChild.nodeName == blockElement.nodeName) {
+    if (firstChild) {
       items.shift();
       dom.appendChildNodes(firstChild, blockElement, (!!blockElement.textContent));
     }
