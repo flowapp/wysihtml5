@@ -19,6 +19,7 @@ import { query } from "wysihtml5/dom/query";
 import { reblock } from "wysihtml5/dom/reblock";
 import { removeEmptyTextNodes } from "wysihtml5/dom/remove_empty_text_nodes";
 import { removeEmptyNodes } from "wysihtml5/dom/remove_empty_nodes";
+import { removeTrailingLineBreaks } from "wysihtml5/dom/remove_trailing_line_breaks";
 import { renameElement } from "wysihtml5/dom/rename_element";
 import { replaceWithChildNodes } from "wysihtml5/dom/replace_with_child_nodes";
 import { resolveList } from "wysihtml5/dom/resolve_list";
@@ -51,6 +52,7 @@ export default = {
   reblock: reblock,
   removeEmptyTextNodes: removeEmptyTextNodes,
   removeEmptyNodes: removeEmptyNodes,
+  removeTrailingLineBreaks: removeTrailingLineBreaks,
   renameElement: renameElement,
   replaceWithChildNodes: replaceWithChildNodes,
   resolveList: resolveList,
