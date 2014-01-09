@@ -9,6 +9,7 @@ import dom from "../dom";
 import { Constants } from "../constants";
 import lang from "wysihtml5/lang";
 import { browser } from "../browser";
+import { firstVisibleChild } from "../dom/first_visible_child";
 
 var Selection = Base.extend({
   constructor: function(editor, composer, contain, unselectableClass) {
@@ -229,24 +230,23 @@ var Selection = Base.extend({
   },
 
   caretIsAtStartOfNode: function(parentNode, selectedRange, selectedNode) {
-    selectedNode = selectedNode || this.getSelectedNode();
     selectedRange = selectedRange || this.getRange();
-    var tester = function(range, node, until) {
-      var textContent = range.startContainer.textContent;
-      var isEmpty = (!textContent || textContent === Constants.INVISIBLE_SPACE)
-      if (range.startOffset == 0 || (range.startOffset == 1 && isEmpty)) {
-        var parent = node.parentNode;
-        if (node === until || parent === until) {
-          return true;
-        }
-        var newRange = document.createRange();
-        newRange.selectNode(parent);
-        return tester(newRange, parent, until);
+    selectedNode = selectedNode || selectedRange.startContainer;
+    var tester = function(node, until) {
+      if (node === until) {
+        return true;
       } else {
+        var parent = node.parentNode;
+        if (node === firstVisibleChild(parent)) {
+          return tester(parent, until);
+        }
         return false;
       }
     }
-    return tester(selectedRange, selectedNode, parentNode);
+    if (selectedRange.startOffset === 0) {
+      return tester(selectedNode, parentNode);
+    }
+    return false;
   },
 
   caretIsBeforeUneditable: function() {
