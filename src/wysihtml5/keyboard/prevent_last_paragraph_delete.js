@@ -8,12 +8,13 @@ Composer.RegisterKeyboardHandler(function(e) {
   );
 }, function(editor, composer, e) {
   var range = composer.selection.getRange();
-  if (range && range.collapsed && range.startOffset == 0) {
+  if (range && range.collapsed) {
     var selectedNode = composer.selection.getSelectedNode();
     if (
       selectedNode &&
       selectedNode === composer.element.firstElementChild &&
-      selectedNode === composer.element.lastElementChild
+      selectedNode === composer.element.lastElementChild &&
+      composer.selection.caretIsAtStartOfNode(selectedNode)
     ) {
       e.preventDefault();
     }
