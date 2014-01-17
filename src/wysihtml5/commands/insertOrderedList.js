@@ -22,14 +22,6 @@ var insertOrderedList = {
         tempElement,
         otherList;
 
-    if(list && !composer.element.contains(list)) {
-      list = null
-    }
-
-    if(otherList && !composer.element.contains(otherList)) {
-      otherList = null
-    }
-
     if (!list && !otherList) {
       doc.execCommand(command, false, null);
       cleanup(composer);
