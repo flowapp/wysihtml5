@@ -57,7 +57,7 @@ var formatBlock = {
 
       composer.selection.executeAndRestoreSimple(function() {
         for (var n = selectedNodes.length; n--;) {
-          var blockElement = dom.getParentElement(selectedNodes[n], {
+          var blockElement = composer.parentElement(selectedNodes[n], {
             nodeName: BLOCK_ELEMENTS_GROUP
           });
           if (blockElement == composer.element) {
@@ -84,7 +84,7 @@ var formatBlock = {
     nodeName = typeof(nodeName) === "string" ? nodeName.toUpperCase() : nodeName;
 
     for (var i = 0, maxi = nodes.length; i < maxi; i++) {
-      var parent = dom.getParentElement(nodes[i], {
+      var parent = composer.parentElement(nodes[i], {
         nodeName: nodeName,
         className: className,
         classRegExp: classRegExp

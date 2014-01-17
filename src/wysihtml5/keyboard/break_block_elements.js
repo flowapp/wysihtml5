@@ -11,13 +11,13 @@ Composer.RegisterKeyboardHandler(function(e) {
   );
 }, function(editor, composer, e) {
   var selectedNode = composer.selection.getSelectedNode();
-  var blockquote = dom.getParentElement(selectedNode, {
+  var blockquote = composer.parentElement(selectedNode, {
     nodeName: ["BLOCKQUOTE"]
-  }, 4);
+  });
 
-  var paragraph = dom.getParentElement(selectedNode, {
+  var paragraph = composer.parentElement(selectedNode, {
     nodeName: ["P"]
-  }, 4);
+  });
 
   if (blockquote) {
     if (paragraph && !paragraph.textContent) {

@@ -15,65 +15,78 @@
  */
 import lang from "wysihtml5/lang";
 
-var getParentElement = (function() {
-  function _isSameNodeName(nodeName, desiredNodeNames) {
-    if (!desiredNodeNames || !desiredNodeNames.length) {
-      return true;
-    }
-    
-    if (typeof(desiredNodeNames) === "string") {
-      return nodeName === desiredNodeNames;
-    } else {
-      return lang.array(desiredNodeNames).contains(nodeName);
-    }
+function _isSameNodeName(nodeName, desiredNodeNames) {
+  if (!desiredNodeNames || !desiredNodeNames.length) {
+    return true;
   }
-  
-  function _isElement(node) {
-    return node.nodeType === Node.ELEMENT_NODE;
+
+  if (typeof(desiredNodeNames) === "string") {
+    return nodeName === desiredNodeNames;
+  } else {
+    return lang.array(desiredNodeNames).contains(nodeName);
   }
-  
-  function _hasClassName(element, className, classRegExp) {
-    var classNames = (element.className || "").match(classRegExp) || [];
-    if (!className) {
-      return !!classNames.length;
-    }
-    return classNames[classNames.length - 1] === className;
+}
+
+function _isElement(node) {
+  return node.nodeType === Node.ELEMENT_NODE;
+}
+
+function _hasClassName(element, className, classRegExp) {
+  var classNames = (element.className || "").match(classRegExp) || [];
+  if (!className) {
+    return !!classNames.length;
   }
-  
-  function _getParentElementWithNodeName(node, nodeName, levels) {
-    while (levels-- && node && node.nodeName !== "BODY") {
-      if (_isSameNodeName(node.nodeName, nodeName)) {
-        return node;
-      }
-      node = node.parentNode;
-    }
-    return null;
+  return classNames[classNames.length - 1] === className;
+}
+
+function _while(node, options, callback) {
+  var levels = options.levels || 50
+  var until;
+  if (options.until && options.until.contains(node)) {
+    until = options.until;
+  } else {
+    until = node.ownerDocument.body;
   }
-  
-  function _getParentElementWithNodeNameAndClassName(node, nodeName, className, classRegExp, levels) {
-    while (levels-- && node && node.nodeName !== "BODY") {
-      if (_isElement(node) &&
-          _isSameNodeName(node.nodeName, nodeName) &&
-          _hasClassName(node, className, classRegExp)) {
-        return node;
-      }
-      node = node.parentNode;
+  var results;
+  while (levels-- && node && node !== until) {
+    results = callback(node)
+    if (results !== undefined) {
+      return results;
     }
-    return null;
+    node = node.parentNode;
   }
-  
-  return function(node, matchingSet, levels) {
-    levels = levels || 50; // Go max 50 nodes upwards from current node
-    if (matchingSet.className || matchingSet.classRegExp) {
-      return _getParentElementWithNodeNameAndClassName(
-        node, matchingSet.nodeName, matchingSet.className, matchingSet.classRegExp, levels
-      );
-    } else {
-      return _getParentElementWithNodeName(
-        node, matchingSet.nodeName, levels
-      );
+  return null
+}
+
+function _getParentElementWithNodeName(node, nodeName, options) {
+  return _while(node, options, function(node) {
+    if (_isSameNodeName(node.nodeName, nodeName)) {
+      return node;
     }
-  };
-})();
+  });
+}
+
+function _getParentElementWithNodeNameAndClassName(node, nodeName, className, classRegExp, levels) {
+  return _while(node, options, function(node) {
+    if (
+      _isElement(node) &&
+      _isSameNodeName(node.nodeName, nodeName) &&
+      _hasClassName(node, className, classRegExp)
+    ) {
+      return node;
+    }
+  });
+}
+
+var getParentElement = function(node, matchingSet, options) {
+  options = options || {};
+  if (matchingSet.className || matchingSet.classRegExp) {
+    return _getParentElementWithNodeNameAndClassName(
+      node, matchingSet.nodeName, matchingSet.className, matchingSet.classRegExp, options
+    );
+  } else {
+    return _getParentElementWithNodeName(node, matchingSet.nodeName, options);
+  }
+};
 
 export { getParentElement };

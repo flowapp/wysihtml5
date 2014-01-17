@@ -2,17 +2,16 @@ import { browser} from "../browser";
 import { Composer } from "../views/composer";
 import { Constants } from "../constants";
 import { dom } from "../dom";
-import { getParentElement } from "../dom/get_parent_element";
 
 var supportsDisablingOfAutoLinking = browser.canDisableAutoLinking();
 var supportsAutoLinking = browser.doesAutoLinkingInContentEditable();
 var INCLUDES_PROTOCOL = /^(https?:\/\/|mailto:)/;
 
 
-var validContainer = function(node) {
-  var blockElement = getParentElement(node, {
+var validContainer = function(node, composer) {
+  var blockElement = composer.parentElement(node, {
     nodeName: ["P", "H1", "H2", "H3", "H4", "H5", "H6", "LI", "BLOCKQUOTE", "A"]
-  }, 4);
+  });
   return (blockElement && blockElement.nodeName !== "A");
 }
 
@@ -35,7 +34,7 @@ var convertRangeToURL = function(composer, range, URL) {
 Composer.RegisterTextSubstitution(function(word, event, editor, composer) {
   return editor.config.autoLink && word.match(Constants.URL_REG_EXP);
 }, function(editor, composer, range, textContent, e) {
-  if (validContainer(composer.selection.getSelectedNode())) {
+  if (validContainer(composer.selection.getSelectedNode()), composer) {
     convertRangeToURL(composer, range, textContent);
   }
 }, {
@@ -46,7 +45,7 @@ Composer.RegisterTextSubstitution(function(word, event, editor, composer) {
 Composer.RegisterTextSubstitution(function(word, event, editor, composer) {
   return editor.config.autoLink && word.match(Constants.URL_REG_EXP_NON_START);
 }, function(editor, composer, range, textContent, e) {
-  if (validContainer(range.commonAncestorContainer)) {
+  if (validContainer(range.commonAncestorContainer), composer) {
     var regExp = Constants.URL_REG_EXP_NON_START;
     regExp.lastIndex = 0;
 

@@ -12,14 +12,14 @@ Composer.RegisterKeyboardHandler(function(e) {
 }, function(editor, composer, e) {
   var range = composer.selection.getRange();
   var selectedNode = composer.selection.getSelectedNode();
-  var blockElement = dom.getParentElement(selectedNode, {
+  var blockElement = composer.parentElement(selectedNode, {
     nodeName: ["BLOCKQUOTE", "PRE", "LI", "P"]
   });
   if (range.collapsed && blockElement && composer.selection.caretIsAtStartOfNode(blockElement)) {
     if (blockElement.nodeName === "LI") {
       convertListItemIntoParagraph(blockElement, composer);
     } else if (blockElement.nodeName === "P") {
-      var blockquote = dom.getParentElement(blockElement, {
+      var blockquote = composer.parentElement(blockElement, {
         nodeName: ["BLOCKQUOTE"]
       });
       if (blockquote) {
