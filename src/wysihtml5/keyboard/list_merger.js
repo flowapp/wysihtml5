@@ -12,7 +12,7 @@ Composer.RegisterKeyboardHandler(function(e) {
   var range = composer.selection.getRange();
   if (range.collapsed && e.keyCode == Constants.BACKSPACE_KEY) {
     var selectedNode = composer.selection.getSelectedNode();
-    var blockElement = dom.getParentElement(selectedNode, {
+    var blockElement = composer.parentElement(selectedNode, {
       nodeName: ["BLOCKQUOTE", "PRE", "P"]
     });
 
@@ -38,11 +38,11 @@ Composer.RegisterKeyboardHandler(function(e) {
     e.keyCode == Constants.BACKSPACE_KEY ||
     e.keyCode == Constants.DELETE_KEY
   ) {
-    var endBlockElement = dom.getParentElement(range.endContainer, {
+    var endBlockElement = composer.parentElement(range.endContainer, {
       nodeName: ["BLOCKQUOTE", "PRE", "P"]
     });
 
-    var startBlockElement = dom.getParentElement(range.startContainer, {
+    var startBlockElement = composer.parentElement(range.startContainer, {
       nodeName: ["UL", "OL"]
     });
 

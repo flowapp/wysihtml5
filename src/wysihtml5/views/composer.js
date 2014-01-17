@@ -118,6 +118,12 @@ var Composer = Base.extend({
     return !this.element.textContent;
   },
 
+  parentElement: function(node, matchingSet, options) {
+    options = options || {};
+    options.until = options.until || this.element;
+    return dom.getParentElement(node, matchingSet, options);
+  },
+
   _create: function() {
     var that = this;
     this.doc = document;
@@ -128,7 +134,7 @@ var Composer = Base.extend({
     this.selection = new Selection(this.parent, this, this.element, this.config.uneditableContainerClassname);
 
     // Make sure commands dispatcher is ready
-    this.commands  = new Commands(this.parent, this);
+    this.commands = new Commands(this.parent, this);
 
     // DEPRECATED
     dom.addClass(this.element, this.config.composerClassName);
@@ -200,9 +206,9 @@ var Composer = Base.extend({
     var nativeRange = range.nativeRange || range;
     var startContainer = nativeRange.startContainer;
     if (nativeRange.collapsed) {
-      var blockElement = dom.getParentElement(startContainer, {
+      var blockElement = this.parentElement(startContainer, {
         nodeName: ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6", "PRE", "BLOCKQUOTE"]
-      }, 4);
+      });
       if (blockElement) {
         var nodes = this._textNodes(blockElement);
         return nodes;

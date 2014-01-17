@@ -16,7 +16,7 @@ Composer.RegisterKeyboardHandler(function(e) {
   var range = composer.selection.getRange();
   if (range.collapsed) {
     var selectedNode = composer.selection.getSelectedNode();
-    var blockElement = dom.getParentElement(selectedNode, {
+    var blockElement = composer.parentElement(selectedNode, {
       nodeName: ["LI", "P", "H1", "H2", "H3", "H4", "H5", "H6", "PRE", "BLOCKQUOTE", "DIV"]
     });
 

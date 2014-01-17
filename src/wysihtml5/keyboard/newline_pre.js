@@ -11,7 +11,7 @@ Composer.RegisterKeyboardHandler(function(e) {
     !e.ctrlKey
   );
 }, function(editor, composer, e) {
-  var preElement = dom.getParentElement(composer.selection.getSelectedNode(), {
+  var preElement = composer.parentElement(composer.selection.getSelectedNode(), {
     nodeName: ["PRE"]
   });
 

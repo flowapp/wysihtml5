@@ -1,8 +1,7 @@
 import { renameElement }  from "../dom/rename_element";
-import { getParentElement }  from "../dom/get_parent_element";
 
 var ensureParagraph = function(element, composer) {
-  var blockElement = getParentElement(element, {
+  var blockElement = composer.parentElement(element, {
     nodeName: ["DIV", "P"]
   });
 
