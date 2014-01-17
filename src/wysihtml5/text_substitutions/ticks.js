@@ -1,5 +1,4 @@
 import { Composer } from "../views/composer";
-import { getParentElement } from "../dom/get_parent_element";
 import { renameElement } from "../dom/rename_element";
 import { Constants } from "../constants";
 
@@ -7,7 +6,7 @@ Composer.RegisterTextSubstitution(function(textContent) {
   return (textContent.indexOf("```") == 0);
 }, function(editor, composer, range, textContent, e) {
   var selectedNode = range.startContainer;
-  var blockElement = getParentElement(selectedNode, {
+  var blockElement = composer.parentElement(selectedNode, {
     nodeName: ["P", "PRE"]
   });
   if (blockElement && blockElement.nodeName != "PRE") {

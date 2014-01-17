@@ -13,7 +13,7 @@ function _removeFormat(composer, anchors) {
       textContent;
   for (; i<length; i++) {
     anchor      = anchors[i];
-    codeElement = dom.getParentElement(anchor, { nodeName: "code" });
+    codeElement = composer.parentElement(anchor, { nodeName: "code" });
     textContent = dom.getTextContent(anchor);
 
     // if <a> contains url-like text content, rename it to <code> to prevent re-autolinking

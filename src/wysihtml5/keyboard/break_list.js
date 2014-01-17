@@ -11,9 +11,9 @@ Composer.RegisterKeyboardHandler(function(e) {
     e.keyCode == Constants.ENTER_KEY
   );
 }, function(editor, composer, e) {
-  var listItem = dom.getParentElement(composer.selection.getSelectedNode(), {
+  var listItem = composer.parentElement(composer.selection.getSelectedNode(), {
     nodeName: ["LI"]
-  }, 4);
+  });
 
   if (listItem && !listItem.textContent) {
     setTimeout(function() {

@@ -5,7 +5,6 @@ import { formatInline } from "./formatInline";
 import { fromPlainText } from "../helpers/from_plain_text";
 import { toPlainText } from "../helpers/to_plain_text";
 import { selectedNodesClosestTo } from "../helpers/selected_nodes_closest_to";
-import { getParentElement } from "../dom/get_parent_element";
 
 var pre = {
   exec: function(composer, command, nodeName, className, classRegExp) {
@@ -27,7 +26,7 @@ var pre = {
     } else {
       var selectedNode = composer.selection.getSelectedNode();
       var range = composer.selection.getRange();
-      var parent = getParentElement(selectedNode, {nodeName: ["DIV", "BLOCKQUOTE"]});
+      var parent = composer.parentElement(selectedNode, {nodeName: ["DIV", "BLOCKQUOTE"]});
       var selectedNodes = selectedNodesClosestTo(range, parent);
       if (selectedNodes.length) {
         var next = selectedNodes[selectedNodes.length - 1].nextSibling;

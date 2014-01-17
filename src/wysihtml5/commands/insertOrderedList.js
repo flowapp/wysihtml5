@@ -3,8 +3,8 @@ import { Constants } from "../constants";
 
 var cleanup = function(composer) {
   var selectedNode = composer.selection.getSelectedNode();
-  var blockElement = dom.getParentElement(selectedNode, { nodeName: "P" });
-  var listElement = dom.getParentElement(selectedNode, { nodeName: ["OL", "UL", "MENU"] });
+  var blockElement = composer.parentElement(selectedNode, { nodeName: "P" });
+  var listElement = composer.parentElement(selectedNode, { nodeName: ["OL", "UL", "MENU"] });
   if (blockElement && listElement) {
     dom.reblock(blockElement, listElement);
     composer.selection.setAfter(listElement.querySelector("li"));
@@ -16,19 +16,11 @@ var insertOrderedList = {
     var doc           = composer.doc,
         selectedNode  = composer.selection.getSelectedNode(),
         tempClassName =  "_wysihtml5-temp-" + new Date().getTime(),
-        list = dom.getParentElement(selectedNode, { nodeName: "OL" }),
-        otherList = dom.getParentElement(selectedNode, { nodeName: "UL" }),
+        list = composer.parentElement(selectedNode, { nodeName: "OL" }),
+        otherList = composer.parentElement(selectedNode, { nodeName: "UL" }),
         isEmpty,
         tempElement,
         otherList;
-
-    if(list && !composer.element.contains(list)) {
-      list = null
-    }
-
-    if(otherList && !composer.element.contains(otherList)) {
-      otherList = null
-    }
 
     if (!list && !otherList) {
       doc.execCommand(command, false, null);
@@ -57,8 +49,7 @@ var insertOrderedList = {
 
   state: function(composer) {
     var selectedNode = composer.selection.getSelectedNode();
-    var node = dom.getParentElement(selectedNode, { nodeName: "OL" });
-    return (composer.element.contains(node) ? node : false);
+    return composer.parentElement(selectedNode, { nodeName: "OL" }) || false;
   }
 };
 

@@ -9,9 +9,9 @@ Composer.RegisterKeyboardHandler(function(e) {
   );
 }, function(editor, composer, e) {
   var selectedNode = composer.selection.getSelectedNode();
-  var blockElement = dom.getParentElement(selectedNode, {
+  var blockElement = composer.parentElement(selectedNode, {
     nodeName: ["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "BLOCKQUOTE", "DIV"]
-  }, 4);
+  });
   if (blockElement && composer.selection.caretIsAtStartOfNode(blockElement)) {
     setTimeout(function() {
       var selected = composer.selection.getSelectedNode();
