@@ -52,8 +52,7 @@ var insertUnorderedList = {
 
   state: function(composer) {
     var selectedNode = composer.selection.getSelectedNode();
-    var node = composer.parentElement(selectedNode, { nodeName: "UL" });
-    return (composer.element.contains(node) ? node : false);
+    return composer.parentElement(selectedNode, { nodeName: "UL" }) || false;
   }
 };
 

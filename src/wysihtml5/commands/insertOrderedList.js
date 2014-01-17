@@ -57,8 +57,7 @@ var insertOrderedList = {
 
   state: function(composer) {
     var selectedNode = composer.selection.getSelectedNode();
-    var node = composer.parentElement(selectedNode, { nodeName: "OL" });
-    return (composer.element.contains(node) ? node : false);
+    return composer.parentElement(selectedNode, { nodeName: "OL" }) || false;
   }
 };
 
