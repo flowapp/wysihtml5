@@ -3,7 +3,6 @@ import { formatInline } from "./formatInline";
 
 import { nodeList } from "../dom/node_list";
 import { replaceWithChildNodes } from "../dom/replace_with_child_nodes";
-import { getParentElement } from "../dom/get_parent_element";
 import { convertNestedBlockquoteIntoParagraph } from "../helpers/convert_nested_blockquote_into_paragraph";
 import { selectedNodesClosestTo } from "../helpers/selected_nodes_closest_to";
 

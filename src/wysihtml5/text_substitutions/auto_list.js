@@ -1,10 +1,9 @@
 import { Composer } from "../views/composer";
-import { getParentElement } from "../dom/get_parent_element";
 import { Constants } from "../constants";
 
 var autoList = function(editor, composer, range, textContent, e) {
   var selectedNode = range.startContainer;
-  var blockElement = getParentElement(selectedNode, {
+  var blockElement = composer.parentElement(selectedNode, {
     nodeName: ["P", "DIV", "LI"]
   });
   if (blockElement && blockElement.nodeName != "LI") {
