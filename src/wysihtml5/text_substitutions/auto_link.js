@@ -34,7 +34,7 @@ var convertRangeToURL = function(composer, range, URL) {
 Composer.RegisterTextSubstitution(function(word, event, editor, composer) {
   return editor.config.autoLink && word.match(Constants.URL_REG_EXP);
 }, function(editor, composer, range, textContent, e) {
-  if (validContainer(composer.selection.getSelectedNode()), composer) {
+  if (validContainer(composer.selection.getSelectedNode(), composer)) {
     convertRangeToURL(composer, range, textContent);
   }
 }, {
@@ -45,7 +45,7 @@ Composer.RegisterTextSubstitution(function(word, event, editor, composer) {
 Composer.RegisterTextSubstitution(function(word, event, editor, composer) {
   return editor.config.autoLink && word.match(Constants.URL_REG_EXP_NON_START);
 }, function(editor, composer, range, textContent, e) {
-  if (validContainer(range.commonAncestorContainer), composer) {
+  if (validContainer(range.commonAncestorContainer, composer)) {
     var regExp = Constants.URL_REG_EXP_NON_START;
     regExp.lastIndex = 0;
 
