@@ -1,15 +1,6 @@
 import dom from "../dom";
 import { Constants } from "../constants";
-
-var cleanup = function(composer) {
-  var selectedNode = composer.selection.getSelectedNode();
-  var blockElement = composer.parentElement(selectedNode, { nodeName: "P" });
-  var listElement = composer.parentElement(selectedNode, { nodeName: ["OL", "UL", "MENU"] });
-  if (blockElement && listElement) {
-    dom.reblock(blockElement, listElement);
-    composer.selection.setAfter(listElement.querySelector("li"));
-  }
-};
+import { listCleanup } from "../helpers/list_cleanup";
 
 var insertUnorderedList = {
   exec: function(composer, command) {
@@ -19,7 +10,7 @@ var insertUnorderedList = {
 
     if (!list && !otherList) {
       document.execCommand(command, false, null);
-      cleanup(composer);
+      listCleanup(composer);
       return;
     }
 
@@ -29,7 +20,7 @@ var insertUnorderedList = {
       // becomes:
       // foo<br>bar<br>
       composer.selection.executeAndRestore(function() {
-        dom.resolveList(list, composer.config.useLineBreaks);
+        dom.resolveList(list);
       });
     } else if (otherList) {
       // Turn an ordered list into an unordered list
