@@ -55,8 +55,6 @@ var defaultConfig = {
   composerClassName:    "wysihtml5-editor",
   // Class name to add to the body when the wysihtml5 editor is supported
   bodyClassName:        "wysihtml5-supported",
-  // By default wysihtml5 will insert a <br> for line breaks, set this to false to use <p>
-  useLineBreaks:        false,
   // Whether the rich text editor should be rendered on touch devices (wysihtml5 >= 0.3.0 comes with basic support for iOS 5)
   supportTouchDevices:  true,
   // Whether senseless <span> elements (empty or without attributes) should be removed/replaced with their content
