@@ -22,21 +22,20 @@
       lang = wysihtml5.lang,
       dom = wysihtml5.dom;
 
-  var Toolbar = Base.extend(
-    /** @scope wysihtml5.toolbar.Toolbar.prototype */ {
-    constructor: function(editor, container, showOnInit) {
-      this.editor     = editor;
-      this.container  = typeof(container) === "string" ? document.getElementById(container) : container;
-      this.composer   = editor.composer;
+  var Toolbar = function(editor, container, showOnInit) {
+    this.editor     = editor;
+    this.container  = typeof(container) === "string" ? document.getElementById(container) : container;
+    this.composer   = editor.composer;
 
-      this._getLinks("command");
-      this._getLinks("action");
+    this._getLinks("command");
+    this._getLinks("action");
 
-      this._observe();
-      if (showOnInit) { this.show(); }
+    this._observe();
+    if (showOnInit) { this.show(); }
 
-    },
+  };
 
+  Toolbar.prototype = {
     _getLinks: function(type) {
       var links   = this[type + "Links"] = lang.array(this.container.querySelectorAll("[data-wysihtml5-" + type + "]")).get(),
           length  = links.length,
@@ -302,7 +301,7 @@
     hide: function() {
       this.container.style.display = "none";
     }
-  });
+  };
 
   window.Toolbar = Toolbar;
 })();

@@ -227,13 +227,11 @@
 
 <script src="jquery.1.10.2.js" type="text/javascript" charset="utf-8"></script>
 <script src="../parser_rules/advanced_unwrap.js"></script>
-<script src="../dist/wysihtml5.js"></script>
-<script src="../vendor/base.js"></script>
+<script src="http://localhost:4200/wysihtml5.js"></script>
 <script src="toolbar.js"></script>
 
 <script>
   var editors = [];
-
   $(".ewrapper").each(function(idx, wrapper) {
     var element = $(wrapper).find(".editable")[0];
     var editor = new wysihtml5.Editor(element, {
