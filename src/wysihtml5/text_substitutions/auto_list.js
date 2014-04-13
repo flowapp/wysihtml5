@@ -8,19 +8,21 @@ var autoList = function(editor, composer, range, textContent, e) {
   });
   if (blockElement && blockElement.nodeName != "LI") {
     if (composer.selection.caretIsAtStartOfNode(blockElement, range, selectedNode)) {
-      var orderedList = hasPrefix(textContent, "1.");
+      composer.selection.executeAndRestore(function() {
+        var orderedList = hasPrefix(textContent, "1.");
 
-      var deleteRange = document.createRange();
-      deleteRange.setStart(range.startContainer, 0);
-      deleteRange.setEnd(range.startContainer, orderedList ? 2 : 1);
-      deleteRange.deleteContents();
+        var deleteRange = document.createRange();
+        deleteRange.setStart(range.startContainer, 0);
+        deleteRange.setEnd(range.startContainer, orderedList ? 2 : 1);
+        deleteRange.deleteContents();
 
-      var selection = composer.selection.getSelection().nativeSelection;
-      selection.removeAllRanges();
-      selection.addRange(range);
+        var selection = composer.selection.getSelection().nativeSelection;
+        selection.removeAllRanges();
+        selection.addRange(range);
 
-      var command = orderedList ? "insertOrderedList" : "insertUnorderedList";
-      composer.commands.exec(command);
+        var command = orderedList ? "insertOrderedList" : "insertUnorderedList";
+        composer.commands.exec(command);
+      });
       return true;
     }
   }
