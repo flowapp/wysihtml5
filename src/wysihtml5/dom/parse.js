@@ -52,11 +52,8 @@
 
 import lang from "wysihtml5/lang";
 import { getAsDom } from "./get_as_dom";
-import { getAttribute } from "./get_attribute";
 import { getCorrectInnerHTML } from "../quirks/get_correct_inner_html";
-import { hasClass } from "./class";
 import { browser } from "../browser";
-import { Constants } from "../constants";
 
 var Parser = (function() {
   /**
@@ -136,7 +133,7 @@ var Parser = (function() {
         newNode,
         newChild;
 
-    if (uneditableClass && oldNodeType === 1 && hasClass(oldNode, uneditableClass)) {
+    if (uneditableClass && oldNodeType === 1 && oldNode.classList.contains(uneditableClass)) {
         return oldNode;
     }
 
@@ -206,16 +203,6 @@ var Parser = (function() {
         tagRules    = currentRules.tags,
         nodeName    = oldNode.nodeName.toLowerCase(),
         scopeName   = oldNode.scopeName;
-
-
-    /**
-     * We already parsed that element
-     * ignore it! (yes, this sometimes happens in IE8 when the html is invalid)
-     */
-    if (oldNode._wysihtml5) {
-      return null;
-    }
-    oldNode._wysihtml5 = 1;
 
     if (oldNode.className === "wysihtml5-temp") {
       return null;
@@ -341,7 +328,7 @@ var Parser = (function() {
     if (definition.attrs) {
         for (a in definition.attrs) {
             if (definition.attrs.hasOwnProperty(a)) {
-                attr = _getAttribute(oldNode, a);
+                attr = oldNode.getAttribute(a);
                 if (typeof(attr) === "string") {
                     if (attr.search(definition.attrs[a]) > -1) {
                         return true;
@@ -404,7 +391,7 @@ var Parser = (function() {
         if (!method) {
           continue;
         }
-        var oldAttribute = _getAttribute(oldNode, attributeName);
+        var oldAttribute = oldNode.getAttribute(attributeName);
         if (oldAttribute || (attributeName === "alt" && oldNode.nodeName == "IMG")) {
           newAttributeValue = method(oldAttribute);
           if (typeof(newAttributeValue) === "string") {
@@ -424,7 +411,7 @@ var Parser = (function() {
         if (!method) {
           continue;
         }
-        newClass = method(_getAttribute(oldNode, attributeName));
+        newClass = method(oldNode.getAttribute(attributeName));
         if (typeof(newClass) === "string") {
           classes.push(newClass);
         }
@@ -465,56 +452,10 @@ var Parser = (function() {
       // Setting attributes can cause a js error in IE under certain circumstances
       // eg. on a <img> under https when it's new attribute value is non-https
       // TODO: Investigate this further and check for smarter handling
+      // TODO write failing spec for this
       try {
         newNode.setAttribute(attributeName, attributes[attributeName]);
       } catch(e) {}
-    }
-
-    // IE8 sometimes loses the width/height attributes when those are set before the "src"
-    // so we make sure to set them again
-    if (attributes.src) {
-      if (typeof(attributes.width) !== "undefined") {
-        newNode.setAttribute("width", attributes.width);
-      }
-      if (typeof(attributes.height) !== "undefined") {
-        newNode.setAttribute("height", attributes.height);
-      }
-    }
-  }
-
-  /**
-   * IE gives wrong results for hasAttribute/getAttribute, for example:
-   *    var td = document.createElement("td");
-   *    td.getAttribute("rowspan"); // => "1" in IE
-   *
-   * Therefore we have to check the element's outerHTML for the attribute
-   */
-  // TODO: remove and use DOM helper instead.
-  function _getAttribute(node, attributeName) {
-    attributeName = attributeName.toLowerCase();
-    var nodeName = node.nodeName;
-    if (nodeName == "IMG" && attributeName == "src" && _isLoadedImage(node) === true) {
-      // Get 'src' attribute value via object property since this will always contain the
-      // full absolute url (http://...)
-      // this fixes a very annoying bug in firefox (ver 3.6 & 4) and IE 8 where images copied from the same host
-      // will have relative paths, which the sanitizer strips out (see attributeCheckMethods.url)
-      return node.src;
-    } else {
-      return node.getAttribute(attributeName);
-    }
-  }
-
-  /**
-   * Check whether the given node is a proper loaded image
-   * FIXME: Returns undefined when unknown (Chrome, Safari)
-   */
-  function _isLoadedImage(node) {
-    try {
-      return node.complete && !node.mozMatchesSelector(":-moz-broken");
-    } catch(e) {
-      if (node.complete && node.readyState === "complete") {
-        return true;
-      }
     }
   }
 

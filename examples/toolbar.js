@@ -191,15 +191,6 @@
         that.bookmark = null;
       });
 
-      if (this.editor.config.handleTables) {
-          editor.on("tableselect:composer", function() {
-              that.container.querySelectorAll('[data-wysihtml5-hiddentools="table"]')[0].style.display = "";
-          });
-          editor.on("tableunselect:composer", function() {
-              that.container.querySelectorAll('[data-wysihtml5-hiddentools="table"]')[0].style.display = "none";
-          });
-      }
-
       editor.on("change_view", function(currentView) {
         // Set timeout needed in order to let the blur event fire first
         if (editor.textarea) {
@@ -207,9 +198,9 @@
               that.commandsDisabled = (currentView !== "composer");
               that._updateLinkStates();
               if (that.commandsDisabled) {
-                dom.addClass(container, CLASS_NAME_COMMANDS_DISABLED);
+                container.classList.add(CLASS_NAME_COMMANDS_DISABLED);
               } else {
-                dom.removeClass(container, CLASS_NAME_COMMANDS_DISABLED);
+                container.classList.remove(CLASS_NAME_COMMANDS_DISABLED);
               }
             }, 0);
         }
@@ -229,18 +220,18 @@
         command = commandMapping[i];
         if (this.commandsDisabled) {
           state = false;
-          dom.removeClass(command.link, CLASS_NAME_COMMAND_ACTIVE);
+          command.link.classList.remove(CLASS_NAME_COMMAND_ACTIVE);
           if (command.group) {
-            dom.removeClass(command.group, CLASS_NAME_COMMAND_ACTIVE);
+            command.group.classList.remove(CLASS_NAME_COMMAND_ACTIVE);
           }
           if (command.dialog) {
             command.dialog.hide();
           }
         } else {
           state = this.composer.commands.state(command.name, command.value);
-          dom.removeClass(command.link, CLASS_NAME_COMMAND_DISABLED);
+          command.link.classList.remove(CLASS_NAME_COMMAND_DISABLED);
           if (command.group) {
-            dom.removeClass(command.group, CLASS_NAME_COMMAND_DISABLED);
+            command.group.classList.remove(CLASS_NAME_COMMAND_DISABLED);
           }
         }
         if (command.state === state) {
@@ -249,9 +240,9 @@
 
         command.state = state;
         if (state) {
-          dom.addClass(command.link, CLASS_NAME_COMMAND_ACTIVE);
+          command.link.classList.add(CLASS_NAME_COMMAND_ACTIVE);
           if (command.group) {
-            dom.addClass(command.group, CLASS_NAME_COMMAND_ACTIVE);
+            command.group.classList.add(CLASS_NAME_COMMAND_ACTIVE);
           }
           if (command.dialog) {
             if (typeof(state) === "object" || lang.object(state).isArray()) {
@@ -270,9 +261,9 @@
             }
           }
         } else {
-          dom.removeClass(command.link, CLASS_NAME_COMMAND_ACTIVE);
+          command.link.classList.remove(CLASS_NAME_COMMAND_ACTIVE);
           if (command.group) {
-            dom.removeClass(command.group, CLASS_NAME_COMMAND_ACTIVE);
+            command.group.classList.remove(CLASS_NAME_COMMAND_ACTIVE);
           }
           if (command.dialog) {
             command.dialog.hide();
@@ -286,9 +277,9 @@
         if (action.name === "change_view") {
           action.state = this.editor.currentView === this.editor.textarea;
           if (action.state) {
-            dom.addClass(action.link, CLASS_NAME_ACTION_ACTIVE);
+            action.link.classList.add(CLASS_NAME_ACTION_ACTIVE);
           } else {
-            dom.removeClass(action.link, CLASS_NAME_ACTION_ACTIVE);
+            action.link.classList.remove(CLASS_NAME_ACTION_ACTIVE);
           }
         }
       }

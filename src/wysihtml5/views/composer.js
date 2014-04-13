@@ -136,17 +136,7 @@ var Composer = Base.extend({
     // Make sure commands dispatcher is ready
     this.commands = new Commands(this.parent, this);
 
-    // DEPRECATED
-    dom.addClass(this.element, this.config.composerClassName);
-
     this.observe();
-
-    // WTF
-    var name = this.config.name;
-    if (name) {
-      dom.addClass(this.element, name);
-    }
-
     this.enable();
 
     // Make sure that the browser avoids using inline styles whenever possible
@@ -294,7 +284,7 @@ var Composer = Base.extend({
 
   _checkForPendingValueChangeAndUpdateClass: function(keyCode) {
     if (!isNonPrintableKey(keyCode)) {
-      dom.addClass(this.element, "has-value");
+      this.element.classList.add("has-value");
     }
   },
 
@@ -312,9 +302,9 @@ var Composer = Base.extend({
     emptyText = !containsVisualBlocks && this.isEmpty() && this.element.querySelectorAll("p").length <= 1;
 
     if(emptyText) {
-      dom.removeClass(this.element, "has-value");
+      this.element.classList.remove("has-value");
     } else {
-      dom.addClass(this.element, "has-value");
+      this.element.classList.add("has-value");
     }
   }
 });

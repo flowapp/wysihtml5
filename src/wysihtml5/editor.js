@@ -81,9 +81,6 @@ var Editor = lang.Dispatcher.extend(
       return;
     }
 
-    // Add class name to body, to indicate that the editor is supported
-    dom.addClass(document.body, this.config.bodyClassName);
-
     this.composer = new Composer(this, this.editableElement, this.config);
     this.currentView = this.composer;
   },

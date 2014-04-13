@@ -7,14 +7,12 @@
  *    wysihtml5.quirks.redraw(document.body);
  */
 
-import { addClass, removeClass } from "../dom/class";
-
 var CLASS_NAME = "wysihtml5-quirks-redraw";
 
 var redraw = function(element) {
-  addClass(element, CLASS_NAME);
-  removeClass(element, CLASS_NAME);
-  
+  element.classList.add(CLASS_NAME);
+  element.classList.remove(CLASS_NAME);
+
   // Following hack is needed for firefox to make sure that image resize handles are properly removed
   try {
     var doc = element.ownerDocument;

@@ -546,7 +546,7 @@ var Selection = Base.extend({
 
       while (tempElements.firstChild) {
         firstChild = tempElements.firstChild;
-        if (firstChild.nodeType == 1 && dom.hasClass(firstChild, nodeOptions.className)) {
+        if (firstChild.nodeType == 1 && firstChild.classList.contains(nodeOptions.className)) {
           while (firstChild.firstChild) {
             tempElement.appendChild(firstChild.firstChild);
           }
