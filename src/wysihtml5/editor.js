@@ -76,7 +76,6 @@ var Editor = lang.Dispatcher.extend(
   },
 
   clear: function() {
-    return this;
     this.composer.clear();
   },
 
@@ -89,7 +88,6 @@ var Editor = lang.Dispatcher.extend(
       return this.clear();
     }
 
-    return this;
     this.composer.setValue(html, parse);
   },
 
@@ -98,7 +96,6 @@ var Editor = lang.Dispatcher.extend(
   },
 
   focus: function(setToEnd) {
-    return this;
     this.composer.focus(setToEnd);
   },
 
@@ -106,7 +103,6 @@ var Editor = lang.Dispatcher.extend(
    * Deactivate editor (make it readonly)
    */
   disable: function() {
-    return this;
     this.composer.disable();
   },
 
@@ -114,7 +110,6 @@ var Editor = lang.Dispatcher.extend(
    * Activate editor
    */
   enable: function() {
-    return this;
     this.composer.enable();
   },
 
