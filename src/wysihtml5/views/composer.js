@@ -10,7 +10,6 @@ import { isNonPrintableKey } from "../helpers/is_non_printable_key";
 
 var Composer = Base.extend({
   name: "composer",
-  browser: browser,
   dom: dom,
 
   // Needed for firefox in order to display a proper caret in an empty contentEditable
@@ -160,6 +159,7 @@ var Composer = Base.extend({
     var that = this,
         _this = this;
 
+    // TODO move into keyboard plugin
     dom.observe(this.element, ["focus", "keydown"], function(e) {
       if (e.type == "focus" || e.keyCode == Constants.BACKSPACE_KEY) {
         setTimeout(function() {
