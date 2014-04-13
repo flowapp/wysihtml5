@@ -35,33 +35,20 @@ import { browser } from "./browser";
 import { Composer } from "./views/composer";
 import quirks from "./quirks";
 
-var undef;
-
 var defaultConfig = {
   // Give the editor a name, the name will also be set as class name on the iframe and on the iframe's body
-  name:                 undef,
+  name: undefined,
   // Whether the editor should look like the textarea (by adopting styles)
-  style:                true,
+  style: true,
   // Whether urls, entered by the user should automatically become clickable-links
-  autoLink:             true,
-  // Includes table editing events and cell selection tracking
-  handleTables:         false,
+  autoLink: true,
   // Object which includes parser rules to apply when html gets inserted via copy & paste
   // See parser_rules/*.js for examples
-  parserRules:          { tags: { br: {}, span: {}, div: {}, p: {} }, classes: {} },
+  parserRules: { tags: { br: {}, span: {}, div: {}, p: {} }, classes: {} },
   // Parser method to use when the user inserts content via copy & paste
-  parser:               dom.Parser,
-  // Class name which should be set on the contentEditable element in the created sandbox iframe, can be styled via the 'stylesheets' option
-  composerClassName:    "wysihtml5-editor",
-  // Class name to add to the body when the wysihtml5 editor is supported
-  bodyClassName:        "wysihtml5-supported",
-  // Whether the rich text editor should be rendered on touch devices (wysihtml5 >= 0.3.0 comes with basic support for iOS 5)
-  supportTouchDevices:  true,
+  parser: dom.Parser,
   // Whether senseless <span> elements (empty or without attributes) should be removed/replaced with their content
-  cleanUp:              true,
-  // Whether to use div instead of secure iframe
-  contentEditableMode: true,
-  noTextarea: true,
+  cleanUp: true,
   // Classname of container that editor should not touch and pass through
   // Pass false to disable
   uneditableContainerClassname: "wysihtml5-uneditable-container"
@@ -70,10 +57,9 @@ var defaultConfig = {
 var Editor = lang.Dispatcher.extend(
   /** @scope wysihtml5.Editor.prototype */ {
   constructor: function(editableElement, config) {
-    this.editableElement  = editableElement;
-    this.config           = lang.object({}).merge(defaultConfig).merge(config).get();
-    this._isCompatible    = browser.supported();
-
+    this.editableElement = editableElement;
+    this.config = lang.object({}).merge(defaultConfig).merge(config).get();
+    this._isCompatible = browser.supported();
     // Sort out unsupported/unwanted browsers here
     if (!this._isCompatible || (!this.config.supportTouchDevices && browser.isTouchDevice())) {
       var that = this;
@@ -108,7 +94,7 @@ var Editor = lang.Dispatcher.extend(
   },
 
   cleanUp: function() {
-      this.currentView.cleanUp();
+    this.currentView.cleanUp();
   },
 
   focus: function(setToEnd) {
