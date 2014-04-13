@@ -7,7 +7,7 @@
  * @example
  *    <div id="toolbar">
  *      <a data-wysihtml5-command="createLink">insert link</a>
- *      <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">insert h1</a>
+ *      <a data-wysihtml5-command="header" data-wysihtml5-command-value="h1">insert h1</a>
  *    </div>
  *
  *    <script>
@@ -103,7 +103,7 @@
      * @example
      *    var toolbar = new wysihtml5.Toolbar();
      *    // Insert a <blockquote> element or wrap current selection in <blockquote>
-     *    toolbar.execCommand("formatBlock", "blockquote");
+     *    toolbar.execCommand("blockquote");
      */
     execCommand: function(command, commandValue) {
       if (this.commandsDisabled) {
@@ -130,18 +130,6 @@
 
     execAction: function(action) {
       var editor = this.editor;
-      if (action === "change_view") {
-        if (editor.textarea) {
-            if (editor.currentView === editor.textarea) {
-              editor.fire("change_view", "composer");
-            } else {
-              editor.fire("change_view", "textarea");
-            }
-        }
-      }
-      if (action == "showSource") {
-          editor.fire("showSource");
-      }
     },
 
     _observe: function() {
@@ -189,21 +177,6 @@
 
       editor.on("focus:composer", function() {
         that.bookmark = null;
-      });
-
-      editor.on("change_view", function(currentView) {
-        // Set timeout needed in order to let the blur event fire first
-        if (editor.textarea) {
-            setTimeout(function() {
-              that.commandsDisabled = (currentView !== "composer");
-              that._updateLinkStates();
-              if (that.commandsDisabled) {
-                container.classList.add(CLASS_NAME_COMMANDS_DISABLED);
-              } else {
-                container.classList.remove(CLASS_NAME_COMMANDS_DISABLED);
-              }
-            }, 0);
-        }
       });
     },
 
@@ -267,19 +240,6 @@
           }
           if (command.dialog) {
             command.dialog.hide();
-          }
-        }
-      }
-
-      for (i in actionMapping) {
-        action = actionMapping[i];
-
-        if (action.name === "change_view") {
-          action.state = this.editor.currentView === this.editor.textarea;
-          if (action.state) {
-            action.link.classList.add(CLASS_NAME_ACTION_ACTIVE);
-          } else {
-            action.link.classList.remove(CLASS_NAME_ACTION_ACTIVE);
           }
         }
       }
