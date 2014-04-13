@@ -57,13 +57,14 @@ var defaultConfig = {
 var Editor = lang.Dispatcher.extend(
   /** @scope wysihtml5.Editor.prototype */ {
   constructor: function(editableElement, config) {
-    this.editableElement = editableElement;
+    this.editableElement = editableElement; // Deprecated
+    this.element = editableElement;
     this.config = lang.object({}).merge(defaultConfig).merge(config).get();
-    this._isCompatible = browser.supported();
+
     // Sort out unsupported/unwanted browsers here
-    if (!this._isCompatible || (!this.config.supportTouchDevices && browser.isTouchDevice())) {
-      var that = this;
-      setTimeout(function() { that.fire("beforeload").fire("load"); }, 0);
+    if (!this.isCompatible() || (!this.config.supportTouchDevices && browser.isTouchDevice())) {
+      var _this = this;
+      setTimeout(function() { _this.fire("beforeload").fire("load"); }, 0);
       return;
     }
 
@@ -72,7 +73,7 @@ var Editor = lang.Dispatcher.extend(
   },
 
   isCompatible: function() {
-    return this._isCompatible;
+    return browser.supported();
   },
 
   clear: function() {
