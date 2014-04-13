@@ -50,18 +50,6 @@
     box-sizing: border-box;
   }
 
-  textarea {
-    height: 280px;
-    border: 2px solid green;
-    font-family: Verdana;
-    font-size: 11px;
-  }
-
-  textarea:focus {
-    color: black;
-    border: 2px solid black;
-  }
-
   .wysihtml5-command-active {
     font-weight: bold;
   }
@@ -84,7 +72,7 @@
     color: blue;
   }
 
-  .wysihtml5-editor, .wysihtml5-editor table td {
+  .wysihtml5-editor {
     outline: 1px dotted #abc;
   }
 
@@ -125,20 +113,6 @@
     background: #eee;
     border-radius: 3px;
     margin: 0px 1px 1px 0;
-  }
-
-  div[data-wysihtml5-dialog="createTable"] {
-    position: absolute;
-    background: white;
-  }
-
-  div[data-wysihtml5-dialog="createTable"] td {
-    width: 10px; height: 5px;
-    border: 1px solid #666;
-  }
-
-  .wysihtml5-editor table td.wysiwyg-tmp-selected-cell {
-    outline: 2px solid green;
   }
 
   .editor-container-tag {
@@ -200,15 +174,16 @@
       </div>
     </div><!-- toolbar -->
 
-    <div class="editable" data-placeholder="Enter text ...">
+    <div class="editable wysihtml5-editor" data-placeholder="Enter text ..." contenteditable="true">
 
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
       <p>Nullam egestas nisl augue, a fermentum quam laoreet at.</p>
       <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-
-      <a href="http://unsplash.com">
-        <img src="http://666a658c624a3c03a6b2-25cda059d975d2f318c03e90bcf17c40.r92.cf1.rackcdn.com/unsplash_528ef22a4cd0b_1.JPG" width="300">
-      </a>
+      <p>
+        <a href="http://unsplash.com">
+          <img src="http://666a658c624a3c03a6b2-25cda059d975d2f318c03e90bcf17c40.r92.cf1.rackcdn.com/unsplash_528ef22a4cd0b_1.JPG" width="300">
+        </a>
+      </p>
 
       <p>XXX Pellentesque ullamcorper ultrices nibh mollis mattis. Etiam ac fermentum nisi. Sed sagittis porta augue, vel congue mi. Vivamus egestas vestibulum sem, a suscipit libero faucibus ut. Quisque mauris metus, imperdiet at velit a, suscipit fermentum ante. Nullam pretium mauris at risus eleifend ultrices. Vestibulum ullamcorper mattis est non lobortis. Donec consequat magna quis felis mollis tristique. Fusce sed congue felis.
         Aenean ut nulla orci. Praesent id mollis massa. Fusce interdum eleifend bibendum. Nulla luctus nisl sit amet sapien sodales ornare. Duis blandit, purus eu egestas pretium, nisi augue aliquet quam, non suscipit diam velit eu enim. Suspendisse vulputate nibh et porta eleifend. Pellentesque rhoncus hendrerit quam. Ut sit amet ligula ac tortor porta ullamcorper.

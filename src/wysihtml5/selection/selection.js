@@ -54,7 +54,7 @@ var Selection = Base.extend({
    *    selection.setBefore(myElement);
    */
   setBefore: function(node) {
-    var range = rangy.createRange(this.doc);
+    var range = rangy.createRange(document);
     range.setStartBefore(node);
     range.setEndBefore(node);
     return this.setSelection(range);
@@ -68,7 +68,7 @@ var Selection = Base.extend({
    *    selection.setBefore(myElement);
    */
   setAfter: function(node) {
-    var range = rangy.createRange(this.doc);
+    var range = rangy.createRange(document);
 
     range.setStartAfter(node);
     range.setEndAfter(node);
@@ -83,7 +83,7 @@ var Selection = Base.extend({
    *    selection.selectNode(document.getElementById("my-image"));
    */
   selectNode: function(node, avoidInvisibleSpace) {
-    var range           = rangy.createRange(this.doc),
+    var range           = rangy.createRange(document),
         isElement       = node.nodeType === Node.ELEMENT_NODE,
         canHaveHTML     = "canHaveHTML" in node ? node.canHaveHTML : (node.nodeName !== "IMG"),
         content         = isElement ? node.innerHTML : node.data,
@@ -124,19 +124,19 @@ var Selection = Base.extend({
     var selection,
         range;
 
-    if (controlRange && this.doc.selection && this.doc.selection.type === "Control") {
-      range = this.doc.selection.createRange();
+    if (controlRange && document.selection && document.selection.type === "Control") {
+      range = document.selection.createRange();
       if (range && range.length) {
         return range.item(0);
       }
     }
 
-    selection = this.getSelection(this.doc);
+    selection = this.getSelection(document);
     if (selection.focusNode === selection.anchorNode) {
       return selection.focusNode;
     } else {
-      range = this.getRange(this.doc);
-      return range ? range.commonAncestorContainer : this.doc.body;
+      range = this.getRange(document);
+      return range ? range.commonAncestorContainer : document.body;
     }
   },
 
@@ -355,12 +355,12 @@ var Selection = Base.extend({
 
   // TODO: has problems in chrome 12. investigate block level and uneditable area inbetween
   executeAndRestore: function(method, restoreScrollPosition) {
-    var body                  = this.doc.body,
+    var body                  = document.body,
         oldScrollTop          = restoreScrollPosition && body.scrollTop,
         oldScrollLeft         = restoreScrollPosition && body.scrollLeft,
         className             = "_wysihtml5-temp-placeholder",
         placeholderHtml       = '<span class="' + className + '">' + Constants.INVISIBLE_SPACE + '</span>',
-        range                 = this.getRange(this.doc),
+        range                 = this.getRange(document),
         caretPlaceholder,
         newCaretPlaceholder,
         nextSibling,
@@ -383,9 +383,9 @@ var Selection = Base.extend({
       setTimeout(function() { throw e; }, 0);
     }
 
-    caretPlaceholder = this.doc.querySelector("." + className);
+    caretPlaceholder = document.querySelector("." + className);
     if (caretPlaceholder) {
-      newRange = rangy.createRange(this.doc);
+      newRange = rangy.createRange(document);
       nextSibling = caretPlaceholder.nextSibling;
 
       newRange.selectNode(caretPlaceholder);
@@ -413,7 +413,7 @@ var Selection = Base.extend({
    */
   executeAndRestoreSimple: function(method) {
     var range = this.getRange(),
-        body  = this.doc.body,
+        body  = document.body,
         newRange,
         firstNode,
         lastNode,
@@ -444,14 +444,14 @@ var Selection = Base.extend({
     //   setTimeout(function() { throw e; }, 0);
     // }
 
-    newRange = rangy.createRange(this.doc);
+    newRange = rangy.createRange(document);
     try { newRange.setStart(rangeBackup.startContainer, rangeBackup.startOffset); } catch(e1) {}
     try { newRange.setEnd(rangeBackup.endContainer, rangeBackup.endOffset); } catch(e2) {}
     try { this.setSelection(newRange); } catch(e3) {}
   },
 
   set: function(node, offset) {
-    var newRange = rangy.createRange(this.doc);
+    var newRange = rangy.createRange(document);
     newRange.setStart(node, offset || 0);
     this.setSelection(newRange);
   },
@@ -464,7 +464,7 @@ var Selection = Base.extend({
    *    selection.insertHTML("<p>foobar</p>");
    */
   insertHTML: function(html) {
-    var range     = rangy.createRange(this.doc),
+    var range     = rangy.createRange(document),
         node      = range.createContextualFragment(html),
         lastChild = node.lastChild;
 
@@ -513,43 +513,6 @@ var Selection = Base.extend({
       range.insertNode(node);
     }
     return node;
-  },
-
-  deblockAndSurround: function(nodeOptions) {
-    var tempElement = this.doc.createElement('div'),
-        range = rangy.createRange(this.doc),
-        tempDivElements,
-        tempElements,
-        firstChild;
-
-    tempElement.className = nodeOptions.className;
-
-    this.composer.commands.exec("formatBlock", nodeOptions.nodeName, nodeOptions.className);
-    tempDivElements = this.contain.querySelectorAll("." + nodeOptions.className);
-    if (tempDivElements[0]) {
-      tempDivElements[0].parentNode.insertBefore(tempElement, tempDivElements[0]);
-
-      range.setStartBefore(tempDivElements[0]);
-      range.setEndAfter(tempDivElements[tempDivElements.length - 1]);
-      tempElements = range.extractContents();
-
-      while (tempElements.firstChild) {
-        firstChild = tempElements.firstChild;
-        if (firstChild.nodeType == 1 && firstChild.classList.contains(nodeOptions.className)) {
-          while (firstChild.firstChild) {
-            tempElement.appendChild(firstChild.firstChild);
-          }
-          if (firstChild.nodeName !== "BR") { tempElement.appendChild(this.doc.createElement('br')); }
-          tempElements.removeChild(firstChild);
-        } else {
-          tempElement.appendChild(firstChild);
-        }
-      }
-    } else {
-      tempElement = null;
-    }
-
-    return tempElement;
   },
 
   /**
@@ -733,7 +696,7 @@ var Selection = Base.extend({
   },
 
   getSelection: function() {
-    return rangy.getSelection(this.doc.defaultView || this.doc.parentWindow);
+    return rangy.getSelection(window);
   },
 
   setSelection: function(range) {
@@ -742,7 +705,7 @@ var Selection = Base.extend({
   },
 
   createRange: function() {
-    return rangy.createRange(this.doc);
+    return rangy.createRange(document);
   },
 
   isCollapsed: function() {

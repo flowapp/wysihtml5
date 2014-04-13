@@ -27,7 +27,7 @@ var Dispatcher = Base.extend(
     }
     return this;
   },
-  
+
   fire: function(eventName, payload) {
     this.events = this.events || {};
     var handlers = this.events[eventName] || [],
@@ -36,16 +36,6 @@ var Dispatcher = Base.extend(
       handlers[i].call(this, payload);
     }
     return this;
-  },
-  
-  // deprecated, use .on()
-  observe: function() {
-    return this.on.apply(this, arguments);
-  },
-  
-  // deprecated, use .off()
-  stopObserving: function() {
-    return this.off.apply(this, arguments);
   }
 });
 

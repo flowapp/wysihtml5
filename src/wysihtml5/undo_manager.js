@@ -4,7 +4,7 @@
  */
 
 import { Constants } from "./constants";
-import lang from "wysihtml5/lang";
+import { Dispatcher } from "./lang/dispatcher"
 import dom from "./dom";
 
 var Z_KEY = 90;
@@ -20,7 +20,7 @@ function cleanTempElements(doc) {
   }
 }
 
-var UndoManager = lang.Dispatcher.extend({
+var UndoManager = Dispatcher.extend({
   constructor: function(composer) {
     this.composer = composer;
     this.editor = this.composer.parent;

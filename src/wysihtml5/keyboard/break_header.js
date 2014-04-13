@@ -1,6 +1,6 @@
 import { Constants } from "../constants";
 import { Composer } from "../views/composer";
-import dom from "../dom";
+import { renameElement } from "../dom/rename_element";
 
 Composer.RegisterKeyboardHandler(function(e) {
   return (
@@ -9,15 +9,15 @@ Composer.RegisterKeyboardHandler(function(e) {
   );
 }, function(editor, composer, e) {
   var blockElement = composer.parentElement(composer.selection.getSelectedNode(), {
-    nodeName: ["H1", "H2", "H3", "H4", "H5", "H6"]
+    nodeName: Constants.HEADER_ELEMENTS
   });
   var range = composer.selection.getRange();
   if (blockElement && composer.selection.caretIsAtEndOfNode(range, blockElement)) {
     setTimeout(function() {
       var selectedNode = composer.selection.getSelectedNode();
       composer.selection.executeAndRestore(function() {
-        dom.renameElement(selectedNode, "p");
-      })
-    }, 0);
+        renameElement(selectedNode, "p");
+      });
+    }, 10);
   }
 });

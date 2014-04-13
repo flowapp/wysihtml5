@@ -5,12 +5,12 @@
  *      abcdefg|
  *   output:
  *      abcdefg<b>|</b>
- *   
+ *
  *   #2 unformatted text selected:
  *      abc|deg|h
  *   output:
  *      abc<b>|deg|</b>h
- *   
+ *
  *   #3 unformatted text selected across boundaries:
  *      ab|c <span>defg|h</span>
  *   output:
@@ -62,7 +62,7 @@ var formatInline = {
   exec: function(composer, command, tagName, className, classRegExp, cssStyle, styleRegExp) {
     var range = composer.selection.createRange();
     var ownRanges = composer.selection.getOwnRanges();
-    
+
     if (!ownRanges || ownRanges.length == 0) {
       return false;
     }
@@ -74,14 +74,13 @@ var formatInline = {
       ownRanges[ownRanges.length - 1].endContainer,
       ownRanges[ownRanges.length - 1].endOffset
     );
-    
+
     composer.selection.setSelection(range);
   },
 
   state: function(composer, command, tagName, className, classRegExp, cssStyle, styleRegExp) {
-    var doc           = composer.doc,
-        aliasTagName  = ALIAS_MAPPING[tagName] || tagName,
-        ownRanges;
+    var doc = composer.doc;
+    var aliasTagName = ALIAS_MAPPING[tagName] || tagName;
 
     // Check whether the document contains a node with the desired tagName
     if (!dom.hasElementWithTagName(doc, tagName) &&
@@ -90,16 +89,16 @@ var formatInline = {
     }
 
      // Check whether the document contains a node with the desired className
-    if (className && !dom.hasElementWithClassName(doc, className)) {
+    if (className && !dom.hasElementWithClassName(composer.element, className)) {
        return false;
     }
 
-    ownRanges = composer.selection.getOwnRanges();
-    
+    var ownRanges = composer.selection.getOwnRanges();
+
     if (ownRanges.length == 0) {
       return false;
     }
-    
+
     return _getApplier(tagName, className, classRegExp, cssStyle, styleRegExp).isAppliedToRange(ownRanges);
   }
 };

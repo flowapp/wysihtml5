@@ -1,7 +1,7 @@
 import { Constants } from "../constants";
 import { Composer } from "../views/composer";
 import { convertNestedBlockquoteIntoParagraph } from "../helpers/convert_nested_blockquote_into_paragraph";
-import dom from "../dom";
+import { renameElement } from "../dom/rename_element";
 
 Composer.RegisterKeyboardHandler(function(e) {
   return (
@@ -26,7 +26,7 @@ Composer.RegisterKeyboardHandler(function(e) {
     } else if (!blockquote.textContent) {
       e.preventDefault();
       composer.selection.executeAndRestore(function() {
-        dom.renameElement(blockquote, "p");
+        renameElement(blockquote, "p");
       });
     }
   }

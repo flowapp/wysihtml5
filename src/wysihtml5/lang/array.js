@@ -10,7 +10,7 @@ var array = function(arr) {
     contains: function(needle) {
         return wysihtml5.lang.array(arr).indexOf(needle) !== -1;
     },
-     
+
     /**
      * Check whether a given object exists in an array and return index
      * If no elelemt found returns -1
@@ -30,7 +30,7 @@ var array = function(arr) {
         return -1;
       }
     },
-    
+
     /**
      * Substract one array from another
      *
@@ -50,10 +50,10 @@ var array = function(arr) {
       }
       return newArr;
     },
-    
+
     /**
      * Return a clean native array
-     * 
+     *
      * Following will convert a Live NodeList to a proper Array
      * @example
      *    var childNodes = wysihtml5.lang.array(document.body.childNodes).get();
@@ -67,7 +67,7 @@ var array = function(arr) {
       }
       return newArray;
     },
-    
+
     /**
      * Creates a new array with the results of calling a provided function on every element in this array.
      * optionally this can be provided as second argument

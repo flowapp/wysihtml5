@@ -29,7 +29,9 @@ Composer.RegisterKeyboardHandler(function(e) {
       if (range.startContainer.nodeType === Node.TEXT_NODE) {
         var content = range.startContainer.textContent.substr(Math.max(range.startOffset - 2, 0), 2);
         if (content == "\n\n") {
-          insertParagraphAfter(preElement, composer);
+          var breakElement = insertParagraphAfter(preElement, composer);
+          composer.selection.setBefore(breakElement);
+
           var text = range.startContainer.textContent;
           range.startContainer.textContent = text.slice(0, text.length - 2);
           return;

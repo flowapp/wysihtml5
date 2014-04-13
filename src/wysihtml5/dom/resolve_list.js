@@ -5,7 +5,7 @@ var resolveList = function(list) {
     return;
   }
 
-  var fragment = doc.createDocumentFragment();
+  var fragment = document.createDocumentFragment();
   var firstChild, listItem;
 
   while (listItem = (list.firstElementChild || list.firstChild)) {

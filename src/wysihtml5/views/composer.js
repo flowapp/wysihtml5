@@ -18,6 +18,7 @@ var Composer = Base.extend({
 
   _keyboardHandlers: [],
   _textSubstitutions: [],
+  _cleanupMethods: [],
 
   constructor: function(parent, editableElement, config) {
     this.parent = parent;
@@ -125,8 +126,6 @@ var Composer = Base.extend({
   },
 
   _create: function() {
-    var that = this;
-    this.doc = document;
     this.element = this.editableArea;
     this.cleanUp(); // cleans contenteditable on initiation as it may contain html
 
@@ -177,7 +176,7 @@ var Composer = Base.extend({
 
   ensureParagraph: function() {
     if (this.isEmpty()) {
-      var paragraph = this.doc.createElement("P");
+      var paragraph = document.createElement("P");
       this.element.innerHTML = "";
       this.element.appendChild(paragraph);
       if (!browser.displaysCaretInEmptyContentEditableCorrectly()) {
@@ -270,7 +269,6 @@ var Composer = Base.extend({
     }
   },
 
-
   // Keyboard Processors
 
   _handleKeyboardHandlers: function(e) {
@@ -289,23 +287,18 @@ var Composer = Base.extend({
   },
 
   _checkForValueAndUpdateClass: function() {
-    var VISUAL_BLOCKS, emptyText, containsVisualBlocks;
-    VISUAL_BLOCKS = ["ul", "ol", "blockquote", "pre"]
+    var VISUAL_BLOCKS = ["ul", "ol", "blockquote", "pre"];
+    var containsVisualBlocks = false;
 
     for(var i = 0; i < VISUAL_BLOCKS.length; i++) {
-      if(this.element.querySelectorAll(VISUAL_BLOCKS[i]).length > 0) {
+      if (this.element.querySelectorAll(VISUAL_BLOCKS[i]).length > 0) {
         containsVisualBlocks = true;
         break;
       }
     }
 
-    emptyText = !containsVisualBlocks && this.isEmpty() && this.element.querySelectorAll("p").length <= 1;
-
-    if(emptyText) {
-      this.element.classList.remove("has-value");
-    } else {
-      this.element.classList.add("has-value");
-    }
+    var emptyText = !containsVisualBlocks && this.isEmpty() && this.element.querySelectorAll("p").length <= 1;
+    this.element.classList.toggle("has-value", !emptyText);
   }
 });
 
@@ -322,6 +315,13 @@ Composer.RegisterTextSubstitution = function(matcher, callback, options) {
     callback: callback,
     options: options
   });
+};
+
+Composer.RegisterCleanupMethod = function(matcher, callback) {
+  Composer.prototype._cleanupMethods.push({
+    matcher: matcher,
+    callback: callback
+  })
 };
 
 export { Composer };

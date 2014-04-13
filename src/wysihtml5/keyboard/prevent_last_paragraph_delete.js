@@ -1,6 +1,8 @@
 import { Constants } from "../constants";
 import { Composer } from "../views/composer";
 
+import { renameElement } from "../dom/rename_element";
+
 Composer.RegisterKeyboardHandler(function(e) {
   return (
     e.type === "keydown" &&
@@ -17,6 +19,11 @@ Composer.RegisterKeyboardHandler(function(e) {
       composer.selection.caretIsAtStartOfNode(selectedNode)
     ) {
       e.preventDefault();
+      if (selectedNode.nodeName !== Constants.DEFAULT_NODE_NAME) {
+        composer.selection.executeAndRestore(function() {
+          renameElement(selectedNode, Constants.DEFAULT_NODE_NAME);
+        });
+      }
     }
   }
 })

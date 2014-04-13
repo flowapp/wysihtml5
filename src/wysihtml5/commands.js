@@ -11,9 +11,9 @@ import lang from "./lang";
 
 var Commands = Base.extend({
   constructor: function(editor, composer) {
-    this.editor   = editor;
+    this.editor = editor;
     this.composer = composer;
-    this.doc      = document;
+    this.doc = document;
   },
 
   /**
@@ -24,7 +24,7 @@ var Commands = Base.extend({
    *    commands.supports("createLink");
    */
   support: function(command) {
-    return browser.supportsCommand(this.doc, command);
+    return browser.supportsCommand(document, command);
   },
 
   /**
@@ -42,7 +42,7 @@ var Commands = Base.extend({
         result  = null,
         blockedCommands = null;
 
-    if(this.state("formatInline", "pre")) {
+    if (this.state("formatInline", "pre")) {
       blockedCommands = ["formatInline", "formatBlock", "bold", "italic", "insertUnorderedList", "insertOrderedList"]
       if(blockedCommands.indexOf(command) != -1 && value != "pre") {
         return false;
@@ -57,7 +57,7 @@ var Commands = Base.extend({
     } else {
       try {
         // try/catch for buggy firefox
-        result = this.doc.execCommand(command, false, value);
+        result = document.execCommand(command, false, value);
       } catch(e) {}
     }
 
@@ -85,7 +85,7 @@ var Commands = Base.extend({
     } else {
       try {
         // try/catch for buggy firefox
-        return this.doc.queryCommandState(command);
+        return document.queryCommandState(command);
       } catch(e) {
         return false;
       }

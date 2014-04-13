@@ -1,6 +1,5 @@
 import { Constants } from "../constants";
 import { Composer } from "../views/composer";
-import dom from "../dom";
 
 Composer.RegisterKeyboardHandler(function(e) {
   return (
@@ -10,7 +9,7 @@ Composer.RegisterKeyboardHandler(function(e) {
 }, function(editor, composer, e) {
   var selectedNode = composer.selection.getSelectedNode();
   var blockElement = composer.parentElement(selectedNode, {
-    nodeName: ["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "BLOCKQUOTE", "DIV"]
+    nodeName: Constants.BLOCK_ELEMENTS
   });
   if (blockElement && composer.selection.caretIsAtStartOfNode(blockElement)) {
     setTimeout(function() {

@@ -3,10 +3,7 @@ import { Composer } from "../views/composer";
 import { Constants } from "../constants";
 import { dom } from "../dom";
 
-var supportsDisablingOfAutoLinking = browser.canDisableAutoLinking();
-var supportsAutoLinking = browser.doesAutoLinkingInContentEditable();
 var INCLUDES_PROTOCOL = /^(https?:\/\/|mailto:)/;
-
 
 var validContainer = function(node, composer) {
   var blockElement = composer.parentElement(node, {
@@ -23,12 +20,13 @@ var addProtocolIfNeeded = function(url) {
 }
 
 var convertRangeToURL = function(composer, range, URL) {
-  composer.selection.executeAndRestore(function() {
-    var selection = composer.selection.getSelection().nativeSelection;
-    selection.removeAllRanges();
-    selection.addRange(range);
-    composer.commands.exec("createLink", addProtocolIfNeeded(URL));
-  });
+  var selection = composer.selection.getSelection().nativeSelection;
+  selection.removeAllRanges();
+  selection.addRange(range);
+  var links = composer.commands.exec("createLink", addProtocolIfNeeded(URL));
+  if (links.length) {
+    composer.selection.setAfter(links[links.length - 1])
+  }
 }
 
 Composer.RegisterTextSubstitution(function(word, event, editor, composer) {

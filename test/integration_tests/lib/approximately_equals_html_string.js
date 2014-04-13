@@ -12,7 +12,7 @@ Assertion.addMethod("equalNode", function (b) {
 
   this.assert(a.isEqualNode(b),
               "expected node to equal #{exp} but it was #{act}",
-              "expected node to not equal #{exp} but it was",
+              "expected node to not equal #{exp} but it was #{act}",
               b.innerHTML,
               a.innerHTML);
 });

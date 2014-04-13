@@ -261,8 +261,7 @@ HTMLApplier.prototype = {
   getAncestorWithStyle: function(node) {
     var cssStyleMatch;
     while (node) {
-      cssStyleMatch = this.cssStyle ? hasStyleAttr(node, this.similarStyleRegExp) : false;
-      if (node.nodeType == Node.ELEMENT_NODE && node.getAttribute("contenteditable") != "false" && rangy.dom.arrayContains(this.tagNames, node.tagName.toLowerCase()) && cssStyleMatch) {
+      if (node.nodeType == Node.ELEMENT_NODE && node.getAttribute("contenteditable") != "false" && rangy.dom.arrayContains(this.tagNames, node.tagName.toLowerCase())) {
         return node;
       }
       node = node.parentNode;
@@ -470,11 +469,7 @@ HTMLApplier.prototype = {
 
       for (var i = 0, len = textNodes.length; i < len; ++i) {
         textNode = textNodes[i];
-        ancestorWithClass = this.getAncestorWithClass(textNode);
         ancestorWithStyle = this.getAncestorWithStyle(textNode);
-        if (ancestorWithClass) {
-          this.undoToTextNode(textNode, range[ri], ancestorWithClass);
-        }
         if (ancestorWithStyle) {
           this.undoToTextNode(textNode, range[ri], false, ancestorWithStyle);
         }
@@ -532,19 +527,13 @@ HTMLApplier.prototype = {
     for (var ri = range.length; ri--;) {
       textNodes = range[ri].getNodes([Node.TEXT_NODE]);
       if (!textNodes.length) {
-        ancestor = this.getAncestorWithClass(range[ri].startContainer);
-        if (!ancestor) {
-          ancestor = this.getAncestorWithStyle(range[ri].startContainer);
-        }
+        ancestor = this.getAncestorWithStyle(range[ri].startContainer);
         return ancestor ? [ancestor] : false;
       }
 
       for (var i = 0, len = textNodes.length, selectedText; i < len; ++i) {
         selectedText = this.getTextSelectedByRange(textNodes[i], range[ri]);
-        ancestor = this.getAncestorWithClass(textNodes[i]);
-        if (!ancestor) {
-          ancestor = this.getAncestorWithStyle(textNodes[i]);
-        }
+        ancestor = this.getAncestorWithStyle(textNodes[i]);
 
         if (ancestor && selectedText.length) {
           ancestors.push(ancestor);

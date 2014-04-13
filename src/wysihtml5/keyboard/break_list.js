@@ -1,9 +1,6 @@
 import { Constants } from "../constants";
 import { Composer } from "../views/composer";
 import { ensureParagraph } from "../helpers/ensure_paragraph";
-import dom from "../dom";
-
-var LIST_TAGS = ["UL", "OL", "MENU"];
 
 Composer.RegisterKeyboardHandler(function(e) {
   return (

@@ -1,7 +1,7 @@
 import { Constants } from "../constants";
 import { Composer } from "../views/composer";
 import dom from "../dom";
-import { convertListItemIntoParagraph } from "../helpers/convert_list_item_into_paragraph";
+import convertListItemsIntoParagraphs from "../helpers/convert_list_item_into_paragraph";
 import { convertNestedBlockquoteIntoParagraph } from "../helpers/convert_nested_blockquote_into_paragraph";
 
 Composer.RegisterKeyboardHandler(function(e) {
@@ -17,7 +17,8 @@ Composer.RegisterKeyboardHandler(function(e) {
   });
   if (range.collapsed && blockElement && composer.selection.caretIsAtStartOfNode(blockElement)) {
     if (blockElement.nodeName === "LI") {
-      convertListItemIntoParagraph(blockElement, composer);
+      var paragraph = convertListItemsIntoParagraphs([blockElement])[0];
+      composer.selection.setBefore(paragraph);
     } else if (blockElement.nodeName === "P") {
       var blockquote = composer.parentElement(blockElement, {
         nodeName: ["BLOCKQUOTE"]
