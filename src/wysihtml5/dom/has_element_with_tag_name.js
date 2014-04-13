@@ -8,23 +8,19 @@
  * @example
  *    wysihtml5.dom.hasElementWithTagName(document, "IMG");
  */
-var hasElementWithTagName = (function() {
-  var LIVE_CACHE          = {},
-      DOCUMENT_IDENTIFIER = 1;
-  
-  function _getDocumentIdentifier(doc) {
-    return doc._wysihtml5_identifier || (doc._wysihtml5_identifier = DOCUMENT_IDENTIFIER++);
+
+import { elementIdentifier } from "../helpers/element_identifier";
+
+var LIVE_CACHE = {};
+
+var hasElementWithTagName = function(element, tagName) {
+  var key = elementIdentifier(element) + ":" + tagName;
+  var cacheEntry = LIVE_CACHE[key];
+  if (!cacheEntry) {
+    cacheEntry = LIVE_CACHE[key] = element.getElementsByTagName(tagName);
   }
-  
-  return function(doc, tagName) {
-    var key         = _getDocumentIdentifier(doc) + ":" + tagName,
-        cacheEntry  = LIVE_CACHE[key];
-    if (!cacheEntry) {
-      cacheEntry = LIVE_CACHE[key] = doc.getElementsByTagName(tagName);
-    }
-    
-    return cacheEntry.length > 0;
-  };
-})();
+
+  return cacheEntry.length > 0;
+};
 
 export { hasElementWithTagName };

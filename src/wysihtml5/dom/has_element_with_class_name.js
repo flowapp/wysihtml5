@@ -9,20 +9,16 @@
  *    wysihtml5.dom.hasElementWithClassName(document, "foobar");
  */
 
+import { elementIdentifier } from "../helpers/element_identifier";
+
 var LIVE_CACHE = {};
-var DOCUMENT_IDENTIFIER = 1;
 
-function _getDocumentIdentifier(doc) {
-  return doc._wysihtml5_identifier || (doc._wysihtml5_identifier = DOCUMENT_IDENTIFIER++);
-}
-
-var hasElementWithClassName = function(doc, className) {
-  var key = _getDocumentIdentifier(doc) + ":" + className;
+var hasElementWithClassName = function(element, className) {
+  var key = elementIdentifier(element) + ":" + className;
   var cacheEntry = LIVE_CACHE[key];
   if (!cacheEntry) {
-    cacheEntry = LIVE_CACHE[key] = doc.getElementsByClassName(className);
+    cacheEntry = LIVE_CACHE[key] = element.getElementsByClassName(className);
   }
-
   return cacheEntry.length > 0;
 };
 
