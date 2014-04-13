@@ -68,7 +68,7 @@ var Editor = lang.Dispatcher.extend(
     }
 
     this.composer = new Composer(this, this.editableElement, this.config);
-    this.currentView = this.composer;
+    this.currentView = this.composer; // Deprecated
   },
 
   isCompatible: function() {
@@ -76,12 +76,12 @@ var Editor = lang.Dispatcher.extend(
   },
 
   clear: function() {
-    this.currentView.clear();
     return this;
+    this.composer.clear();
   },
 
   getValue: function(options) {
-    return this.currentView.getValue(options);
+    return this.composer.getValue(options);
   },
 
   setValue: function(html, parse) {
@@ -89,37 +89,37 @@ var Editor = lang.Dispatcher.extend(
       return this.clear();
     }
 
-    this.currentView.setValue(html, parse);
     return this;
+    this.composer.setValue(html, parse);
   },
 
   cleanUp: function() {
-    this.currentView.cleanUp();
+    this.composer.cleanUp();
   },
 
   focus: function(setToEnd) {
-    this.currentView.focus(setToEnd);
     return this;
+    this.composer.focus(setToEnd);
   },
 
   /**
    * Deactivate editor (make it readonly)
    */
   disable: function() {
-    this.currentView.disable();
     return this;
+    this.composer.disable();
   },
 
   /**
    * Activate editor
    */
   enable: function() {
-    this.currentView.enable();
     return this;
+    this.composer.enable();
   },
 
   isEmpty: function() {
-    return this.currentView.isEmpty();
+    return this.composer.isEmpty();
   },
 
   parse: function(htmlOrElement) {
