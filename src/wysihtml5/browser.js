@@ -187,33 +187,11 @@ var browser = (function() {
       return "getSelection" in window && "modify" in window.getSelection();
     },
 
-    // Returns if there is a way for setting selection to expand a line
-    supportsSelectLine: function () {
-        return (this.supportsSelectionModify() || document.selection) ? true : false;
-    },
-
-    /**
-     * Opera needs a white space after a <br> in order to position the caret correctly
-     */
-    needsSpaceAfterLineBreak: function() {
-      return isOpera;
-    },
-
     /**
      * In IE it's impssible for the user and for the selection library to set the caret after an <img> when it's the lastChild in the document
      */
     hasProblemsSettingCaretAfterImg: function() {
       return isIE;
-    },
-
-    /**
-     * Opera sometimes doesn't insert the node at the right position when range.insertNode(someNode)
-     * is used (regardless if rangy or native)
-     * This especially happens when the caret is positioned right after a <br> because then
-     * insertNode() will insert the node right before the <br>
-     */
-    hasInsertNodeIssue: function() {
-      return isOpera;
     }
   };
 })();

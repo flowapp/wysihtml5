@@ -373,12 +373,8 @@ var Selection = Base.extend({
       return;
     }
 
-    if (browser.hasInsertNodeIssue()) {
-      this.doc.execCommand("insertHTML", false, placeholderHtml);
-    } else {
-      node = range.createContextualFragment(placeholderHtml);
-      range.insertNode(node);
-    }
+    node = range.createContextualFragment(placeholderHtml);
+    range.insertNode(node);
 
     // Make sure that a potential error doesn't cause our placeholder element to be left as a placeholder
     try {
@@ -391,16 +387,9 @@ var Selection = Base.extend({
     if (caretPlaceholder) {
       newRange = rangy.createRange(this.doc);
       nextSibling = caretPlaceholder.nextSibling;
-      // Opera is so fucked up when you wanna set focus before a <br>
-      if (browser.hasInsertNodeIssue() && nextSibling && nextSibling.nodeName === "BR") {
-        newCaretPlaceholder = this.doc.createTextNode(Constants.INVISIBLE_SPACE);
-        dom.insert(newCaretPlaceholder).after(caretPlaceholder);
-        newRange.setStartBefore(newCaretPlaceholder);
-        newRange.setEndBefore(newCaretPlaceholder);
-      } else {
-        newRange.selectNode(caretPlaceholder);
-        newRange.deleteContents();
-      }
+
+      newRange.selectNode(caretPlaceholder);
+      newRange.deleteContents();
       this.setSelection(newRange);
     } else {
       // fallback for when all hell breaks loose
@@ -723,7 +712,7 @@ var Selection = Base.extend({
   },
 
   _compareNode: function(range, node) {
-    var nodeRange = node.ownerDocument.createRange();
+    var nodeRange = document.createRange();
     try {
       nodeRange.selectNode(node);
     }
