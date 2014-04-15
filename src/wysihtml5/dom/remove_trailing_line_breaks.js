@@ -8,7 +8,8 @@
 import { nodeList } from "./node_list";
 
 var removeTrailingLineBreaks = function(node) {
-  var childNodes = nodeList.toArray(node.querySelectorAll("br:last-child"));
+  var element = node.cloneNode(true);
+  var childNodes = nodeList.toArray(element.querySelectorAll("br:last-child"));
 
   for (var index = 0; index < childNodes.length; index++) {
     var childNode = childNodes[index];
@@ -18,7 +19,7 @@ var removeTrailingLineBreaks = function(node) {
     }
   }
 
-  return node;
+  return element;
 };
 
 export { removeTrailingLineBreaks };
