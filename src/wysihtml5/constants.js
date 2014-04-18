@@ -1,4 +1,4 @@
-var Constants = {
+var Constants = Object.freeze({
   INVISIBLE_SPACE: "\uFEFF",
   BACKSPACE_KEY: 8,
   ENTER_KEY: 13,
@@ -9,8 +9,8 @@ var Constants = {
   URL_REG_EXP: /^((https?:\/\/|www\.|mailto:)[^\s<]{3,})/gi,
   URL_REG_EXP_NON_START: /((https?:\/\/|www\.|mailto:)[^\s<]{3,})/gi,
 
-  BLOCK_ELEMENTS: ["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "DIV", "BLOCKQUOTE"]
-
-};
+  BLOCK_ELEMENTS: Object.freeze(["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "DIV", "BLOCKQUOTE"]),
+  DEFAULT_NODE_NAME: "P"
+});
 
 export { Constants };
