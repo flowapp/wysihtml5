@@ -15,10 +15,8 @@
  *    blur:textarea
  *    change
  *    change:composer
- *    change:textarea
  *    paste
  *    paste:composer
- *    paste:textarea
  *    newword:composer
  *    undo:composer
  *    redo:composer
@@ -39,8 +37,6 @@ var defaultConfig = {
   // Give the editor a name, the name will also be set as class name on the iframe and on the iframe's body
   name: undefined,
   // Whether the editor should look like the textarea (by adopting styles)
-  style: true,
-  // Whether urls, entered by the user should automatically become clickable-links
   autoLink: true,
   // Object which includes parser rules to apply when html gets inserted via copy & paste
   // See parser_rules/*.js for examples
@@ -60,13 +56,6 @@ var Editor = lang.Dispatcher.extend(
     this.editableElement = editableElement; // Deprecated
     this.element = editableElement;
     this.config = lang.object({}).merge(defaultConfig).merge(config).get();
-
-    // Sort out unsupported/unwanted browsers here
-    if (!this.isCompatible() || (!this.config.supportTouchDevices && browser.isTouchDevice())) {
-      var _this = this;
-      setTimeout(function() { _this.fire("beforeload").fire("load"); }, 0);
-      return;
-    }
 
     this.composer = new Composer(this, this.editableElement, this.config);
     this.currentView = this.composer; // Deprecated
