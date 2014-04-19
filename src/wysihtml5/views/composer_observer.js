@@ -100,7 +100,6 @@ Composer.prototype.observe = function() {
       var keepScrollPosition = true;
       setTimeout(function() {
         that.selection.executeAndRestore(function() {
-          quirks.cleanPastedHTML(that.element);
           that.parent.parse(that.element);
         }, keepScrollPosition);
       }, 0)
