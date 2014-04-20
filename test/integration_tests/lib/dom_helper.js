@@ -18,10 +18,6 @@ var DOM = {
     ", [item]);
   },
 
-  exec: function(command) {
-    return browser.execute("window.editor.composer.commands.exec(arguments[0], arguments[1]);", [command]);
-  },
-
   selectStartOfNode: function(node) {
     return browser.execute("\
       range = document.createRange();\
