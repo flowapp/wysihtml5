@@ -10,6 +10,8 @@ var Constants = Object.freeze({
   URL_REG_EXP_NON_START: /((https?:\/\/|www\.|mailto:)[^\s<]{3,})/gi,
 
   BLOCK_ELEMENTS: Object.freeze(["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "DIV", "BLOCKQUOTE"]),
+  HEADER_ELEMENTS: Object.freeze(["H1", "H2", "H3", "H4", "H5", "H6"]),
+  LIST_ELEMENTS: Object.freeze(["OL", "UL"]),
   DEFAULT_NODE_NAME: "P"
 });
 

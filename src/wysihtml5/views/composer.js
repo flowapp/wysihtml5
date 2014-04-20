@@ -4,7 +4,7 @@ import quirks from "../quirks";
 import { browser } from "../browser";
 import { Constants } from "../constants";
 import { Selection } from "../selection/selection";
-import { Commands} from "../commands";
+import { Commands } from "../commands";
 import { UndoManager } from "../undo_manager";
 import { isNonPrintableKey } from "../helpers/is_non_printable_key";
 

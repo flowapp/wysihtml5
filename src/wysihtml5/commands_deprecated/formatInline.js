@@ -1,5 +1,5 @@
 /**
- * formatInline scenarios for tag "B" (| = caret, |foo| = selected text)
+ * formatInline scenarios for tag "B" (| = caret, [foo] = selected text)
  *
  *   #1 caret in unformatted text:
  *      abcdefg|
@@ -9,38 +9,39 @@
  *   #2 unformatted text selected:
  *      abc|deg|h
  *   output:
- *      abc<b>|deg|</b>h
+ *      abc<b>[deg]</b>h
  *
  *   #3 unformatted text selected across boundaries:
  *      ab|c <span>defg|h</span>
  *   output:
- *      ab<b>|c </b><span><b>defg</b>|h</span>
+ *      ab<b>[c </b><span><b>defg</b>]h</span>
  *
  *   #4 formatted text entirely selected
- *      <b>|abc|</b>
+ *      <b>[abc]</b>
  *   output:
- *      |abc|
+ *      [abc]
  *
  *   #5 formatted text partially selected
- *      <b>ab|c|</b>
+ *      <b>ab[c]</b>
  *   output:
- *      <b>ab</b>|c|
+ *      <b>ab</b>[c]
  *
  *   #6 formatted text selected across boundaries
- *      <span>ab|c</span> <b>de|fgh</b>
+ *      <span>ab[c</span> <b>de]fgh</b>
  *   output:
- *      <span>ab|c</span> de|<b>fgh</b>
+ *      <span>ab[c</span> de]<b>fgh</b>
  */
+
 import { HTMLApplier } from "../selection/html_applier";
 import dom from "../dom";
 
 var ALIAS_MAPPING = {
-      "strong": "b",
-      "em":     "i",
-      "b":      "strong",
-      "i":      "em"
-    },
-    htmlApplier = {};
+  strong: "b",
+  em: "i",
+  b: "strong",
+  i: "em"
+};
+var htmlApplier = {};
 
 function _getTagNames(tagName) {
   var alias = ALIAS_MAPPING[tagName];
@@ -79,12 +80,11 @@ var formatInline = {
   },
 
   state: function(composer, command, tagName, className, classRegExp, cssStyle, styleRegExp) {
-    var doc = composer.doc;
     var aliasTagName = ALIAS_MAPPING[tagName] || tagName;
 
     // Check whether the document contains a node with the desired tagName
-    if (!dom.hasElementWithTagName(doc, tagName) &&
-        !dom.hasElementWithTagName(doc, aliasTagName)) {
+    if (!dom.hasElementWithTagName(composer.element, tagName) &&
+        !dom.hasElementWithTagName(composer.element, aliasTagName)) {
       return false;
     }
 
