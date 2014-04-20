@@ -1,7 +1,6 @@
 import { all } from "wysihtml5/dom/all";
 import { appendChildNodes } from "wysihtml5/dom/append_child_nodes";
 import { contains } from "wysihtml5/dom/contains";
-import { convertToList } from "wysihtml5/dom/convert_to_list";
 import { copyAttributes } from "wysihtml5/dom/copy_attributes";
 import { copyStyles } from "wysihtml5/dom/copy_styles";
 import { getAsDom } from "wysihtml5/dom/get_as_dom";
@@ -20,9 +19,7 @@ import { removeEmptyNodes } from "wysihtml5/dom/remove_empty_nodes";
 import { removeTrailingLineBreaks } from "wysihtml5/dom/remove_trailing_line_breaks";
 import { renameElement } from "wysihtml5/dom/rename_element";
 import { replaceWithChildNodes } from "wysihtml5/dom/replace_with_child_nodes";
-import { resolveList } from "wysihtml5/dom/resolve_list";
 import { setAttributes } from "wysihtml5/dom/set_attributes";
-import { setStyles } from "wysihtml5/dom/set_styles";
 import { nodeList } from "wysihtml5/dom/node_list";
 import { setTextContent, getTextContent } from "wysihtml5/dom/text_content";
 
@@ -30,7 +27,6 @@ export default = {
   all: all,
   appendChildNodes: appendChildNodes,
   contains: contains,
-  convertToList: convertToList,
   copyAttributes: copyAttributes,
   copyStyles: copyStyles,
   getAsDom: getAsDom,
@@ -49,9 +45,7 @@ export default = {
   removeTrailingLineBreaks: removeTrailingLineBreaks,
   renameElement: renameElement,
   replaceWithChildNodes: replaceWithChildNodes,
-  resolveList: resolveList,
   setAttributes: setAttributes,
-  setStyles: setStyles,
   nodeList: nodeList,
   setTextContent: setTextContent,
   getTextContent: getTextContent
