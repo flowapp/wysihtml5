@@ -1,0 +1,18 @@
+<style>
+  #editor {
+    width: 600px;
+    height: 300px;
+  }
+</style>
+<script src="http://localhost:4200/wysihtml5.js"></script>
+<script>
+  window.CommittedWords = [];
+  wysihtml5.Composer.RegisterTextSubstitution(function(content) {
+    window.CommittedWords.push(content);
+    return false;
+  }, function() {}, {
+    word: true,
+    sentence: false
+  });
+</script>
+<div id="editor" contenteditable="true"></div>
