@@ -48,7 +48,7 @@ var Composer = Base.extend({
       element = wysihtml5.dom.removeTrailingLineBreaks(element);
     }
 
-    value = this.isEmpty() ? "" : quirks.getCorrectInnerHTML(element);
+    value = this.visuallyEmpty() ? "" : quirks.getCorrectInnerHTML(element);
 
     if (options.parse) {
       var textNodes = this._textNodes(element);
@@ -114,8 +114,13 @@ var Composer = Base.extend({
     return dom.getTextContent(this.element);
   },
 
-  isEmpty: function() {
+  visuallyEmpty: function() {
     return !this.element.textContent;
+  },
+
+  isEmpty: function() {
+    var element = this.element.querySelector("ul, ol, blockquote, pre")
+    return !element && this.visuallyEmpty() && this.element.querySelectorAll("p").length <= 1;
   },
 
   parentElement: function(node, matchingSet, options) {
@@ -287,18 +292,7 @@ var Composer = Base.extend({
   },
 
   _checkForValueAndUpdateClass: function() {
-    var VISUAL_BLOCKS = ["ul", "ol", "blockquote", "pre"];
-    var containsVisualBlocks = false;
-
-    for(var i = 0; i < VISUAL_BLOCKS.length; i++) {
-      if (this.element.querySelectorAll(VISUAL_BLOCKS[i]).length > 0) {
-        containsVisualBlocks = true;
-        break;
-      }
-    }
-
-    var emptyText = !containsVisualBlocks && this.isEmpty() && this.element.querySelectorAll("p").length <= 1;
-    this.element.classList.toggle("has-value", !emptyText);
+    this.element.classList.toggle("has-value", !this.isEmpty());
   }
 });
 

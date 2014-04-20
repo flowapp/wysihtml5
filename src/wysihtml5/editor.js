@@ -24,7 +24,6 @@
  *    aftercommand:composer
  *    enable:composer
  *    disable:composer
- *    change_view
  */
 
 import lang from "wysihtml5/lang";
@@ -103,8 +102,9 @@ var Editor = lang.Dispatcher.extend(
     this.composer.enable();
   },
 
+  // FIXUP
   isEmpty: function() {
-    return this.composer.isEmpty();
+    return this.composer.visuallyEmpty();
   },
 
   parse: function(htmlOrElement) {
