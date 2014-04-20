@@ -1,16 +1,13 @@
 import { appendChildNodes } from "../dom/append_child_nodes";
 import { nodeList } from "../dom/node_list";
 
-var convertNestedBlockquoteIntoParagraph = function(paragraph, composer) {
+var convertNestedBlockquoteIntoParagraph = function(paragraph) {
   var blockquote = paragraph.parentNode; // Switch to using getParentElement
   if (blockquote.firstElementChild === paragraph) {
     var parent = blockquote.parentNode;
     parent.insertBefore(paragraph, blockquote);
     if (!blockquote.firstChild) { // TODO
       parent.removeChild(blockquote);
-    }
-    if (composer) {
-      composer.selection.setBefore(paragraph);
     }
   } else {
     var children = nodeList.toArray(blockquote.childNodes);
@@ -27,11 +24,9 @@ var convertNestedBlockquoteIntoParagraph = function(paragraph, composer) {
       if (!newBlockquote.firstChild) {
         parent.removeChild(newBlockquote);
       }
-      if (composer) {
-        composer.selection.setBefore(paragraph);
-      }
     }
   }
+  return paragraph;
 }
 
 export { convertNestedBlockquoteIntoParagraph };

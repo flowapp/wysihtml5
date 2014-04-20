@@ -22,7 +22,8 @@ Composer.RegisterKeyboardHandler(function(e) {
   if (blockquote) {
     if (paragraph && !paragraph.textContent) {
       e.preventDefault();
-      convertNestedBlockquoteIntoParagraph(paragraph, composer);
+      var element = convertNestedBlockquoteIntoParagraph(paragraph);
+      composer.selection.setBefore(element);
     } else if (!blockquote.textContent) {
       e.preventDefault();
       composer.selection.executeAndRestore(function() {

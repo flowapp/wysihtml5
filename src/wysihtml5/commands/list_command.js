@@ -1,5 +1,6 @@
 import { BlockCommand } from "./block_command";
 import { listCleanup } from "../helpers/list_cleanup";
+import BlockquoteCommand from "./blockquote_command";
 
 // DOM helpers
 import { renameElement } from "../dom/rename_element";
@@ -43,6 +44,8 @@ var ListCommand = BlockCommand.extend({
   shouldUnapplyForCommand: function(command) {
     if (command instanceof ListCommand) {
       return false;
+    } else if (command instanceof BlockquoteCommand) {
+      return false
     }
     return this.base(command);
   },

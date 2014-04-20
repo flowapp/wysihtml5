@@ -24,7 +24,8 @@ Composer.RegisterKeyboardHandler(function(e) {
         nodeName: ["BLOCKQUOTE"]
       });
       if (blockquote) {
-        convertNestedBlockquoteIntoParagraph(blockElement, composer);
+        var paragraph = convertNestedBlockquoteIntoParagraph(blockElement);
+        composer.selection.setBefore(paragraph);
       } else {
         return;
       }
