@@ -7,7 +7,6 @@ var Assertion = chai.Assertion;
 var assert = chai.assert;
 
 Assertion.addMethod("equalNode", function (b) {
-  var _this = this;
   var a = this._obj;
 
   this.assert(a.isEqualNode(b),
@@ -17,8 +16,12 @@ Assertion.addMethod("equalNode", function (b) {
               a.innerHTML);
 });
 
-var approximatelyEqualsHTMLString = function(a, b) {
+var approximatelyEqualsHTMLString = function(a, b, debug) {
   return RSVP.all([normalize(a), normalize(b)]).then(function(windows) {
+    if (debug) {
+      console.log("A: ", windows[0].document.body.innerHTML);
+      console.log("B: ", windows[1].document.body.innerHTML);
+    }
     expect(windows[0].document.body).to.be.equalNode(windows[1].document.body)
   });
 };
@@ -27,7 +30,7 @@ var normalize = function(html) {
   return setupDOM(html).then(function(window) {
     var body = window.document.body;
     body.normalize();
-    cleanupChildNodes(body);
+    cleanupChildNodes(body, window);
     removeSingleEmptyBreakLine(body);
     return window;
   });
@@ -54,8 +57,49 @@ var removeSingleEmptyBreakLine = function(node) {
   };
 };
 
-var cleanupChildNodes = function(node) {
-  var children = node.childNodes
+var blockElements = Object.freeze([
+  "ADDRESS",
+  "ARTICLE",
+  "ASIDE",
+  "AUDIO",
+  "BLOCKQUOTE",
+  "CANVAS",
+  "DD",
+  "DIV",
+  "DL",
+  "FIELDSET",
+  "FIGCAPTION",
+  "FIGURE",
+  "FOOTER",
+  "FORM",
+  "H1",
+  "H2",
+  "H3",
+  "H4",
+  "H5",
+  "H6",
+  "HEADER",
+  "HGROUP",
+  "HR",
+  "NOSCRIPT",
+  "OL",
+  "OUTPUT",
+  "P",
+  "PRE",
+  "SECTION",
+  "TABLE",
+  "TFOOT",
+  "UL",
+  "VIDEO",
+  "LI"
+]);
+
+var isBlockElement = function(node) {
+  return (blockElements.indexOf(node.nodeName) !== -1)
+}
+
+var cleanupChildNodes = function(node, window) {
+  var children = node.childNodes;
   for (var index = children.length - 1; index >= 0; index--) {
     var childNode = children[index];
     switch (childNode.nodeType) {
@@ -63,9 +107,43 @@ var cleanupChildNodes = function(node) {
         if (!childNode.nodeValue) {
           node.removeChild(childNode);
         }
+
+        // Trim leading whitespace if the parent is a block element
+        if (index === 0 && isBlockElement(node) && node.nodeName !== "PRE") {
+          var trimmed = childNode.textContent.trimLeft();
+          if (trimmed) {
+            childNode.textContent = trimmed;
+          } else {
+            node.removeChild(childNode);
+          }
+          break;
+        }
+
+        // Trim whitespace if next sibling is a block element
+        var nextSibling = childNode.nextSibling;
+        if (nextSibling && isBlockElement(nextSibling) && node.nodeName !== "PRE") {
+          var trimmed = childNode.textContent.trimRight();
+          if (trimmed) {
+            childNode.textContent = trimmed;
+          } else {
+            node.removeChild(childNode);
+          }
+          break;
+        }
+
+        if (!nextSibling && isBlockElement(node) && node.nodeName !== "PRE") {
+          var trimmed = childNode.textContent.trimRight();
+          if (trimmed) {
+            childNode.textContent = trimmed;
+          } else {
+            node.removeChild(childNode);
+          }
+          break;
+        }
+
         break;
       case childNode.ELEMENT_NODE:
-        cleanupChildNodes(childNode);
+        cleanupChildNodes(childNode, window);
         break;
       case childNode.COMMENT_NODE:
         node.removeChild(childNode);

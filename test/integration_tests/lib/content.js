@@ -7,7 +7,7 @@ function ContentShouldEqual(item, shouldEqual, debug) {
     if (debug) {
       console.log("Content: ", content);
     }
-    return approximatelyEqualsHTMLString(content, shouldEqual);
+    return approximatelyEqualsHTMLString(content, shouldEqual, debug);
   });
 };
 
