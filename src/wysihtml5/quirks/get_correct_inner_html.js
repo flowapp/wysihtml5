@@ -16,17 +16,13 @@ var getCorrectInnerHTML = function(element) {
   if (innerHTML.indexOf(TILDE_ESCAPED) === -1) {
     return innerHTML;
   }
-  
-  var elementsWithTilde = element.querySelectorAll("[href*='~'], [src*='~']"),
-      url,
-      urlToSearch,
-      length,
-      i;
 
-  for (i = 0, length = elementsWithTilde.length; i < length; i++) {
-    url         = elementsWithTilde[i].href || elementsWithTilde[i].src;
-    urlToSearch = lang.string(url).replace("~").by(TILDE_ESCAPED);
-    innerHTML   = lang.string(innerHTML).replace(urlToSearch).by(url);
+  var elementsWithTilde = element.querySelectorAll("[href*='~'], [src*='~']");
+
+  for (var index = 0, length = elementsWithTilde.length; index < length; index++) {
+    var url = elementsWithTilde[index].href || elementsWithTilde[index].src;
+    var urlToSearch = url.replace(/~/g, TILDE_ESCAPED);
+    innerHTML = innerHTML.split(urlToSearch).join(url);
   }
   return innerHTML;
 };

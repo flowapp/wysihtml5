@@ -78,6 +78,7 @@ var array = function(arr) {
      *    });
      *    // => [2,4,6,8]
      */
+    // DEPRECATED
     map: function(callback, thisArg) {
       if (Array.prototype.map) {
         return arr.map(callback, thisArg);

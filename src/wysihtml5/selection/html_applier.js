@@ -377,7 +377,7 @@ HTMLApplier.prototype = {
   },
 
   isRemovable: function(el) {
-    return rangy.dom.arrayContains(this.tagNames, el.tagName.toLowerCase()) && lang.string(el.className).trim() == this.cssClass;
+    return rangy.dom.arrayContains(this.tagNames, el.tagName.toLowerCase()) && el.className.trim() == this.cssClass;
   },
 
   undoToTextNode: function(textNode, range, ancestorWithClass, ancestorWithStyle) {
