@@ -146,7 +146,7 @@ var Selection = Base.extend({
         ownNodes = [];
 
     for (var i = 0, maxi = ranges.length; i < maxi; i++) {
-        ownNodes.push(ranges[i].commonAncestorContainer || this.doc.body);
+        ownNodes.push(ranges[i].commonAncestorContainer || document.body);
     }
     return ownNodes;
   },
@@ -159,6 +159,34 @@ var Selection = Base.extend({
           return lang.array(nodeTypes).contains(node.nodeName);
       });
       nodes = nodes.concat(curNodes);
+    }
+    return nodes;
+  },
+
+  findNodesByType: function(nodeTypes) {
+    // TODO create `nodeTypes` cache, and benchmark it?
+    var ranges = this.getOwnRanges();
+    var nodes = [];
+
+    for (var index = 0, length = ranges.length; index < length; index++) {
+      var range = ranges[index];
+      if (range.collapsed || range.startContainer === range.endContainer) {
+        var node = this.composer.parentElement(range.startContainer, {
+          nodeName: nodeTypes
+        });
+        if (node) {
+          nodes.push(node);
+        }
+      } else {
+        var selectedNodes = range.getNodes([Node.ELEMENT_NODE], function(node) {
+          return lang.array(nodeTypes).contains(node.nodeName);
+        });
+        selectedNodes.forEach(function(selectedNode) {
+          if (this.composer.element.contains(selectedNode)) {
+            nodes.push(selectedNode);
+          }
+        }.bind(this));
+      }
     }
     return nodes;
   },
