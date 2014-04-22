@@ -1,6 +1,6 @@
 /**
- * @license wysihtml5x v<%= pkg.version %>
- * https://github.com/Edicy/wysihtml5
+ * @license wysihtml5x v@@version
+ * @@repo
  *
  * Author: Christopher Blum (https://github.com/tiff)
  * Secondary author of extended features: Oliver Pulges (https://github.com/pulges)
@@ -38,5 +38,6 @@ import "wysihtml5/text_substitutions/auto_list";
 import "wysihtml5/text_substitutions/blockquote";
 import "wysihtml5/text_substitutions/ticks";
 
-var version = "<%= pkg.version %>";
+var version = "@@version";
+
 export { version, Editor, Composer, lang, dom};
