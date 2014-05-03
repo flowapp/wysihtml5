@@ -12,9 +12,10 @@ var removeEmptyTextNodes = function(node) {
       childNodes        = lang.array(node.childNodes).get(),
       childNodesLength  = childNodes.length,
       i                 = 0;
-  for (; i<childNodesLength; i++) {
+
+  for (; i < childNodesLength; i++) {
     childNode = childNodes[i];
-    if (childNode.nodeType === Node.TEXT_NODE && childNode.data === "") {
+    if (childNode.nodeType === Node.TEXT_NODE && !childNode.data.trim()) {
       childNode.parentNode.removeChild(childNode);
     }
   }

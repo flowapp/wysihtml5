@@ -1,0 +1,140 @@
+-
+  description: "trailing one line selection"
+  content: "<p>Stringer [Barksdale]</p>"
+  clipboard:
+    html: "<p>Bell</p>"
+    plain: "Bell"
+  shouldEqual: "<p>Stringer Bell</p>"
+-
+  description: "trailing one line selection (w/ two lines in clipboard)"
+  content: "<p>Stringer [Barksdale]</p>"
+  clipboard:
+    html: "<p>Bell</p><p>Jimmy McNulty</p>"
+    plain: "Bell\nJimmy McNulty"
+  shouldEqual: "<p>Stringer Bell</p><p>Jimmy McNulty</p>"
+-
+  description: "leading one-line selection"
+  content: "<p>[Stringer] Barksdale</p>"
+  clipboard:
+    html: "<p>Avon</p>"
+    plain: "Avon"
+  shouldEqual: "<p>Avon Barksdale</p>"
+-
+  description: "leading one-line selection (w/ two lines in clipboard)"
+  content: "<p>[Stringer] Barksdale</p>"
+  clipboard:
+    html: "<p>Jimmy McNulty</p><p>Avon</p>"
+    plain: "Jimmy McNulty\nAvon"
+  shouldEqual: "<p>Jimmy McNulty</p><p>Avon Barksdale</p>"
+-
+  description: "one-line mid to mid selection"
+  content: "<p>D’Angelo Barksdale, [Stringer Bell], Avon Barksdale</p>"
+  clipboard:
+    html: "<p>Jimmy McNulty</p>"
+    plain: "Jimmy McNulty"
+  shouldEqual: "<p>D’Angelo Barksdale, Jimmy McNulty, Avon Barksdale</p>"
+-
+  description: "one-line mid to mid selection (w/ two lines in clipboard)"
+  content: "<p>D’Angelo Barksdale, [Stringer Bell], Avon Barksdale</p>"
+  clipboard:
+    html: "<p>Jimmy McNulty</p><p>Omar Little</p>"
+    plain: "Jimmy McNulty\nOmar Little"
+  shouldEqual: "<p>D’Angelo Barksdale, Jimmy McNulty</p><p>Omar Little, Avon Barksdale</p>"
+-
+  description: "one-line selection"
+  content: "<p>[Avon Barksdale]</p>"
+  clipboard:
+    html: "<p>Jimmy McNulty</p>"
+    plain: "Jimmy McNulty"
+  shouldEqual: "<p>Jimmy McNulty</p>"
+-
+  description: "one-line selection (w/ two lines in clipboard)"
+  content: "<p>[Avon Barksdale]</p>"
+  clipboard:
+    html: "<p>Jimmy McNulty</p><p>Stringer Bell</p>"
+    plain: "Jimmy McNulty\nStringer Bell"
+  shouldEqual: "<p>Jimmy McNulty</p><p>Stringer Bell</p>"
+-
+  description: "two-line leading to mid selection"
+  content: "<p>[Stringer</p><p>D’Angelo] Barksdale</p>"
+  clipboard:
+    html: "<p>Avon</p>"
+    plain: "Avon"
+  shouldEqual: "<p>Avon Barksdale</p>"
+-
+  description: "two-line leading to mid selection (w/ two lines in clipboard)"
+  content: "<p>[Stringer</p><p>D’Angelo] Barksdale</p>"
+  clipboard:
+    html: "<p>Jimmy McNulty</p><p>Avon</p>"
+    plain: "Jimmy McNulty\nAvon"
+  shouldEqual: "<p>Jimmy McNulty</p><p>Avon Barksdale</p>"
+-
+  description: "two-line mid to trailing selection"
+  content: "<p>D’Angelo [Barksdale</p><p>Stringer Bell]</p>"
+  clipboard:
+    html: "<p>McNulty</p>"
+    plain: "McNulty"
+  shouldEqual: "<p>D’Angelo McNulty</p>"
+-
+  description: "two-line mid to trailing selection (w/ two lines in clipboard)"
+  content: "<p>D’Angelo [Barksdale</p><p>Stringer Bell]</p>"
+  clipboard:
+    html: "<p>McNulty</p><p>Omar Little</p>"
+    plain: "McNulty\nOmar Little"
+  shouldEqual: "<p>D’Angelo McNulty</p><p>Omar Little</p>"
+-
+  description: "two-line mid to trailing selection (w/ sibling)"
+  content: "<p>D’Angelo [Barksdale</p><p>Stringer Bell]</p><p>Avon Barksdale</p>"
+  clipboard:
+    html: "<p>McNulty</p>"
+    plain: "McNulty"
+  shouldEqual: "<p>D’Angelo McNulty</p><p>Avon Barksdale</p>"
+-
+  description: "two-line mid to trailing selection (w/ sibling and two lines in clipboard) TDOD"
+  content: "<p>D’Angelo [Barksdale</p><p>Stringer Bell]</p><p>Avon Barksdale</p>"
+  clipboard:
+    html: "<p>McNulty</p><p>Omar Little</p>"
+    plain: "McNulty\nOmar Little"
+  shouldEqual: "<p>D’Angelo McNulty</p><p>Omar Little</p><p>Avon Barksdale</p>"
+-
+  description: "two-line mid to mid selection"
+  content: "<p>D’Angelo [Barksdale</p><p>Stringer] Bell</p>"
+  clipboard:
+    html: "<p>Russell</p>"
+    plain: "Russell"
+  shouldEqual: "<p>D’Angelo Russell Bell</p>"
+-
+  description: "two-line mid to mid selection (w/ two lines in clipboard)"
+  content: "<p>D’Angelo [Barksdale</p><p>Stringer] Bell</p>"
+  clipboard:
+    html: "<p>Russell</p><p>Jimmy</p>"
+    plain: "Russell\nJimmy"
+  shouldEqual: "<p>D’Angelo Russell</p><p>Jimmy Bell</p>"
+-
+  description: "two-line leading to trailing selection"
+  content: "<p>[D’Angelo Barksdale</p><p>Stringer Bell]</p>"
+  clipboard:
+    html: "<p>Jimmy McNulty</p>"
+    plain: "Jimmy McNulty"
+  shouldEqual: "<p>Jimmy McNulty</p>"
+-
+  description: "two-line leading to trailing selection (w/ two lines in clipboard)"
+  content: "<p>[D’Angelo Barksdale</p><p>Stringer Bell]</p>"
+  clipboard:
+    html: "<p>Jimmy McNulty</p><p>Omar Little</p>"
+    plain: "Jimmy McNulty\nOmar Little"
+  shouldEqual: "<p>Jimmy McNulty</p><p>Omar Little</p>"
+-
+  description: "three-line mid to mid selection"
+  content: "<p>D’Angelo [Barksdale</p><p>Avon Barksdale</p><p>Stringer] Bell</p>"
+  clipboard:
+    html: "<p>Russell</p>"
+    plain: "Russell"
+  shouldEqual: "<p>D’Angelo Russell Bell</p>"
+-
+  description: "three-line mid to mid selection (w/ two lines in clipboard)"
+  content: "<p>D’Angelo [Barksdale</p><p>Avon Barksdale</p><p>Stringer] Bell</p>"
+  clipboard:
+    html: "<p>Russell</p><p>McNulty</p>"
+    plain: "Russell\nMcNulty"
+  shouldEqual: "<p>D’Angelo Russell</p><p>McNulty Bell</p>"

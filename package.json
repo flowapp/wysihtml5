@@ -42,6 +42,10 @@
     "broccoli-dist-es6-module": "0.1.8",
     "broccoli-replace": "0.1.5",
     "broccoli-concat": "0.0.3",
-    "broccoli-global-export": "git://github.com/mogstad/broccoli-global-export.git"
+    "broccoli-global-export": "git://github.com/mogstad/broccoli-global-export.git",
+    "karma-chrome-launcher": "~0.1.3",
+    "karma-coffee-preprocessor": "~0.2.1",
+    "karma-chai": "~0.1.0",
+    "yamljs": "~0.1.5"
   }
 }
