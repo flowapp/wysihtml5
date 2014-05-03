@@ -181,8 +181,10 @@ var Composer = Base.extend({
     });
   },
 
-  ensureParagraph: function() {
-    if (this.isEmpty()) {
+  ensureParagraph: function(options) {
+    options = options || {};
+    var isEmpty = options.force ? !this.element.textContent.trim() : this.isEmpty();
+    if (isEmpty) {
       var paragraph = document.createElement("P");
       this.element.innerHTML = "";
       this.element.appendChild(paragraph);

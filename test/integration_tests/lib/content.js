@@ -5,7 +5,7 @@ var approximatelyEqualsHTMLString = require("../lib/approximately_equals_html_st
 function ContentShouldEqual(item, shouldEqual, debug) {
   return browser.execute("return arguments[0].innerHTML;", [item]).then(function(content) {
     if (debug) {
-      console.log("Content: ", content);
+      console.log("Content: “"+ content +"”");
     }
     return approximatelyEqualsHTMLString(content, shouldEqual, debug);
   });

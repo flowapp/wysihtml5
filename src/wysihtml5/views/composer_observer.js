@@ -13,9 +13,35 @@ import { browser } from "../browser";
 import { Constants } from "../constants";
 import quirks from "../quirks";
 import lang from "wysihtml5/lang";
+import { removeEmptyTextNodes } from "../dom/remove_empty_text_nodes";
 import { fromPlainText } from "../helpers/from_plain_text";
+import ClipboardIntegrator from "../helpers/clipboard_integrator";
 
 var newLineRegExp = /\n/g;
+
+Composer.prototype.handlePastedHTML = function(html) {
+  try {
+    var integrator = new ClipboardIntegrator(this)
+    integrator.set(html, "text/html");
+    integrator.integrate();
+  } catch(e) {
+    window.superError = e;
+    console.log("error: ", e);
+    throw e;
+  }
+};
+
+Composer.prototype.handlePastedPlainText = function(text) {
+  try {
+    var integrator = new ClipboardIntegrator(this)
+    integrator.set(text, "text/plain");
+    integrator.integrate();
+  } catch(e) {
+    window.superError = e;
+    console.log("error: ", e);
+    throw e;
+  }
+};
 
 Composer.prototype.observe = function() {
   var that                = this,
@@ -65,33 +91,22 @@ Composer.prototype.observe = function() {
       clipboardData.setData("text/html", node.innerHTML);
       if (e.type == "cut") {
         range.deleteContents();
+        this.ensureParagraph({force: true});
       }
       e.preventDefault();
       that._checkForValueAndUpdateClass();
     }
-  });
+  }.bind(this));
 
   dom.observe(element, pasteEvents, function(e) {
     var clipboardData = e.clipboardData;
     if (clipboardData) {
       var range = that.selection.getRange();
-      var host = document.createElement("div");
       var data = clipboardData.getData("text/html");
       if (data) {
-        host.innerHTML = data;
-        that.parent.parse(host);
-        var fragment = dom.nodeList.toArray(host.childNodes);
-
-        for (var i = 0; i < fragment.length; i++) {
-          if (fragment[i].nodeType == Node.TEXT_NODE) {
-            fragment[i] = fromPlainText(fragment[i].textContent)[0];
-          }
-        }
-
-        that.selection.insertElements(fragment);
+        this.handlePastedHTML(data);
       } else if (data = clipboardData.getData("Text")) {
-        var fragment = fromPlainText(data);
-        that.selection.insertElements(fragment);
+        this.handlePastedPlainText(data);
       }
       var textNodes = that._textNodes(that.element);
       that._processNodesForBlockTextSubstitution(textNodes);
@@ -104,7 +119,7 @@ Composer.prototype.observe = function() {
         }, keepScrollPosition);
       }, 0)
     }
-  });
+  }.bind(this));
 
   // --------- neword event ---------
   dom.observe(element, "keyup", function(event) {
@@ -147,6 +162,7 @@ Composer.prototype.observe = function() {
     });
   }
 
+  // TODO write failing implementation test for this
   if (browser.hasHistoryIssue() && browser.supportsSelectionModify()) {
     dom.observe(element, "keydown", function(event) {
       if (!event.metaKey && !event.ctrlKey) {

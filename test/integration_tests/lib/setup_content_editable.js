@@ -28,14 +28,20 @@ function SetSelection(parent) {
   nodes.forEach(function(node) {
     var text = node.nodeValue;
     var index;
+    var tempRange = {};
     index = text.indexOf("[");
     if (index !== -1) {
       node.nodeValue = text = text.replace("[", "");
       range.setStart(node, index);
+      tempRange.startContainer = node;
+      tempRange.startOffset = index;
     }
     index = text.indexOf("]");
     if (index !== -1) {
       node.nodeValue = text = text.replace("]", "");
+      if (tempRange.startContainer === node) {
+        range.setStart(node, tempRange.startOffset)
+      }
       range.setEnd(node, index);
     }
 
