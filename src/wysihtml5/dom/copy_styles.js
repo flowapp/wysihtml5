@@ -7,7 +7,7 @@
  *
  * @param {Array} stylesToCopy List of styles which should be copied
  * @return {Object} Returns an object which offers the "from" method which can be invoked with the element where to
- *    copy the styles from., this again returns an object which provides a method named "to" which can be invoked 
+ *    copy the styles from., this again returns an object which provides a method named "to" which can be invoked
  *    with the element where to copy the styles to (see example)
  *
  * @example
@@ -20,10 +20,10 @@
 
 import { setStyles } from "./set_styles";
 import { getStyle } from "./get_style";
-
+import lang from "wysihtml5/lang";
 /**
  * Mozilla, WebKit and Opera recalculate the computed width when box-sizing: boder-box; is set
- * So if an element has "width: 200px; -moz-box-sizing: border-box; border: 1px;" then 
+ * So if an element has "width: 200px; -moz-box-sizing: border-box; border: 1px;" then
  * its computed css width will be 198px
  *
  * See https://bugzilla.mozilla.org/show_bug.cgi?id=520992
@@ -52,9 +52,9 @@ var copyStyles = function(stylesToCopy) {
   return {
     from: function(element) {
       if (shouldIgnoreBoxSizingBorderBox(element)) {
-        stylesToCopy = wysihtml5.lang.array(stylesToCopy).without(BOX_SIZING_PROPERTIES);
+        stylesToCopy = lang.array(stylesToCopy).without(BOX_SIZING_PROPERTIES);
       }
-      
+
       var cssText = "",
           length  = stylesToCopy.length,
           i       = 0,
@@ -63,7 +63,7 @@ var copyStyles = function(stylesToCopy) {
         property = stylesToCopy[i];
         cssText += property + ":" + getStyle(property).from(element) + ";";
       }
-      
+
       return {
         to: function(element) {
           setStyles(cssText).on(element);

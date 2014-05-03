@@ -18,32 +18,9 @@ var Selection = Base.extend({
 
     this.editor = editor;
     this.composer = composer;
-    this.doc = document;
+    this.doc = document; // Deprecated
     this.contain = contain;
     this.unselectableClass = unselectableClass || false;
-  },
-
-  /**
-   * Get the current selection as a bookmark to be able to later restore it
-   *
-   * @return {Object} An object that represents the current selection
-   */
-  getBookmark: function() {
-    var range = this.getRange();
-    return range && range.cloneRange();
-  },
-
-  /**
-   * Restore a selection retrieved via wysihtml5.Selection.prototype.getBookmark
-   *
-   * @param {Object} bookmark An object that represents the current selection
-   */
-  setBookmark: function(bookmark) {
-    if (!bookmark) {
-      return;
-    }
-
-    this.setSelection(bookmark);
   },
 
   /**
@@ -191,70 +168,12 @@ var Selection = Base.extend({
     return nodes;
   },
 
-  containsUneditable: function() {
-    var uneditables = this.getOwnUneditables(),
-        selection = this.getSelection();
-
-    for (var i = 0, maxi = uneditables.length; i < maxi; i++) {
-      if (selection.containsNode(uneditables[i])) {
-        return true;
-      }
-    }
-
-    return false;
-  },
-
   deleteContents: function()  {
     var ranges = this.getOwnRanges();
     for (var i = ranges.length; i--;) {
       ranges[i].deleteContents();
     }
     this.setSelection(ranges[0]);
-  },
-
-  getPreviousNode: function(node, ignoreEmpty) {
-    if (!node) {
-      var selection = this.getSelection();
-      node = selection.anchorNode;
-    }
-
-    if (node === this.contain) {
-        return false;
-    }
-
-    var ret = node.previousSibling,
-        parent;
-
-    if (ret === this.contain) {
-        return false;
-    }
-
-    if (ret && ret.nodeType !== 3 && ret.nodeType !== 1) {
-       // do not count comments and other node types
-       ret = this.getPreviousNode(ret, ignoreEmpty);
-    } else if (ret && ret.nodeType === 3 && (/^\s*$/).test(ret.textContent)) {
-      // do not count empty textnodes as previus nodes
-      ret = this.getPreviousNode(ret, ignoreEmpty);
-    } else if (ignoreEmpty && ret && ret.nodeType === 1 && !lang.array(["BR", "HR", "IMG"]).contains(ret.nodeName) && (/^[\s]*$/).test(ret.innerHTML)) {
-      // Do not count empty nodes if param set.
-      // Contenteditable tends to bypass and delete these silently when deleting with caret
-      ret = this.getPreviousNode(ret, ignoreEmpty);
-    } else if (!ret && node !== this.contain) {
-      parent = node.parentNode;
-      if (parent !== this.contain) {
-          ret = this.getPreviousNode(parent, ignoreEmpty);
-      }
-    }
-
-    return (ret !== this.contain) ? ret : false;
-  },
-
-  caretIsInTheBeginnig: function() {
-    var selection = this.getSelection();
-    var node = selection.anchorNode;
-    var offset = selection.anchorOffset;
-
-    return (offset === 0 && !this.getPreviousNode(node, true));
   },
 
   caretIsAtStartOfNode: function(parentNode, selectedRange, selectedNode) {
@@ -273,25 +192,6 @@ var Selection = Base.extend({
     }
     if (selectedRange.startOffset === 0) {
       return tester(selectedNode, parentNode);
-    }
-    return false;
-  },
-
-  caretIsBeforeUneditable: function() {
-    var selection = this.getSelection(),
-        node = selection.anchorNode,
-        offset = selection.anchorOffset;
-
-    if (offset === 0) {
-      var prevNode = this.getPreviousNode(node, true);
-      if (prevNode) {
-        var uneditables = this.getOwnUneditables();
-        for (var i = 0, maxi = uneditables.length; i < maxi; i++) {
-          if (prevNode === uneditables[i]) {
-            return uneditables[i];
-          }
-        }
-      }
     }
     return false;
   },
@@ -320,68 +220,6 @@ var Selection = Base.extend({
     }
   },
 
-  insertElements: function(elements) {
-    var range = this.getRange();
-    if (!range.collapsed) {
-      range.deleteContents();
-      range = this.getRange();
-    }
-
-    var items = elements.map(function(node) {
-      if (node.nodeType == Node.TEXT_NODE) {
-        var fragment = document.createDocumentFragment();
-        fragment.appendChild(node);
-        return fragment;
-      }
-      return node;
-    });
-
-    var selectedNode = this.getSelectedNode();
-    var oldLastChild;
-    var blockElement = this.composer.parentElement(selectedNode, {
-      nodeName: ["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "UL", "OL", "BLOCKQUOTE"]
-    });
-
-    if (!blockElement) {
-      this.composer.ensureParagraph();
-      blockElement = this.contain.querySelector("P") || this.contain.firstElementChild;
-    }
-
-    // Extract the tail of the current block
-    var endRange = range.cloneRange();
-    endRange.setEndAfter(blockElement.lastChild);
-
-    if (endRange.toString()) {
-      var documentFragment = endRange.extractContents();
-      var lastChild = items[items.length - 1];
-      oldLastChild = lastChild.lastChild;
-      dom.appendChildNodes(documentFragment, lastChild);
-    } else if (elements.length > 1) {
-      oldLastChild = elements[elements.length - 1];
-    }
-
-    // Integrate the first block of content with the current block element
-    var firstChild = items[0];
-    if (firstChild) {
-      items.shift();
-      dom.appendChildNodes(firstChild, blockElement, (!!blockElement.textContent));
-    }
-
-    // Insert it
-    var fragment = document.createDocumentFragment();
-    items.forEach(function(element) {
-      fragment.appendChild(element);
-    });
-    dom.insert(fragment).after(blockElement);
-
-    // Restore the selection
-    var item = oldLastChild || blockElement;
-    if (item) {
-      this.setAfter(item);
-    }
-  },
-
-  // TODO: has problems in chrome 12. investigate block level and uneditable area inbetween
   executeAndRestore: function(method, restoreScrollPosition) {
     var body                  = document.body,
         oldScrollTop          = restoreScrollPosition && body.scrollTop,
@@ -541,15 +379,6 @@ var Selection = Base.extend({
       range.insertNode(node);
     }
     return node;
-  },
-
-  /**
-   * https://developer.mozilla.org/en/DOM/Selection/modify
-   */
-  selectLine: function() {
-    var selection = window.getSelection();
-    selection.modify("move", "left", "lineboundary");
-    selection.modify("extend", "right", "lineboundary");
   },
 
   getText: function() {

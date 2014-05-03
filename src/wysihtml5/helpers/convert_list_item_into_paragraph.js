@@ -8,7 +8,7 @@ import { nodeList } from "../dom/node_list";
   @method convertListItemsIntoParagraphs
   @static
   @param {Array} listItems
-  @return {Array} pragraphs
+  @return {Array} paragraphs
 */
 
 var convertListItemsIntoParagraphs = function(listItems) {

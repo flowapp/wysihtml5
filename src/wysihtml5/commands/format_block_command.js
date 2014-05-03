@@ -21,6 +21,7 @@ var FormatBlockCommand = BlockCommand.extend({
   exec: function(nodeName) {
     nodeName = this._nodeName(nodeName);
 
+    // TODO just use `findNodesByType`?
     var selectedNodes = this.composer.selection.findNodesInSelection(Constants.BLOCK_ELEMENTS);
     selectedNodes = selectedNodes.concat(this.composer.selection.getSelectedOwnNodes());
 
