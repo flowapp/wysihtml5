@@ -60,6 +60,13 @@ Commands.RegisterCommand("blockquote", BlockquoteCommand);
 Commands.RegisterCommand("paragraph", ParagraphCommand);
 Commands.RegisterCommand("header", HeaderCommand);
 
+// MIME Types
+import PlainParser from "wysihtml5/mime_parsers/plain_parser";
+import HTMLParser from "wysihtml5/mime_parsers/html_parser";
+
+Composer.RegisterMIMEParser("text/plain", PlainParser);
+Composer.RegisterMIMEParser("text/html", HTMLParser);
+
 // Text Substitutions
 import "wysihtml5/text_substitutions/auto_link";
 import "wysihtml5/text_substitutions/auto_list";
