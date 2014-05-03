@@ -15,9 +15,11 @@ var Composer = Base.extend({
   // Needed for firefox in order to display a proper caret in an empty contentEditable
   CARET_HACK: "<br>",
 
+  // I know… this is probably a silly idea
   _keyboardHandlers: [],
   _textSubstitutions: [],
   _cleanupMethods: [],
+  _MIMETypes: [],
 
   constructor: function(parent, editableElement, config) {
     this.parent = parent;
@@ -194,6 +196,10 @@ var Composer = Base.extend({
     }
   },
 
+  parserForMIME: function(mime) {
+    return Composer.prototype._MIMETypes[mime];
+  },
+
   // Text Substitutions
 
   _lastInsertedBlock: function(range, e) {
@@ -295,6 +301,10 @@ var Composer = Base.extend({
     this.element.classList.toggle("has-value", !this.isEmpty());
   }
 });
+
+Composer.RegisterMIMEParser = function(mime, parser) {
+  Composer.prototype._MIMETypes[mime] = parser;
+}
 
 Composer.RegisterKeyboardHandler = function(matcher, callback) {
   Composer.prototype._keyboardHandlers.push({
