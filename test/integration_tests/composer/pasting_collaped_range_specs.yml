@@ -1,0 +1,138 @@
+-
+  description: "integrate into exisiting block element"
+  it: "should integrate the first child into the current block element"
+  content: "<h2>Avon |</h2>"
+  clipboard:
+    html: "<p>Barksdale</p>"
+    plain: "Barksdale"
+  shouldEqual: "<h2>Avon Barksdale</h2>"
+-
+  description: "An issue"
+  it: "should integrate the first child into the current block element"
+  content: "<h2>Avon |</h2>"
+  clipboard:
+    html: "<p>Barksdale</p><p>Jimmy McNulty</p>"
+    plain: "Barksdale\nJimmy McNulty"
+  shouldEqual:
+    html: "<h2>Avon Barksdale</h2><p>Jimmy McNulty</p>"
+    plain: "<h2>Avon Barksdale</h2><h2>Jimmy McNulty</h2>"
+-
+  description: "LOL"
+  it: "should append a single word at end of paragraph"
+  content: "<p>Avon |</p>"
+  clipboard:
+    html: "<p>Barksdale</p>"
+    plain: "Barksdale"
+  shouldEqual: "<p>Avon Barksdale</p>"
+-
+  description: "adding spaces"
+  it: "should ensure whitespace between cursor and pasted word"
+  content: "<p>Avon|</p>"
+  clipboard:
+    html: "<p>Barksdale</p>"
+    plain: "Barksdale"
+  shouldEqual: "<p>Avon Barksdale</p>"
+-
+  description: ""
+  it: "should insert word at cursor"
+  content: "<p>| Barksdale</p>"
+  clipboard:
+    html: "<p>Avon</p>"
+    plain: "Avon"
+  shouldEqual: "<p>Avon Barksdale</p>"
+-
+  description: ""
+  it: "should ensure whitespace between cursor and pasted word"
+  content: "<p>|Barksdale</p>"
+  clipboard:
+    html: "<p>Avon</p>"
+    plain: "Avon"
+  shouldEqual: "<p>Avon Barksdale</p>"
+-
+  description: ""
+  it: "should ensure whitespace between cursor and pasted word"
+  content: "<p>|Barksdale</p>"
+  clipboard:
+    html: "<p>Jimmy McNulty</p><p>Avon</p>"
+    plain: "Jimmy McNulty\nAvon"
+  shouldEqual: "<p>Jimmy McNulty</p><p>Avon Barksdale</p>"
+-
+  description: ""
+  it: "should ensure whitespace between cursor and pasted word"
+  content: "<h2>|Barksdale</h2>"
+  clipboard:
+    html: "<p>Jimmy McNulty</p><p>Avon</p>"
+    plain: "Jimmy McNulty\nAvon"
+  shouldEqual:
+    html: "<h2>Jimmy McNulty</h2><p>Avon Barksdale</p>"
+    plain: "<h2>Jimmy McNulty</h2><h2>Avon Barksdale</h2>"
+-
+  description: "LOL"
+  content: "<p>Russell|Bell</p>"
+  clipboard:
+    html: "<p>Stringer</p>"
+    plain: "Stringer"
+  shouldEqual: "<p>Russell Stringer Bell</p>"
+-
+  description: "mid collapsed selection"
+  content: "<p>Russell | Bell</p>"
+  clipboard:
+    html: "<p>Stringer</p>"
+    plain: "Stringer"
+  shouldEqual: "<p>Russell Stringer Bell</p>"
+-
+  description: "mid collapsed selection"
+  content: "<p>Avon|Bell</p>"
+  clipboard:
+    html: "<p>Barksdale</p><p>Stringer</p>"
+    plain: "Barksdale\nStringer"
+  shouldEqual: "<p>Avon Barksdale</p><p>Stringer Bell</p>"
+-
+  description: "mid collapsed selection"
+  content: "<p>Avon|Bell</p>"
+  clipboard:
+    html: "<p>Barksdale</p><p>Jimmy McNulty</p><p>Stringer</p>"
+    plain: "Barksdale\nJimmy McNulty\nStringer"
+  shouldEqual: "<p>Avon Barksdale</p><p>Jimmy McNulty</p><p>Stringer Bell</p>"
+-
+  description: "advanced integration"
+  it: "should work"
+  content: "<h2>Avon|</h2>"
+  clipboard:
+    html: "<p>Barksdale</p>"
+    plain: "Barksdale"
+  shouldEqual: "<h2>Avon Barksdale</h2>"
+-
+  description: "advanced integration (w/ two line clipboard)"
+  it: "should work"
+  content: "<h2>Avon|</h2>"
+  clipboard:
+    html: "<p>Barksdale</p><p>Stringer Bell</p>"
+    plain: "Barksdale\nStringer Bell"
+  shouldEqual:
+    html: "<h2>Avon Barksdale</h2><p>Stringer Bell</p>"
+    plain: "<h2>Avon Barksdale</h2><h2>Stringer Bell</h2>"
+-
+  description: "pasting in empty node"
+  it: "should work"
+  content: "<p>|<br></p>"
+  clipboard:
+    html: "<p>Avon Barksdale</p>"
+    plain: "Avon Barksdale"
+  shouldEqual: "<p>Avon Barksdale</p>"
+-
+  description: "pasting in empty node (w/ two line clipboard)"
+  it: "should work"
+  content: "<p>|<br></p>"
+  clipboard:
+    html: "<p>Avon Barksdale</p><p>Stringer Bell</p>"
+    plain: "Avon Barksdale\nStringer Bell"
+  shouldEqual: "<p>Avon Barksdale</p><p>Stringer Bell</p>"
+-
+  description: "pasting in empty node with different node type"
+  it: "should use pasted node type"
+  content: "<p>|<br></p>"
+  clipboard:
+    html: "<h2>Avon Barksdale</h2>"
+    plain: "Avon Barksdale"
+  shouldEqual: "<p>Avon Barksdale</p>"

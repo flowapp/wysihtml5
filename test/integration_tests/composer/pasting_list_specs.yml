@@ -1,0 +1,61 @@
+-
+  description: "BOP"
+  content: "<ul><li>Stringer|</li></ul>"
+  clipboard:
+    html: "<p>Bell</p>"
+    plain: "Bell"
+  shouldEqual: "<ul><li>Stringer Bell</li></ul>"
+-
+  description: "BOP2"
+  content: "<ul><li>Stringer|</li></ul>"
+  clipboard:
+    html: "<p>Bell</p><p>Avon Barksdale</p>"
+    plain: "Bell\nAvon Barksdale"
+  shouldEqual:
+    html: "<ul><li>Stringer Bell</li></ul><p>Avon Barksdale</p>"
+    plain: "<ul><li>Stringer Bell</li><li>Avon Barksdale</li></ul>"
+-
+  description: "BOP2"
+  content: "<ul><li>|</li></ul>"
+  clipboard:
+    html: "<p>Stringer Bell</p>"
+    plain: "Stringer Bell"
+  shouldEqual:
+    html: "<ul><li>Stringer Bell</li></ul>"
+    plain: "<ul><li>Stringer Bell</li></ul>"
+-
+  description: "BOP2"
+  content: "<ul><li>Avon Barksdale</li><li>|</li></ul>"
+  clipboard:
+    html: "<p>Stringer Bell</p>"
+    plain: "Stringer Bell"
+  shouldEqual:
+    html: "<ul><li>Avon Barksdale</li><li>Stringer Bell</li></ul>"
+    plain: "<ul><li>Avon Barksdale</li><li>Stringer Bell</li></ul>"
+-
+  description: "BOP2"
+  content: "<ul><li>|<br></li></ul>"
+  clipboard:
+    html: "<p>Stringer Bell</p>"
+    plain: "Stringer Bell"
+  shouldEqual:
+    html: "<ul><li>Stringer Bell</li></ul>"
+    plain: "<ul><li>Stringer Bell</li>"
+-
+  description: "BOP2"
+  content: "<ul><li>Stringer Bell</li><li>Avon|</li><li>Omar Little</li></ul>"
+  clipboard:
+    html: "<p>Barksdale</p>"
+    plain: "Barksdale"
+  shouldEqual:
+    html: "<ul><li>Stringer Bell</li><li>Avon Barksdale</li><li>Omar Little</li></ul>"
+    plain: "<ul><li>Stringer Bell</li><li>Avon Barksdale</li><li>Omar Little</li></ul>"
+-
+  description: "works"
+  content: "<ul><li>Avon|</li><li>Omar Little</li></ul>"
+  clipboard:
+    html: "<p>Barksdale</p><p>Stringer Bell</p>"
+    plain: "Barksdale\nStringer Bell"
+  shouldEqual:
+    html: "<ul><li>Avon Barksdale</li></ul><p>Stringer Bell</p><ul><li>Omar Little</li></ul>"
+    plain: "<ul><li>Avon Barksdale</li><li>Stringer Bell</li><li>Omar Little</li></ul>"
