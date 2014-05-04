@@ -9,6 +9,9 @@ import { selectedNodesClosestTo } from "../helpers/selected_nodes_closest_to";
 
 
 var PreCommand = BlockCommand.extend({
+  parsingRules: {
+    pre: {}
+  },
   state: function() {
     return !!formatInline.state(this.composer, undefined, "pre").length;
   },

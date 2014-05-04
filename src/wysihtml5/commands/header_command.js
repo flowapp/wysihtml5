@@ -3,6 +3,15 @@ import { Constants } from "../constants";
 import BlockquoteCommand from "./blockquote_command";
 
 var HeaderCommand = FormatBlockCommand.extend({
+  parsingRules: {
+    h1: {},
+    h2: {},
+    h3: {},
+    h4: {},
+    h5: {},
+    h6: {}
+  },
+
   shouldUnapplyForCommand: function(command) {
     if (command instanceof BlockquoteCommand) {
       return false

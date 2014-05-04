@@ -7,6 +7,12 @@ import { renameElement } from "../dom/rename_element";
 import convertListItemsIntoParagraphs from "../helpers/convert_list_item_into_paragraph";
 
 var ListCommand = BlockCommand.extend({
+  parsingRules: {
+    ul: {},
+    ol: {},
+    li: {}
+  },
+
   exec: function() {
     var selectedNode = this.composer.selection.getSelectedNode();
     var oppositeList = this.composer.parentElement(selectedNode, {

@@ -12,6 +12,9 @@ import { convertNestedBlockquoteIntoParagraph } from "../helpers/convert_nested_
 import { selectedNodesClosestTo } from "../helpers/selected_nodes_closest_to";
 
 var BlockquoteCommand = BlockCommand.extend({
+  parsingRules: {
+    blockquote: {}
+  },
   shouldUnapplyForCommand: function(command) {
     return false;
   },
