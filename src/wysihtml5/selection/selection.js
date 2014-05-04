@@ -200,6 +200,9 @@ var Selection = Base.extend({
     if (this.caretIsAtEndOfRange(range)) {
       var parent = range.endContainer.parentNode;
       if (parent === until) {
+        if (range.endContainer.nodeType === Node.TEXT_NODE) {
+          return (parent.lastChild === range.endContainer);
+        }
         return true;
       }
       var newRange = document.createRange();
