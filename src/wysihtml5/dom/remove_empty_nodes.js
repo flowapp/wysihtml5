@@ -7,24 +7,27 @@
  */
 
 var removeEmptyNodes = function(node) {
-  var element, firstNode, lastNode, firstNodeText, lastNodeText;
+  var index, lastNodeIndex, element, firstNode, lastNode, firstNodeText, lastNodeText;
   element = node.cloneNode(true);
-
+  index = 0;
   while (element.childNodes.length) {
-    firstNode = element.childNodes[0];
-    lastNode = element.childNodes[element.childNodes.length - 1];
+    lastNodeIndex = Math.max(element.childNodes.length - 1, 0)
+    firstNode = element.childNodes[index];
+    lastNode = element.childNodes[lastNodeIndex];
     firstNodeText = (firstNode.textContent || "").trim();
     lastNodeText = (lastNode.textContent || "").trim();
 
     if (!firstNodeText) {
       element.removeChild(firstNode);
+    } else {
+      index++;
     }
 
     if (!lastNodeText && lastNode != firstNode) {
       element.removeChild(lastNode);
     }
 
-    if (firstNodeText && lastNodeText) {
+    if (index >= lastNodeIndex) {
       break;
     }
   }
