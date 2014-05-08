@@ -168,21 +168,24 @@ var Composer = Base.extend({
   },
 
   _initLineBreaking: function() {
-    var that = this,
-        _this = this;
+    var timeout;
+
+    dom.observe(this.element, "blur", function(e) {
+      clearTimeout(timeout);
+    }.bind(this));
 
     dom.observe(this.element, ["focus", "keydown"], function(e) {
       if (e.type == "focus" || e.keyCode == Constants.BACKSPACE_KEY) {
-        setTimeout(function() {
-          that.ensureParagraph();
-        }, 0);
+        timeout = setTimeout(function() {
+          this.ensureParagraph();
+        }.bind(this), 0);
       }
-    });
+    }.bind(this));
 
     dom.observe(this.element, "keydown", function(event) {
-      _this._handleKeyboardHandlers(event);
-      _this._lookForTextSubstitution(event);
-    });
+      this._handleKeyboardHandlers(event);
+      this._lookForTextSubstitution(event);
+    }.bind(this));
   },
 
   ensureParagraph: function() {
