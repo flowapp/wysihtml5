@@ -44,11 +44,11 @@ function _while(node, options, callback) {
   var until;
   if (options.until && options.until.contains(node)) {
     until = options.until;
-  } else {
+  } else if (node && node.ownerDocument) {
     until = node.ownerDocument.body;
   }
   var results;
-  while (levels-- && node && node !== until) {
+  while (levels-- && node && until && node !== until) {
     results = callback(node)
     if (results !== undefined) {
       return results;
