@@ -303,7 +303,7 @@ var Composer = Base.extend({
 
   _checkForValueAndUpdateClass: function() {
     var VISUAL_BLOCKS, emptyText, containsVisualBlocks;
-    VISUAL_BLOCKS = ["ul", "ol", "blockquote", "pre"]
+    VISUAL_BLOCKS = ["ul", "ol", "blockquote", "pre", "img"]
 
     for(var i = 0; i < VISUAL_BLOCKS.length; i++) {
       if(this.element.querySelectorAll(VISUAL_BLOCKS[i]).length > 0) {
