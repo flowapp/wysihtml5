@@ -1,6 +1,6 @@
 require "../lib/common"
 
-describe.only "Clear Inline Block Styles", ->
+describe "Clear Inline Block Styles", ->
   describe "collapsed range", ->
     beforeEach ->
       SetupContentEditable(
