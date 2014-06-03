@@ -22,9 +22,11 @@ Composer.RegisterKeyboardHandler(function(e) {
 
     if (composer.selection.caretIsAtStartOfNode(blockElement)) {
       var previousSibling = blockElement && blockElement.previousElementSibling;
-      if (previousSibling && !previousSibling.textContent) {
-        previousSibling.parentNode.removeChild(previousSibling);
-        e.preventDefault();
+      if (previousSibling) {
+        if(!previousSibling.textContent && !previousSibling.querySelector("img")) {
+          previousSibling.parentNode.removeChild(previousSibling);
+          e.preventDefault();
+        }
       }
     }
   }
