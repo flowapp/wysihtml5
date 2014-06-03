@@ -115,7 +115,7 @@ var Composer = Base.extend({
   },
 
   isEmpty: function() {
-    return !this.element.textContent;
+    return !this.element.textContent && !this.element.querySelector("img");
   },
 
   parentElement: function(node, matchingSet, options) {

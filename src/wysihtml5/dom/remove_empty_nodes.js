@@ -14,8 +14,25 @@ var removeEmptyNodes = function(node) {
     lastNodeIndex = Math.max(element.childNodes.length - 1, 0);
     firstNode = element.childNodes[index];
     lastNode = element.childNodes[lastNodeIndex];
-    firstNodeText = (firstNode.textContent || "").trim();
-    lastNodeText = (lastNode.textContent || "").trim();
+    if(firstNode) {
+      if(firstNode.nodeName == "IMG" || firstNode.querySelector("img")) {
+        firstNodeText = true;
+      } else {
+        firstNodeText = (firstNode.textContent || "").trim();
+      }
+    } else {
+      firstNodeText = ""
+    }
+
+    if(lastNode) {
+      if(lastNode.nodeName == "IMG" || lastNode.querySelector("img")) {
+        lastNodeText = true;
+      } else {
+        lastNodeText = (lastNode.textContent || "").trim();
+      }
+    } else {
+      lastNodeText = ""
+    }
 
     if (!firstNodeText) {
       element.removeChild(firstNode);
