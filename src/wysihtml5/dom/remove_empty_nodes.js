@@ -15,7 +15,7 @@ var removeEmptyNodes = function(node) {
     firstNode = element.childNodes[index];
     lastNode = element.childNodes[lastNodeIndex];
     if(firstNode) {
-      if(firstNode.nodeName == "IMG" || firstNode.querySelector("img")) {
+      if(firstNode.nodeName == "IMG" || (firstNode.nodeType == 1 && firstNode.querySelector("img"))) {
         firstNodeText = true;
       } else {
         firstNodeText = (firstNode.textContent || "").trim();
@@ -25,7 +25,7 @@ var removeEmptyNodes = function(node) {
     }
 
     if(lastNode) {
-      if(lastNode.nodeName == "IMG" || lastNode.querySelector("img")) {
+      if(lastNode.nodeName == "IMG" || (lastNode.nodeType == 1 && lastNode.querySelector("img"))) {
         lastNodeText = true;
       } else {
         lastNodeText = (lastNode.textContent || "").trim();
