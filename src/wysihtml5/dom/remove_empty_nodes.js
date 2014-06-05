@@ -7,45 +7,21 @@
  */
 
 var removeEmptyNodes = function(node) {
-  var index, lastNodeIndex, element, firstNode, lastNode, firstNodeText, lastNodeText;
+  var index, lastNodeIndex, element;
   element = node.cloneNode(true);
   index = 0;
-  while (element.childNodes.length) {
-    lastNodeIndex = Math.max(element.childNodes.length - 1, 0);
-    firstNode = element.childNodes[index];
-    lastNode = element.childNodes[lastNodeIndex];
-    if(firstNode) {
-      if(firstNode.nodeName == "IMG" || (firstNode.nodeType == 1 && firstNode.querySelector("img"))) {
-        firstNodeText = true;
-      } else {
-        firstNodeText = (firstNode.textContent || "").trim();
-      }
-    } else {
-      firstNodeText = ""
+  while (index != element.childNodes.length) {
+    var nodeContainsImage, nodeHasTextContent;
+    var node = element.childNodes[index];
+    if (node) {
+      nodeContainsImage = node.nodeName == "IMG" || (node.nodeType == 1 && node.querySelector("img"));
+      nodeHasTextContent = (node.textContent || "").trim();
     }
 
-    if(lastNode) {
-      if(lastNode.nodeName == "IMG" || (lastNode.nodeType == 1 && lastNode.querySelector("img"))) {
-        lastNodeText = true;
-      } else {
-        lastNodeText = (lastNode.textContent || "").trim();
-      }
-    } else {
-      lastNodeText = ""
-    }
-
-    if (!firstNodeText) {
-      element.removeChild(firstNode);
+    if (!nodeContainsImage && !nodeHasTextContent) {
+      element.removeChild(node);
     } else {
       index++;
-    }
-
-    if (!lastNodeText && lastNode != firstNode) {
-      element.removeChild(lastNode);
-    }
-
-    if (index >= lastNodeIndex) {
-      break;
     }
   }
 
