@@ -64,7 +64,6 @@ var ClipboardIntegrator = Base.extend({
     });
 
     var selectedNode = this.selection.getSelectedNode();
-    //var oldLastChild;
     var blockElement = this.composer.parentElement(selectedNode, {
       nodeName: ["H1", "H2", "H3", "H4", "H5", "H6", "P", "PRE", "UL", "OL", "BLOCKQUOTE", "LI"]
     });
@@ -86,7 +85,6 @@ var ClipboardIntegrator = Base.extend({
         this._insertTrailingWhitespaceIfNeeded(lastChild, documentFragment.firstChild);
       }
       restore.endIntegration = lastChild.lastChild;
-      console.log("restore.endIntegration: ", restore.endIntegration);
       appendChildNodes(documentFragment, lastChild);
     } else {
       if (orginalEndContainer) {
@@ -137,7 +135,6 @@ var ClipboardIntegrator = Base.extend({
 
     var item = restore.endIntegration || restore.multipleChildren || restore.onlyChild;
     if (item) {
-      console.log(item, item.parentNode);
       this.selection.setAfter(item);
     }
   },
@@ -171,8 +168,6 @@ var ClipboardIntegrator = Base.extend({
       var element = document.createElement(context || "p");
       element.appendChild(node);
       return element;
-    } else if (node.nodeName === "DIV") {
-      console.log("Fuck");
     }
     return node;
   },
