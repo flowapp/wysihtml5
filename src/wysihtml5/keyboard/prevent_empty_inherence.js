@@ -1,7 +1,5 @@
 import { Constants } from "../constants";
 import { Composer } from "../views/composer";
-import dom from "../dom";
-import { redraw } from "../quirks/redraw";
 
 /*
   Prevent style inherence on `backspace` when the previousSibling is empty

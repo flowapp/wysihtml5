@@ -8,7 +8,7 @@ files = [
 
 ]
 
-describe.only "Pasting", ->
+describe "Pasting", ->
   for file in files
     specs = YAML.load(file)
     for spec in specs #when spec.debug
