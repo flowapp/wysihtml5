@@ -37,7 +37,7 @@ var Composer = Base.extend({
 
   getValue: function(options) {
     var value;
-    var element = this.element;
+    var element = this.element.cloneNode(true);
 
     if (!options) {
       options = {}
