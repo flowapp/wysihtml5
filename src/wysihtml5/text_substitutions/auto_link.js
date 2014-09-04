@@ -34,7 +34,8 @@ var convertRangeToURL = function(composer, range, URL) {
 Composer.RegisterTextSubstitution(function(word, event, editor, composer) {
   return editor.config.autoLink && word.match(Constants.URL_REG_EXP);
 }, function(editor, composer, range, textContent, e) {
-  if (validContainer(composer.selection.getSelectedNode(), composer)) {
+  var anchor = composer.selection.getSelection().anchorNode;
+  if (validContainer(anchor, composer)) {
     convertRangeToURL(composer, range, textContent);
   }
 }, {
