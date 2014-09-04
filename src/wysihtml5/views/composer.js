@@ -52,8 +52,6 @@ var Composer = Base.extend({
     value = !containsContent(element) ? "" : quirks.getCorrectInnerHTML(element);
 
     if (options.parse) {
-      var textNodes = this._textNodes(element);
-      this._processNodesForBlockTextSubstitution(textNodes);
       value = this.parent.parse(value);
     }
 
