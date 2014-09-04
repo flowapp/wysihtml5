@@ -268,7 +268,7 @@ var Composer = Base.extend({
       if (options) {
         for (var index = 0; index < this._textSubstitutions.length; index++) {
           var textSubstitution = this._textSubstitutions[index];
-          if (textSubstitution.options.word !== false && textSubstitution.matcher(options.textContent, e, this.parent, this)) {
+          if (textSubstitution.options.word !== false && textSubstitution.matcher(options.textContent, e, this.parent, this, options.range)) {
             textSubstitution.callback(this.parent, this, options.range, options.textContent, e);
           }
         }
