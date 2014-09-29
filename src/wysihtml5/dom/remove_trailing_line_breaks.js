@@ -9,12 +9,12 @@ import { nodeList } from "./node_list";
 
 var removeTrailingLineBreaks = function(node) {
   var element = node.cloneNode(true);
+  element.normalize();
   var childNodes = nodeList.toArray(element.querySelectorAll("br:last-child"));
-
   for (var index = 0; index < childNodes.length; index++) {
     var childNode = childNodes[index];
     var previousSibling = childNode.previousSibling;
-    if(!previousSibling || (previousSibling && previousSibling.nodeName != "BR")) {
+    if ((!previousSibling || (previousSibling && previousSibling.nodeName != "BR")) && !childNode.nextSibling) {
       childNode.parentNode.removeChild(childNode);
     }
   }
