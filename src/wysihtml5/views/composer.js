@@ -7,6 +7,7 @@ import { Selection } from "../selection/selection";
 import { Commands} from "../commands";
 import { UndoManager } from "../undo_manager";
 import { isNonPrintableKey } from "../helpers/is_non_printable_key";
+import { containsContent } from "../helpers/contains_content";
 
 var Composer = Base.extend({
   name: "composer",
@@ -48,11 +49,9 @@ var Composer = Base.extend({
       element = wysihtml5.dom.removeEmptyNodes(element);
     }
 
-    value = this.isEmpty() ? "" : quirks.getCorrectInnerHTML(element);
+    value = !containsContent(element) ? "" : quirks.getCorrectInnerHTML(element);
 
     if (options.parse) {
-      var textNodes = this._textNodes(element);
-      this._processNodesForBlockTextSubstitution(textNodes);
       value = this.parent.parse(value);
     }
 
@@ -114,8 +113,8 @@ var Composer = Base.extend({
     return dom.getTextContent(this.element);
   },
 
-  isEmpty: function() {
-    return !this.element.textContent && !this.element.querySelector("img");
+  isEmpty: function(element) {
+    return !containsContent(this.element);
   },
 
   parentElement: function(node, matchingSet, options) {
@@ -268,7 +267,7 @@ var Composer = Base.extend({
       if (options) {
         for (var index = 0; index < this._textSubstitutions.length; index++) {
           var textSubstitution = this._textSubstitutions[index];
-          if (textSubstitution.options.word !== false && textSubstitution.matcher(options.textContent, e, this.parent, this)) {
+          if (textSubstitution.options.word !== false && textSubstitution.matcher(options.textContent, e, this.parent, this, options.range)) {
             textSubstitution.callback(this.parent, this, options.range, options.textContent, e);
           }
         }
