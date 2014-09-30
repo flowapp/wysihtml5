@@ -31,13 +31,14 @@ var convertRangeToURL = function(composer, range, URL) {
   });
 }
 
-Composer.RegisterTextSubstitution(function(word, event, editor, composer) {
-  return editor.config.autoLink && word.match(Constants.URL_REG_EXP);
+Composer.RegisterTextSubstitution(function(word, event, editor, composer, range) {
+  return (
+    editor.config.autoLink &&
+    word.match(Constants.URL_REG_EXP) &&
+    validContainer(range.commonAncestorContainer, composer)
+  );
 }, function(editor, composer, range, textContent, e) {
-  var anchor = composer.selection.getSelection().anchorNode;
-  if (validContainer(anchor, composer)) {
-    convertRangeToURL(composer, range, textContent);
-  }
+  convertRangeToURL(composer, range, textContent);
 }, {
   word: true,
   sentence: false
@@ -61,7 +62,7 @@ Composer.RegisterTextSubstitution(function(word, event, editor, composer) {
     matches.reverse().forEach(function(match) {
       var content = match[0];
       var linkRange = document.createRange();
-      linkRange.setStart(range.startContainer, match.index)
+      linkRange.setStart(range.startContainer, match.index);
       linkRange.setEnd(range.startContainer, match.index + content.length);
       convertRangeToURL(composer, linkRange, content);
     });
