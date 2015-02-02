@@ -40,4 +40,20 @@ import "wysihtml5/text_substitutions/ticks";
 
 var version = "@@version";
 
-export { version, Editor, Composer, lang, dom};
+var wysihtml5 = {
+  version: version,
+  Editor: Editor,
+  Composer: Composer,
+  lang: lang,
+  dom: dom
+};
+
+if (typeof define === "function" && define.amd) {
+  define(function() {
+    return wysihtml5;
+  });
+} else if (typeof module !== 'undefined' && module.exports) {
+  module.exports = wysihtml5;
+} else {
+  this.wysihtml5 = wysihtml5;
+}

@@ -1,10 +1,8 @@
 module.exports = function (broccoli) {
   var staticCompiler = require('broccoli-static-compiler');
   var mergeTrees = require('broccoli-merge-trees');
-  var compileES6 = require('broccoli-es6-concatenator');
   var replace = require('broccoli-replace');
-  var concat = require('broccoli-concat');
-  var exporter = require('broccoli-global-export');
+  var compileModules = require('broccoli-es6-module-transpiler');
 
   var packageJSON = require('./package.json');
 
@@ -31,28 +29,11 @@ module.exports = function (broccoli) {
     ]
   });
 
-  application = compileES6(application, {
-    loaderFile: 'vendor/loader.js',
-    ignoredModules: [],
-    inputFiles: [
-      'vendor/**/*.js',
-      '**/*.js'
-    ],
-    legacyFilesToAppend: [
-      'vendor/base.js',
-      'vendor/rangy.js',
-    ],
-    wrapInEval: false,
-    outputFile: '/wysihtml5.cjs.js'
+  application = compileModules(application, {
+    format: 'bundle',
+    entry: 'wysihtml5.js',
+    output: 'wysihtml5.js'
   });
 
-  var exportTree = new mergeTrees([application, "src"], {overwrite: true});
-  exportTree = new exporter(exportTree, {
-    name: packageJSON.name,
-    namespace: packageJSON.namespace,
-    inputFiles: ["wysihtml5.cjs.js"],
-    outputFile: "/wysihtml5.js"
-  });
-
-  return new mergeTrees([exportTree, application], {overwrite: true});
+  return application;
 };
