@@ -196,4 +196,4 @@ ClipboardIntegrator.RegisterMIME = function(mime, parser) {
 
 };
 
-export default = ClipboardIntegrator;
+export default ClipboardIntegrator;
