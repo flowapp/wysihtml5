@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "description": "wysihtml5y 0.0.0",
   "main": "dist/wysihtml5.js",
-  "namespace": "wysihtml5",
   "directories": {
     "example": "examples",
     "test": "test"
@@ -21,11 +20,11 @@
     "url": "https://github.com/metalabdesign/wysihtml5/issues"
   },
   "devDependencies": {
-    "broccoli": "0.7.2",
+    "broccoli": "^0.13.3",
     "broccoli-es6-module-transpiler": "^0.5.0",
-    "broccoli-merge-trees": "0.1.3",
-    "broccoli-replace": "0.1.5",
-    "broccoli-static-compiler": "0.1.4",
+    "broccoli-merge-trees": "0.2.1",
+    "broccoli-replace": "0.2.0",
+    "broccoli-static-compiler": "0.2.1",
     "chai": "~1.8.1",
     "chai-as-promised": "~4.1.0",
     "grunt": "~0.4.2",
