@@ -1,20 +1,24 @@
 {
-  "name": "wysihtml5",
-  "version": "0.0.0",
-  "description": "wysihtml5y 0.0.0",
+  "name": "flow-wysihtml5",
+  "version": "0.1.0",
+  "description": "",
   "main": "dist/wysihtml5.js",
+  "files": [
+    "dist/wysihtml5.js"
+  ],
   "directories": {
     "example": "examples",
     "test": "test"
   },
   "scripts": {
-    "test": "node --harmony ./node_modules/.bin/grunt test"
+    "test": "node --harmony ./node_modules/.bin/grunt test",
+    "prepublish": "broccoli build dist"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/metalabdesign/wysihtml5.git"
   },
-  "author": "MetaLab",
+  "author": "Flow Ltd",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/metalabdesign/wysihtml5/issues"
