@@ -1,5 +1,5 @@
 import dom from "../dom";
-import { quirks } from "../quirks";
+import quirks from "../quirks";
 import { browser } from "../browser";
 import { Constants } from "../constants";
 import lang from "wysihtml5/lang";
@@ -10,7 +10,7 @@ var insertImage = {
   /**
    * Inserts an <img>
    * If selection is already an image link, it removes it
-   * 
+   *
    * @example
    *    // either ...
    *    wysihtml5.commands.insertImage.exec(composer, "insertImage", "http://www.google.de/logo.jpg");
@@ -44,7 +44,7 @@ var insertImage = {
     }
 
     image = doc.createElement(NODE_NAME);
-    
+
     for (var i in value) {
       image.setAttribute(i === "className" ? "class" : i, value[i]);
     }

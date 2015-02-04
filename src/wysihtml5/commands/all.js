@@ -14,7 +14,7 @@ import { underline } from "./underline";
 import { undo } from "./undo";
 import { pre } from "./pre";
 
-export default = {
+export default {
   blockquote: blockquote,
   bold: bold,
   createLink: createLink,

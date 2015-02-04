@@ -28,7 +28,7 @@ import { setStyles } from "wysihtml5/dom/set_styles";
 import { nodeList } from "wysihtml5/dom/node_list";
 import { setTextContent, getTextContent } from "wysihtml5/dom/text_content";
 
-export default = {
+export default {
   all: all,
   addClass: addClass,
   appendChildNodes: appendChildNodes,
