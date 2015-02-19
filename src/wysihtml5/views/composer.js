@@ -45,8 +45,8 @@ var Composer = Base.extend({
     }
 
     if (options.trim) {
-      element = wysihtml5.dom.removeTrailingLineBreaks(element);
-      element = wysihtml5.dom.removeEmptyNodes(element);
+      element = dom.removeTrailingLineBreaks(element);
+      element = dom.removeEmptyNodes(element);
     }
 
     value = !containsContent(element) ? "" : quirks.getCorrectInnerHTML(element);
