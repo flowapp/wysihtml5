@@ -16,8 +16,9 @@ var ClipboardIntegrator = Base.extend({
       var host = document.createElement("div");
       host.innerHTML = content;
       this.composer.parent.parse(host);
-      host.normalize();
       removeEmptyTextNodes(host);
+      host.normalize();
+
       var fragment = nodeList.toArray(host.childNodes);
 
       for (var i = 0; i < fragment.length; i++) {
