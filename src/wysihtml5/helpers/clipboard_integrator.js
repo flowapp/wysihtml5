@@ -29,7 +29,7 @@ var ClipboardIntegrator = Base.extend({
 
       this.elements = fragment;
     } else if (mime === "text/plain") {
-      var fragment = content.split(/\n+/);
+      var fragment = content.split(/\n+|\u2028+/);
       for (var i = 0; i < fragment.length; i++) {
         fragment[i] = document.createTextNode(fragment[i]);
       }
