@@ -3,6 +3,7 @@ import { appendChildNodes } from "../dom/append_child_nodes";
 import { nodeList } from "../dom/node_list";
 import { fromPlainText } from "./from_plain_text";
 import { removeEmptyTextNodes } from "../dom/remove_empty_text_nodes";
+import { removeTrailingLineBreaks } from "../dom/remove_trailing_line_breaks"
 import { splitNode } from "./split_node";
 import { containsContent } from "./contains_content";
 var ClipboardIntegrator = Base.extend({
@@ -17,7 +18,7 @@ var ClipboardIntegrator = Base.extend({
       host.innerHTML = content;
       this.composer.parent.parse(host);
       removeEmptyTextNodes(host);
-      host.normalize();
+      host = removeTrailingLineBreaks(host);
 
       var fragment = nodeList.toArray(host.childNodes);
 
