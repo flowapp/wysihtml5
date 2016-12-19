@@ -31,6 +31,7 @@ import "wysihtml5/keyboard/break_list";
 import "wysihtml5/keyboard/shortcuts";
 import "wysihtml5/keyboard/delete_images";
 import "wysihtml5/keyboard/delete_block_elements";
+import "wysihtml5/keyboard/line_break";
 
 // Text Substitutions
 import "wysihtml5/text_substitutions/auto_link";
