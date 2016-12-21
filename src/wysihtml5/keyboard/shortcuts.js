@@ -14,6 +14,6 @@ Composer.RegisterKeyboardHandler(function(e) {
   var command = SHORTCUTS[e.keyCode];
   if (command) {
     composer.commands.exec(command);
-    event.preventDefault();
+    e.preventDefault();
   }
 });
