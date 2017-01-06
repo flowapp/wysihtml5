@@ -45,8 +45,8 @@ var Composer = Base.extend({
     }
 
     if (options.trim) {
-      element = dom.removeTrailingLineBreaks(element);
       element = dom.removeEmptyNodes(element);
+      element = dom.removeTrailingLineBreaks(element);
     }
 
     value = !containsContent(element) ? "" : quirks.getCorrectInnerHTML(element);

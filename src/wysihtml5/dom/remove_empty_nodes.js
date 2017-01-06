@@ -17,6 +17,15 @@ var removeEmptyNodes = function(node) {
       var nodeContainsImage = node.nodeName == "IMG" || (node.nodeType == Node.ELEMENT_NODE && node.querySelector("img"));
       var nodeHasTextContent = (node.textContent || "").trim();
       if (!nodeContainsImage && !nodeHasTextContent) {
+        var nodeContainsLineBreak = node.nodeName == "BR" || (node.nodeType == Node.ELEMENT_NODE && node.querySelector("br"));
+
+        if (nodeContainsLineBreak) {
+          var totalLineBreaks = node.nodeType == Node.ELEMENT_NODE ? node.querySelectorAll("br").length : 1;
+          for (var lineBreakIndex = 0; lineBreakIndex < totalLineBreaks; lineBreakIndex++) {
+            element.insertBefore(document.createElement("br"), node);
+          }
+        }
+
         element.removeChild(node);
       }
     }
