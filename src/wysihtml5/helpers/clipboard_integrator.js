@@ -89,7 +89,7 @@ var ClipboardIntegrator = Base.extend({
       restore.endIntegration = lastChild.lastChild;
       appendChildNodes(documentFragment, lastChild);
     } else {
-      if (originalEndContainer) {
+      if (originalEndContainer && originalEndContainer.parentNode) {
         if (originalEndContainer !== originalStartContainer && !containsContent(originalEndContainer)) {
           originalEndContainer.parentNode.removeChild(originalEndContainer);
         }
