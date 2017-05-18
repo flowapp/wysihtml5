@@ -47,9 +47,9 @@ var ClipboardIntegrator = Base.extend({
 
     var elements = this.elements;
     var range = this.selection.getRange();
-    var orginallyCollapsed = range.collapsed;
-    var orginalEndContainer = this._nearestBlock(range.endContainer);
-    var orginalStartContainer = this._nearestBlock(range.startContainer);
+    var originallyCollapsed = range.collapsed;
+    var originalEndContainer = this._nearestBlock(range.endContainer);
+    var originalStartContainer = this._nearestBlock(range.startContainer);
 
     if (!range.collapsed) {
       range.deleteContents();
@@ -83,20 +83,20 @@ var ClipboardIntegrator = Base.extend({
       var documentFragment = endRange.extractContents();
       var lastChild = items[items.length - 1];
 
-      if (orginallyCollapsed) {
+      if (originallyCollapsed) {
         this._insertTrailingWhitespaceIfNeeded(lastChild, documentFragment.firstChild);
       }
       restore.endIntegration = lastChild.lastChild;
       appendChildNodes(documentFragment, lastChild);
     } else {
-      if (orginalEndContainer) {
-        if (orginalEndContainer !== orginalStartContainer && !containsContent(orginalEndContainer)) {
-          orginalEndContainer.parentNode.removeChild(orginalEndContainer);
+      if (originalEndContainer && originalEndContainer.parentNode) {
+        if (originalEndContainer !== originalStartContainer && !containsContent(originalEndContainer)) {
+          originalEndContainer.parentNode.removeChild(originalEndContainer);
         }
-        if (containsContent(orginalEndContainer) && !orginallyCollapsed && blockElement != orginalEndContainer) {
+        if (containsContent(originalEndContainer) && !originallyCollapsed && blockElement != originalEndContainer) {
           var lastChild = items[items.length - 1];
-          appendChildNodes(orginalEndContainer, lastChild);
-          orginalEndContainer.parentNode.removeChild(orginalEndContainer);
+          appendChildNodes(originalEndContainer, lastChild);
+          originalEndContainer.parentNode.removeChild(originalEndContainer);
         }
       }
     }
@@ -109,7 +109,7 @@ var ClipboardIntegrator = Base.extend({
       // Or empty and a list item
       var emptyListItem = blockElementWasOriginallyEmpty && blockElement.nodeName === "LI"
       if (!blockElementWasOriginallyEmpty || firstChild.nodeType === Node.TEXT_NODE || emptyListItem) {
-        if (orginallyCollapsed) {
+        if (originallyCollapsed) {
           this._insertTrailingWhitespaceIfNeeded(blockElement);
         }
         appendChildNodes(firstChild, blockElement, containsContent(blockElement));

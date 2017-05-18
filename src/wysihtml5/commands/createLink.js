@@ -60,11 +60,12 @@ function _format(composer, attributes) {
     isEmpty = textContent === "" || textContent === Constants.INVISIBLE_SPACE;
     if (!hasElementChild && isEmpty) {
       dom.setTextContent(anchor, attributes.text || anchor.href);
-      whiteSpace = doc.createTextNode(" ");
-      composer.selection.setAfter(anchor);
-      dom.insert(whiteSpace).after(anchor);
-      elementToSetCaretAfter = whiteSpace;
     }
+
+    whiteSpace = doc.createTextNode(" ");
+    composer.selection.setAfter(anchor);
+    dom.insert(whiteSpace).after(anchor);
+    elementToSetCaretAfter = whiteSpace;
   }
   composer.selection.setAfter(elementToSetCaretAfter);
   return anchors;
